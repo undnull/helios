@@ -52,7 +52,7 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     const std::vector<uint8_t> vert_spv = util::readBinaryFile("shaders/sprite.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         util::log("sprite.vert: %s", vert.getInfoLog());
-    
+
     const std::vector<uint8_t> frag_spv = util::readBinaryFile("shaders/sprite.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         util::log("sprite.frag: %s", frag.getInfoLog());
@@ -65,6 +65,16 @@ void SpriteRenderer::setView(const data::View &view)
 {
     const float4x4_t view_m = view.getMatrix();
     ubo.subData(offsetof(ubo_s, view), &view_m, sizeof(view_m));
+}
+
+void SpriteRenderer::setProjection(const float4x4_t &projection)
+{
+    ubo.subData(offsetof(ubo_s, projection), &projection, sizeof(projection));
+}
+
+void SpriteRenderer::setProjection(float4x4_t &&projection)
+{
+    ubo.subData(offsetof(ubo_s, projection), &projection, sizeof(projection));
 }
 
 void SpriteRenderer::draw(const std::vector<data::Transform> &transforms, const gfx::Texture &texture, const float2_t &size)

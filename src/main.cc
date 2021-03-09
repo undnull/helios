@@ -4,12 +4,12 @@
  * Copyright (C) 2021, Kirill GPRB.
  */
 #include <data/vidmode.hh>
+#include <render/sprite_renderer.hh>
 #include <ui/logger_out.hh>
 #include <ui/menu_bar.hh>
 #include <ui/ui.hh>
 #include <util/clock.hh>
 #include <util/logger.hh>
-#include <render/sprite_renderer.hh>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     vidmode.loadFromFile("vidmode.json");
     vidmode.loadFromArgs(args);
 
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_DECORATED, vidmode.border);
     GLFWwindow *window = glfwCreateWindow(vidmode.width, vidmode.height, "TEST", vidmode.monitor, nullptr);
     if(!window) {
@@ -96,76 +96,86 @@ int main(int argc, char **argv)
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(debugCallback, nullptr);
-	{
-		const unsigned int nvidia_131185 = 131185;
-    	glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 1, &nvidia_131185, GL_FALSE);
+    {
+        const unsigned int nvidia_131185 = 131185;
+        glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 1, &nvidia_131185, GL_FALSE);
 
-    	// sprite
-    	float2_t sprite_size;
-    	gfx::Texture sprite_texture;
-    	data::Transform sprite_transform0;
-    	data::Transform sprite_transform1;
+        // sprite
+        float2_t sprite_size;
+        gfx::Texture sprite_texture;
+        data::Transform sprite_transform0;
+        data::Transform sprite_transform1;
 
-    	sprite_size = float2_t(100.0f, 100.0f);
-    	sprite_transform0.setOrigin(float2_t(50.0f, 50.0f));
-    	sprite_transform1.setOrigin(float2_t(50.0f, 50.0f));
-    	sprite_transform0.move(float2_t(100.0f, 200.0f));
-    	sprite_transform1.move(float2_t(300.0f, 200.0f));
+        sprite_size = float2_t(100.0f, 100.0f);
+        sprite_transform0.setOrigin(float2_t(50.0f, 50.0f));
+        sprite_transform1.setOrigin(float2_t(50.0f, 50.0f));
+        sprite_transform0.move(float2_t(100.0f, 200.0f));
+        sprite_transform1.move(float2_t(300.0f, 200.0f));
 
-    	int width, height, comp;
-    	stbi_uc *pixels = stbi_load("textures/bruh.jpg", &width, &height, &comp, STBI_rgb_alpha);
-    	if(!pixels)
-    	    return 1;
-    	
-    	sprite_texture.storage(width, height, GL_RGBA16F);
-    	sprite_texture.subImage(width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    	sprite_texture.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    	sprite_texture.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    	sprite_texture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    	sprite_texture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        int width, height, comp;
+        stbi_uc *pixels = stbi_load("textures/bruh.jpg", &width, &height, &comp, STBI_rgb_alpha);
+        if(!pixels)
+            return 1;
 
-    	render::SpriteRenderer sprite_renderer(vidmode.width, vidmode.height);
+        sprite_texture.storage(width, height, GL_RGBA16F);
+        sprite_texture.subImage(width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        sprite_texture.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        sprite_texture.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        sprite_texture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        sprite_texture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    	ui::init(window);
-    	ui::LoggerOut logger_out;
-    	ui::MenuBar menu_bar;
+        render::SpriteRenderer sprite_renderer(vidmode.width, vidmode.height);
 
-    	data::View view;
-    	sprite_renderer.setView(view);
+        ui::init(window);
+        ui::LoggerOut logger_out;
+        ui::MenuBar menu_bar;
 
-    	std::vector<data::Transform> transforms;
-    	transforms.push_back(sprite_transform0);
-    	transforms.push_back(sprite_transform1);
+        data::View view;
+        sprite_renderer.setView(view);
 
-    	util::Clock frametime_clock;
-    	while(!glfwWindowShouldClose(window)) {
-    	    const float frametime = frametime_clock.reset();
+        std::vector<data::Transform> transforms;
+        transforms.push_back(sprite_transform0);
+        transforms.push_back(sprite_transform1);
 
-    	    transforms[0].rotate(45.0f * frametime);
-    	    transforms[1].rotate(-45.0f * frametime);
+        util::Clock frametime_clock;
+        while(!glfwWindowShouldClose(window)) {
+            const float frametime = frametime_clock.reset();
+            int width, height;
+            glfwGetFramebufferSize(window, &width, &height);
+            glViewport(0, 0, width, height);
 
-    	    glClear(GL_COLOR_BUFFER_BIT);
+            sprite_renderer.setProjection(
+                glm::ortho(0.0f,
+                           static_cast<float>(width),
+                           static_cast<float>(height),
+                           0.0f,
+                           -1.0f,
+                           1.0f));
 
-    	    sprite_renderer.draw(transforms, sprite_texture, sprite_size);
+            transforms[0].rotate(45.0f * frametime);
+            transforms[1].rotate(-45.0f * frametime);
 
-    	    const ImGuiIO &io = ui::beginFrame();
-    	    logger_out.draw(io);
-    	    menu_bar.draw(io);
-    	    ui::endFrame();
+            glClear(GL_COLOR_BUFFER_BIT);
 
-    	    if(menu_bar.file_exit) {
-    	        glfwSetWindowShouldClose(window, GLFW_TRUE);
-    	        menu_bar.file_exit = false;
-    	    }
+            sprite_renderer.draw(transforms, sprite_texture, sprite_size);
 
-    	    glBindProgramPipeline(0);
-    	    glfwSwapBuffers(window);
-    	    glfwPollEvents();
-    	}
+            const ImGuiIO &io = ui::beginFrame();
+            logger_out.draw(io);
+            menu_bar.draw(io);
+            ui::endFrame();
 
-	}
-   	glfwDestroyWindow(window);
-   	glfwTerminate();
+            if(menu_bar.file_exit) {
+                glfwSetWindowShouldClose(window, GLFW_TRUE);
+                menu_bar.file_exit = false;
+            }
+
+            glBindProgramPipeline(0);
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
+    }
+    glfwDestroyWindow(window);
+    glfwTerminate();
     vidmode.saveToFile("vidmode.json");
 
     return 0;

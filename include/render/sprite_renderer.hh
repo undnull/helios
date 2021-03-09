@@ -19,6 +19,8 @@ public:
 public:
     SpriteRenderer(int width, int height);
 
+    void setProjection(const float4x4_t &projection);
+    void setProjection(float4x4_t &&projection);
     void setView(const data::View &view);
     void draw(const std::vector<data::Transform> &transforms, const gfx::Texture &texture, const float2_t &size);
 
