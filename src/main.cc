@@ -102,6 +102,7 @@ int main(int argc, char **argv)
 
         // sprite
         float2_t sprite_size;
+        float2_t sprite_size;
         gfx::Texture sprite_texture;
         data::Transform sprite_transform0;
         data::Transform sprite_transform1;
@@ -151,6 +152,7 @@ int main(int argc, char **argv)
                            0.0f,
                            -1.0f,
                            1.0f));
+
 
             transforms[0].rotate(45.0f * frametime);
             transforms[1].rotate(-45.0f * frametime);
