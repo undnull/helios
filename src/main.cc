@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_DECORATED, vidmode.border);
-    GLFWwindow *window = glfwCreateWindow(vidmode.width, vidmode.height, "TEST", vidmode.monitor, nullptr);
+    GLFWwindow *window = glfwCreateWindow(vidmode.width, vidmode.height, "Voxelius", vidmode.monitor, nullptr);
     if(!window) {
         glfwTerminate();
         return 1;
@@ -96,12 +96,16 @@ int main(int argc, char **argv)
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
     glDebugMessageCallback(debugCallback, nullptr);
-    {
-        const unsigned int nvidia_131185 = 131185;
-        glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 1, &nvidia_131185, GL_FALSE);
 
-        // sprite
-        float2_t sprite_size;
+    // sprite
+    float2_t sprite_size;
+    const unsigned int nvidia_131185 = 131185;
+    glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 1, &nvidia_131185, GL_FALSE);
+
+    // All the GL-related (objects) stuff should be done
+    // inside of this scope to avoid destructor calls when
+    // the window is destroyed and the GL context is gone
+    {
         float2_t sprite_size;
         gfx::Texture sprite_texture;
         data::Transform sprite_transform0;
@@ -176,8 +180,10 @@ int main(int argc, char **argv)
             glfwPollEvents();
         }
     }
+
     glfwDestroyWindow(window);
     glfwTerminate();
+
     vidmode.saveToFile("vidmode.json");
 
     return 0;
