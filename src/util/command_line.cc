@@ -9,10 +9,6 @@
  */
 #include <util/command_line.hh>
 
-#include <string.h>
-#include <string>
-#include <vector>
-
 namespace util
 {
 static inline const bool isOption(const char *option)

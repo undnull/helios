@@ -8,6 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <GLFW/glfw3.h>
 
 namespace util
 {
@@ -21,4 +22,22 @@ public:
 private:
     float start;
 };
+
+inline Clock::Clock()
+{
+    start = static_cast<float>(glfwGetTime());
+}
+
+inline float Clock::getTime() const
+{
+    return static_cast<float>(glfwGetTime()) - start;
+}
+
+inline float Clock::reset()
+{
+    float cur_time = static_cast<float>(glfwGetTime());
+    float delta = cur_time - start;
+    start = cur_time;
+    return delta;
+}
 } // namespace util

@@ -8,8 +8,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <data/vidmode.hh>
-#include <util/json.hh>
-#include <util/logger.hh>
 
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
@@ -25,29 +23,14 @@ VidMode::VidMode()
     monitor = nullptr;
 }
 
-bool VidMode::loadFromFile(const fs::path &path)
+void VidMode::loadFromJson(const json &j)
 {
-    if(!fs::exists(path)) {
-        util::log("vidmode: file %s doesn't exist", path.string().c_str());
-        return false;
-    }
-
-    try {
-        const json j = json::parse(util::readTextFile(path));
-
-        width = util::jsonRequire(j, "width")->get<int>();
-        height = util::jsonRequire(j, "height")->get<int>();
-        border = util::jsonRequire(j, "border")->get<bool>() ? GLFW_TRUE : GLFW_FALSE;
-        swap_interval = util::jsonRequire(j, "vsync")->get<bool>() ? 1 : 0;
-        if(util::jsonRequire(j, "fullscreen")->get<bool>())
-            monitor = glfwGetPrimaryMonitor();
-
-        return true;
-    }
-    catch(const std::exception &e) {
-        util::log("vidmode: %s", e.what());
-        return false;
-    }
+    width = util::jsonRequire(j, "width")->get<int>();
+    height = util::jsonRequire(j, "height")->get<int>();
+    border = util::jsonRequire(j, "border")->get<bool>() ? GLFW_TRUE : GLFW_FALSE;
+    swap_interval = util::jsonRequire(j, "vsync")->get<bool>() ? 1 : 0;
+    if(util::jsonRequire(j, "fullscreen")->get<bool>())
+        monitor = glfwGetPrimaryMonitor();
 }
 
 void VidMode::loadFromArgs(const util::CommandLine &args)

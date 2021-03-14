@@ -11,14 +11,37 @@
 #include <common.hh>
 
 #include <filesystem>
+#include <fstream>
 #include <string>
+#include <sstream>
 #include <vector>
 
 namespace fs = std::filesystem;
 
 namespace util
 {
-const std::string readTextFile(const fs::path &path);
-const std::vector<uint8_t> readBinaryFile(const fs::path &path);
-void writeTextFile(const fs::path &path, const std::string &str);
+inline const std::string readTextFile(const fs::path &path)
+{
+    return (std::stringstream() << std::ifstream(path, std::ios::in).rdbuf()).str();
+}
+
+inline const std::vector<uint8_t> readBinaryFile(const fs::path &path)
+{
+    std::ifstream ifs(path, std::ios::in | std::ios::binary);
+    ifs.unsetf(std::ios::skipws);
+
+    std::vector<uint8_t> buffer;
+
+    ifs.seekg(0, std::ios::end);
+    buffer.reserve(ifs.tellg());
+    ifs.seekg(0, std::ios::beg);
+
+    buffer.insert(buffer.begin(), std::istream_iterator<uint8_t>(ifs), std::istream_iterator<uint8_t>());
+    return buffer;
+}
+
+inline void writeTextFile(const fs::path &path, const std::string &str)
+{
+    std::ofstream(path, std::ios::out) << str;
+}
 } // namespace util

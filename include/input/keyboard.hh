@@ -15,7 +15,7 @@ namespace input
 extern bool keys_down[];
 extern int pressed_key, released_key;
 
-void keyCallback(int key, int action);
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 inline bool isKeyPressed(int key)
 {

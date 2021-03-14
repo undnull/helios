@@ -15,13 +15,17 @@ bool keys_down[GLFW_KEY_LAST + 1] = { 0 };
 int pressed_key = GLFW_KEY_UNKNOWN;
 int released_key = GLFW_KEY_UNKNOWN;
 
-void keyCallback(int key, int action)
+void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     bool press = (action == GLFW_PRESS || action == GLFW_REPEAT);
     keys_down[key] = press;
-    if(press)
+    if(press) {
         pressed_key = key;
-    else
+        released_key = GLFW_KEY_UNKNOWN;
+    }
+    else {
+        pressed_key = GLFW_KEY_UNKNOWN;
         released_key = key;
+    }
 }
 } // namespace input

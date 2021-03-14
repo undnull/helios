@@ -71,12 +71,6 @@ static void errorCallback(int code, const char *message)
     util::log("glfw error %d: %s", code, message);
 }
 
-static void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-    //ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
-    input::keyCallback(key, action);
-}
-
 int main(int argc, char **argv)
 {
     util::CommandLine args(argc, argv);
@@ -100,7 +94,7 @@ int main(int argc, char **argv)
 
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
-    glfwSetKeyCallback(window, keyCallback);
+    glfwSetKeyCallback(window, input::keyCallback);
 
     glfwMakeContextCurrent(window);
     if(!gladLoadGL()) {
