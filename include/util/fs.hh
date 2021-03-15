@@ -12,6 +12,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <sstream>
 #include <vector>
@@ -22,7 +23,9 @@ namespace util
 {
 inline const std::string readTextFile(const fs::path &path)
 {
-    return (std::stringstream() << std::ifstream(path, std::ios::in).rdbuf()).str();
+    std::stringstream ss;
+    ss << std::ifstream(path, std::ios::in).rdbuf();
+    return ss.str();
 }
 
 inline const std::vector<uint8_t> readBinaryFile(const fs::path &path)
