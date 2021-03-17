@@ -128,7 +128,7 @@ int main(int argc, char **argv)
         } sprite;
 
         data::Image image;
-        if(!image.loadFromFile("textures/bruh.jpg"))
+        if(!image.loadFromFile("assets/textures/bruh.jpg"))
             return false;
 
         int width, height;

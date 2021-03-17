@@ -53,11 +53,11 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = util::readBinaryFile("shaders/sprite.vert.spv");
+    const std::vector<uint8_t> vert_spv = util::readBinaryFile("assets/shaders/sprite.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         util::log("sprite.vert: %s", vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = util::readBinaryFile("shaders/sprite.frag.spv");
+    const std::vector<uint8_t> frag_spv = util::readBinaryFile("assets/shaders/sprite.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         util::log("sprite.frag: %s", frag.getInfoLog());
 

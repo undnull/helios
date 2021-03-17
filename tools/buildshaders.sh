@@ -6,30 +6,37 @@
 # https://github.com/KhronosGroup/glslang/releases/tag/master-tot
 PATH=$PATH:"$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
-shift $((OPTIND - 1))
-work_dir="$@"
-build_dir="build/shaders"
+source progressbar.sh || exit 1
 
-if [[ -z "$work_dir" ]] || [[ ! -d "$work_dir" ]]
+hlsl_dir="$PWD/shaders"
+spirv_dir="$PWD/assets/shaders"
+build_dir="$PWD/build/shaders"
+
+mkdir -p $spirv_dir
+mkdir -p $build_dir
+
+if [[ ! -d "$hlsl_dir" ]]
 then
-    echo "$0: fatal: invalid directory $work_dir"
+    echo "$0: fatal: $hlsl_dir doesn't exist"
     exit 1
 fi
 
-sources=$(find "$work_dir" -name *.hlsl)
+sources=$(find "$hlsl_dir" -name *.hlsl)
 if [[ -z "$sources" ]]
 then
-    echo "$0: fatal: no shaders found in $work_dir/src/"
+    echo "$0: fatal: no shaders found in $hlsl_dir/src/"
     exit 1
 fi
-
-mkdir -p "$build_dir"
 
 for src in $sources
 do
     xspv=$(basename "$src" .hlsl)
-    glslangValidator -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src"
+    progressbar "Building $xspv.hlsl" 1 4
+    glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src"
+    progressbar "Building $xspv.hlsl" 2 4
     spirv-cross "$build_dir/$xspv.spv" > "$build_dir/$xspv.glsl"
-    glslangValidator --quiet -G -e main -o "$work_dir/$xspv.spv" "$build_dir/$xspv.glsl"
+    progressbar "Building $xspv.hlsl" 3 4
+    glslangValidator --quiet -G -e main -o "$spirv_dir/$xspv.spv" "$build_dir/$xspv.glsl"
+    progressbar "Building $xspv.hlsl" 4 4
 done
 exit 0
