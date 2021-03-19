@@ -9,8 +9,8 @@
  */
 #pragma once
 
-#define VERSION_MAJOR @voxelius_VERSION_MAJOR@
-#define VERSION_MINOR @voxelius_VERSION_MINOR@
-#define VERSION_PATCH @voxelius_VERSION_PATCH@
+#define VERSION_MAJOR @helios_VERSION_MAJOR@
+#define VERSION_MINOR @helios_VERSION_MINOR@
+#define VERSION_PATCH @helios_VERSION_PATCH@
 
-#define VERSION_STRING "@voxelius_VERSION@"
+#define VERSION_STRING "@helios_VERSION@"

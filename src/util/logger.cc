@@ -18,8 +18,8 @@
 namespace util
 {
 static std::mutex mutex;
-static std::ofstream logfile("./voxelius.log", std::ios::out | std::ios::app);
-static std::ofstream logfile_l("./voxelius.latest.log", std::ios::out);
+static std::ofstream logfile("./helios.log", std::ios::out | std::ios::app);
+static std::ofstream logfile_l("./helios.latest.log", std::ios::out);
 static std::string last_log;
 
 void log(const std::string &str)

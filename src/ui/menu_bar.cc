@@ -57,7 +57,7 @@ void MenuBar::draw(const ImGuiIO &io)
         }
 
         if(ImGui::BeginMenu("Help")) {
-            ImGui::MenuItem("Voxelius " VERSION_STRING, nullptr, false, false);
+            ImGui::MenuItem("helios " VERSION_STRING, nullptr, false, false);
             ImGui::EndMenu();
         }
 

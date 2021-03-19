@@ -9,8 +9,8 @@
 ### 1. Cloning
 Clone the repository recursively, then go to the directory:
 ```
-git clone --recursive https://github.com/undnull/voxelius.git
-cd voxelius
+git clone --recursive https://github.com/undnull/helios.git
+cd helios
 ```
 
 ### 2. Generating build files
@@ -29,13 +29,13 @@ cmake --build build
 ### 4. Running
 Depending on your environment, run one of the following commands:
 ```
-./build/Debug/voxelius
+./build/Debug/helios
 ```
 ```
-./build/Release/voxelius
+./build/Release/helios
 ```
 ```
-./build/voxelius
+./build/helios
 ```
 
 ### 5. (Optional) building shaders
