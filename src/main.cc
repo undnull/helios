@@ -195,7 +195,7 @@ int main(int argc, char **argv)
                     velocity.y += -1.0f;
                 if(input::isKeyPressed(GLFW_KEY_D))
                     velocity.x += -1.0f;
-                
+
                 if(glm::abs(glm::length(velocity)) > 0.0f) {
                     view.move(velocity * 128.0f * frametime);
                     sprite_renderer.setView(view);
