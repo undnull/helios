@@ -9,7 +9,7 @@
  */
 
 struct ps_input {
-    float2 texcoord : TexCoord0;
+    float2 texcoord : TEXCOORD0;
 };
 
 sampler2D color : register(S0);

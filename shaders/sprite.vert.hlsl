@@ -9,23 +9,23 @@
  */
 
 struct vs_input {
-    float2 position : Position;
-    float2 texcoord : TexCoord1;
+    float2 position : POSITION;
+    float2 texcoord : TEXCOORD1;
     int instance_id : SV_InstanceID;
 };
 
 struct vs_output {
     float4 position : SV_Position;
-    float2 texcoord : TexCoord0;
+    float2 texcoord : TEXCOORD0;
 };
 
-cbuffer ubo : register(b0) {
+cbuffer ubo : register(B0) {
     row_major float4x4 projection;
     row_major float4x4 scale;
     row_major float4x4 view;
 };
 
-row_major StructuredBuffer<float4x4> ssbo : register(u0);
+row_major StructuredBuffer<float4x4> ssbo : register(U0);
 
 vs_output main(vs_input input)
 {
