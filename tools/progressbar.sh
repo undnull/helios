@@ -29,9 +29,7 @@ function progressbar {
     percent=$((100 * $current / $maximum))
     progress="$progress `printf %3d%% $percent`"
 
-    offset=$(($cols - ${#message} - 2))
-
-    printf "\r %s%*s" "$message" "$offset" "$progress"
+    printf "\r %s%*s" "$message" $(($cols - ${#message} - 2)) "$progress"
     if (( $current == $maximum ))
     then
         printf "\n"
