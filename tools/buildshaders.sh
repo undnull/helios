@@ -31,12 +31,21 @@ fi
 for src in $sources
 do
     xspv=$(basename "$src" .hlsl)
-    progressbar "Building $xspv.hlsl" 1 4
-    glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src"
-    progressbar "Building $xspv.hlsl" 2 4
-    spirv-cross "$build_dir/$xspv.spv" > "$build_dir/$xspv.glsl"
-    progressbar "Building $xspv.hlsl" 3 4
-    glslangValidator --quiet -G -e main -o "$spirv_dir/$xspv.spv" "$build_dir/$xspv.glsl"
-    progressbar "Building $xspv.hlsl" 4 4
+    md5_c=$(md5sum "$src" | awk '{ print $1 }')
+    md5_o=$(cat "$build_dir/$xspv.md5")
+    if [[ "$md5_c" == "$md5_o" ]]
+    then
+        progressbar "Building $xspv.hlsl" 4 4
+        continue
+    else
+        progressbar "Building $xspv.hlsl" 1 4
+        glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src"
+        progressbar "Building $xspv.hlsl" 2 4
+        spirv-cross "$build_dir/$xspv.spv" > "$build_dir/$xspv.glsl"
+        progressbar "Building $xspv.hlsl" 3 4
+        glslangValidator --quiet -G -e main -o "$spirv_dir/$xspv.spv" "$build_dir/$xspv.glsl"
+        progressbar "Building $xspv.hlsl" 4 4
+        echo "$md5_c" > "$build_dir/$xspv.md5"
+    fi
 done
 exit 0
