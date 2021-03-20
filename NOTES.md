@@ -10,6 +10,11 @@ This _will_ be changed in future. The most possible variant is "Helios".
 I've chosen OpenGL 4.6 because I wanted to research this version a bit and was interested in using SPIR-V shaders so I don't have to worry about shader caching.  
 At this point my code is compatible with even older GL versions (such as ubiquitous OpenGL 3.3) with extensions. Those extensions seem to be supported on a big amount of GPUs now.
 
+## Sources
+The project dependencies are being built from sources completely just because it's simpler to build a library than download a binary for all possibly supported platforms.  
+I was initially using this way for UNIX-like systems and had Win32 libraries already included in the project: that was a big pain in ass...  
+However this way of building stuff requires the libraries to have CMake as build system.  
+
 ## HLSL
 I've chosen HLSL as a main shader language just because I generally don't like GLSL and its way to deal with built-in shader inputs and outputs.  
 While GLSL has some hard-coded constant names, HLSL has semantics which means you can name those variables whatever you want.  
