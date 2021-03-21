@@ -16,6 +16,7 @@
 #include <ui/ui.hh>
 #include <util/clock.hh>
 #include <util/logger.hh>
+#include <util/lua.hh>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -74,6 +75,15 @@ static void errorCallback(int code, const char *message)
 int main(int argc, char **argv)
 {
     util::CommandLine args(argc, argv);
+
+    lua_State *L = luaL_newstate();
+    luaL_openlibs(L);
+    util::registerEngineAPI(L);
+
+    const std::string src = util::readTextFile("assets/scripts/init.lua");
+    luaL_dostring(L, src.c_str());
+
+    lua_close(L);
 
     glfwSetErrorCallback(errorCallback);
     if(!glfwInit())

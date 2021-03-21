@@ -6,6 +6,7 @@
         "./external/glm",
         "./external/imgui",
         "./external/json",
+        "./external/lua",
         "./external/stb/stb"
     ],
     "C_Cpp.default.cStandard": "gnu99",
