@@ -1,7 +1,7 @@
 # Code style
 ## C++
 ### General
-* Mostly no macros allowed. Use `constexpr` instead
+* Macros are not allowed for constants and functions, use `constexpr` instead
 * No include guards allowed, `#pragma once` is used instead
 * Name spaces don't indent code
 * No `using namespace` allowed
