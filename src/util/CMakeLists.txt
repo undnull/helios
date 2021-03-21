@@ -9,5 +9,4 @@
 #
 target_sources(helios PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/command_line.cc"
-    "${CMAKE_CURRENT_LIST_DIR}/logger.cc"
-    "${CMAKE_CURRENT_LIST_DIR}/lua.cc")
+    "${CMAKE_CURRENT_LIST_DIR}/logger.cc")

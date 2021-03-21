@@ -1,6 +1,6 @@
 /*
- * lua.hh
- * Created: 2021-03-21, 13:21:29.
+ * api.hh
+ * Created: 2021-03-22, 00:14:15.
  * Copyright (C) 2021, Kirill GPRB.
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -9,14 +9,11 @@
  */
 #pragma once
 #include <common.hh>
-#include <util/json.hh>
-extern "C" {
-    #include <lua.h>
-    #include <lualib.h>
-    #include <lauxlib.h>
-}
+#include <util/fs.hh>
+#include <lua.hpp>
 
-namespace util
+namespace api
 {
-void registerEngineAPI(lua_State *L);
-} // namespace util
+void init(lua_State *lua);
+bool execFile(lua_State *lua, const fs::path &path);
+} // namespace api

@@ -7,6 +7,7 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <api/api.hh>
 #include <data/image.hh>
 #include <data/vidmode.hh>
 #include <input/keyboard.hh>
@@ -16,7 +17,6 @@
 #include <ui/ui.hh>
 #include <util/clock.hh>
 #include <util/logger.hh>
-#include <util/lua.hh>
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -76,14 +76,10 @@ int main(int argc, char **argv)
 {
     util::CommandLine args(argc, argv);
 
-    lua_State *L = luaL_newstate();
-    luaL_openlibs(L);
-    util::registerEngineAPI(L);
-
-    const std::string src = util::readTextFile("assets/scripts/init.lua");
-    luaL_dostring(L, src.c_str());
-
-    lua_close(L);
+    lua_State *lua = luaL_newstate();
+    api::init(lua);
+    api::execFile(lua, "assets/scripts/init.lua");
+    lua_close(lua);
 
     glfwSetErrorCallback(errorCallback);
     if(!glfwInit())

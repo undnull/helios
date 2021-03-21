@@ -7,6 +7,7 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <api/function.hh>
 #include <util/logger.hh>
 
 #include <fstream>
@@ -45,5 +46,24 @@ void log(const std::string &str)
 const std::string &getLastLog()
 {
     return last_log;
+}
+
+/**
+ * API  function log(...) : void
+ * Prints something in js-styled way
+ */
+API_FUNCTION(log)
+{
+    std::stringstream ss;
+
+    const int top = lua_gettop(lua);
+    for(int i = 1; i <= top; i++) {
+        ss << lua_tostring(lua, i);
+        ss << "\t";
+    }
+
+    util::log("%s", ss.str().c_str());
+    
+    return 0;
 }
 } // namespace util
