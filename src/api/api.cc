@@ -12,14 +12,43 @@
 
 namespace api
 {
-void init(lua_State *lua)
+static class RootVM {
+public:
+    virtual ~RootVM();
+    void demand();
+    lua_State *lua = nullptr;
+} root_vm;
+
+RootVM::~RootVM()
 {
-    for(Module *module = Module::base; module; module = module->next) {
-        std::vector<luaL_Reg> functions(module->functions);
-        functions.push_back(luaL_Reg { nullptr, nullptr });
-        lua_createtable(lua, static_cast<int>(functions.size() - 1), 0);
-        luaL_setfuncs(lua, functions.data(), 0);
-        lua_setglobal(lua, module->name);
+    if(lua)
+        lua_close(lua);
+}
+
+void RootVM::demand()
+{
+    if(!lua) {
+        lua = luaL_newstate();
+        for(Module *module = Module::base; module; module = module->next) {
+            std::vector<luaL_Reg> functions(module->functions);
+            functions.push_back(luaL_Reg { nullptr, nullptr });
+            lua_createtable(lua, static_cast<int>(functions.size() - 1), 0);
+            luaL_setfuncs(lua, functions.data(), 0);
+            lua_setglobal(lua, module->name);
+        }
     }
+}
+
+VM::VM()
+{
+    root_vm.demand();
+    lua = lua_newthread(root_vm.lua);
+    ref_id = luaL_ref(root_vm.lua, LUA_REGISTRYINDEX);
+}
+
+VM::~VM()
+{
+    // The Lua thread should be GC'ed after that
+    luaL_unref(root_vm.lua, LUA_REGISTRYINDEX, ref_id);
 }
 } // namespace api

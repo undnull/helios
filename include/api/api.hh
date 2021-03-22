@@ -15,5 +15,19 @@
 
 namespace api
 {
-void init(lua_State *lua);
+class VM {
+public:
+    VM();
+    virtual ~VM();
+    constexpr lua_State *get() const;
+
+private:
+    lua_State *lua;
+    int ref_id;
+};
+
+inline constexpr lua_State *VM::get() const
+{
+    return lua;
+}
 } // namespace api

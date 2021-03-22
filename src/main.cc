@@ -77,10 +77,12 @@ int main(int argc, char **argv)
 {
     util::CommandLine args(argc, argv);
 
-    lua_State *lua = luaL_newstate();
-    api::init(lua);
-    api::include(lua, "assets/scripts/init.lua");
-    lua_close(lua);
+    // new scope to be sure we kill the fork vm
+    // before killing the root vm
+    {
+        api::VM vm;
+        api::include(vm.get(), "assets/scripts/init.lua");
+    }
 
     glfwSetErrorCallback(errorCallback);
     if(!glfwInit())

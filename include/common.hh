@@ -18,6 +18,7 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <memory>
+#include <mutex>
 #include <sstream>
 #include <stddef.h>
 #include <stdint.h>

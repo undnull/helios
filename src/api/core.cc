@@ -9,6 +9,7 @@
  */
 #include <api/core.hh>
 #include <api/module.hh>
+#include <util/logger.hh>
 
 namespace api
 {
@@ -18,6 +19,7 @@ bool include(lua_State *lua, const fs::path &path)
         const std::string &src = util::readTextFile(path);
         if(luaL_dostring(lua, src.c_str()) == LUA_OK)
             return true;
+        util::log("api: %s", lua_tostring(lua, -1));
     }
     return false;
 }

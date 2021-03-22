@@ -12,8 +12,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <mutex>
-#include <sstream>
 #include <time.h>
 
 namespace util
@@ -65,7 +63,7 @@ API_FUNCTION(logger, log)
 
     std::stringstream ss;
     for(int i = 1; i <= top; i++) {
-        ss << lua_tostring(lua, i);
+        ss << luaL_checkstring(lua, i);
         ss << "\t";
     }
 
@@ -86,7 +84,7 @@ API_FUNCTION(logger, dlog)
 
     std::stringstream ss;
     for(int i = 1; i <= top; i++) {
-        ss << lua_tostring(lua, i);
+        ss << luaL_checkstring(lua, i);
         ss << "\t";
     }
 
