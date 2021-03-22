@@ -9,4 +9,5 @@
 #
 target_sources(helios PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/api.cc"
-    "${CMAKE_CURRENT_LIST_DIR}/function.cc")
+    "${CMAKE_CURRENT_LIST_DIR}/core.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/module.cc")

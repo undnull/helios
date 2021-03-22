@@ -8,44 +8,18 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <api/api.hh>
-#include <api/function.hh>
-#include <util/logger.hh>
+#include <api/module.hh>
 
 namespace api
 {
 void init(lua_State *lua)
 {
-    for(Function *fn = Function::base; fn; fn = fn->next) {
-        lua_pushcfunction(lua, fn->func);
-        lua_setglobal(lua, fn->name);
+    for(Module *module = Module::base; module; module = module->next) {
+        std::vector<luaL_Reg> functions(module->functions);
+        functions.push_back(luaL_Reg { nullptr, nullptr });
+        lua_createtable(lua, static_cast<int>(functions.size() - 1), 0);
+        luaL_setfuncs(lua, functions.data(), 0);
+        lua_setglobal(lua, module->name);
     }
-}
-
-bool execFile(lua_State *lua, const fs::path &path)
-{
-    if(fs::exists(path)) {
-        const std::string &s = util::readTextFile(path);
-        if(luaL_dostring(lua, s.c_str()) != LUA_OK) {
-            util::log("api: %s", lua_tostring(lua, -1));
-            return false;
-        }
-        return true;
-    }
-    return false;
-}
-
-/**
- * API  function include(path: string): void
- * An alternative to Lua's dofile() that utilizes
- * the engine-specific paths
- */
-API_FUNCTION(include)
-{
-    const int narg = lua_gettop(lua);
-    if(narg != 1)
-        return luaL_error(lua, "invalid argument count: %d", narg);
-    if(!execFile(lua, lua_tostring(lua, 1)))
-        return luaL_error(lua, "api::execFile failed");
-    return 0;
 }
 } // namespace api

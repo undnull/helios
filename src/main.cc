@@ -8,6 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <api/api.hh>
+#include <api/core.hh>
 #include <data/image.hh>
 #include <data/vidmode.hh>
 #include <input/keyboard.hh>
@@ -78,7 +79,7 @@ int main(int argc, char **argv)
 
     lua_State *lua = luaL_newstate();
     api::init(lua);
-    api::execFile(lua, "assets/scripts/init.lua");
+    api::include(lua, "assets/scripts/init.lua");
     lua_close(lua);
 
     glfwSetErrorCallback(errorCallback);

@@ -1,2 +1,2 @@
-log("logging from init.lua")
-include("assets/scripts/test.lua")
+core.include "assets/scripts/test_1.lua"
+core.include "assets/scripts/test_2.lua"
