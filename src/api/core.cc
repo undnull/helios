@@ -44,3 +44,17 @@ API_FUNCTION(core, include)
     }
     return luaL_error(lua, "argument error");
 }
+
+/**
+ * API: function core.shutdown(core: integer): void
+ * Exits the application.
+ */
+API_FUNCTION(core, shutdown)
+{
+    const int top = lua_gettop(lua);
+    if(top == 1) {
+        exit(static_cast<int>(luaL_checkinteger(lua, 1)));
+        return 0;
+    }
+    return luaL_error(lua, "argument error");
+}
