@@ -8,21 +8,21 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <common.hh>
+
 #include <stdio.h>
-#include <string>
-#include <vector>
 
 namespace util
 {
 template<typename... Args>
-static inline constexpr const std::string format(const std::string &fmt, Args... args)
+static inline constexpr const std::string format(const std::string &fmt, Args &&... args)
 {
-    const int count = snprintf(nullptr, 0, fmt.c_str(), args...);
+    const int count = snprintf(nullptr, 0, fmt.c_str(), std::forward<Args>(args)...);
     if(count <= 0)
         return fmt;
 
     std::vector<char> buffer((size_t)count + 1);
-    snprintf(buffer.data(), buffer.size(), fmt.c_str(), args...);
+    snprintf(buffer.data(), buffer.size(), fmt.c_str(), std::forward<Args>(args)...);
 
     return std::string(buffer.data());
 }
