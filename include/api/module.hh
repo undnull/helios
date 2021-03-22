@@ -43,9 +43,9 @@ inline Function::Function(Module &m, const char *name, lua_CFunction func)
 } // namespace api
 
 #define API_MODULE(module)                                                          \
-    static api::Module __api_m_##module(#module)
+    static api::Module x_api_m_##module(#module)
 
 #define API_FUNCTION(module, name)                                                  \
-    static int __api_c_##name(lua_State *lua);                                      \
-    static api::Function __api_f_##name(__api_m_##module, #name, __api_c_##name);   \
-    static int __api_c_##name(lua_State *lua)
+    static int x_api_c_##name(lua_State *lua);                                      \
+    static api::Function x_api_f_##name(x_api_m_##module, #name, x_api_c_##name);   \
+    static int x_api_c_##name(lua_State *lua)
