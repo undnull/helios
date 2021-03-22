@@ -38,8 +38,3 @@ But over time the project started shaping to a game engine, so I've relicensed i
 I was often thinking about this. Will there be an embedded level editor or script editor? The answer is... **No**. I don't want to bloat the engine with some heavy stuff that won't be even used for production.  
 Instead, I would write a small amount of plug-ins for VSCode (engine API auto-completion for scripts) and Tiled Editor (engine's tilemap format support). Of couse I will write my own toolset for stuff like JSON->BSON compiler.  
 Be as simple as possible, right? :)
-
-## Scripting language
-I firstly was thinking about Lua as an easy to learn language that is widely supported.  
-But I also like AngelScript for its C++-ish nature and syntax.  
-I will choose that when the time comes.
