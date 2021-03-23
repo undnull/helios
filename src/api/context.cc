@@ -1,5 +1,5 @@
 /*
- * api.cc
+ * context.cc
  * Created: 2021-03-22, 00:17:18.
  * Copyright (C) 2021, Kirill GPRB.
  * 
@@ -7,25 +7,25 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <api/api.hh>
+#include <api/context.hh>
 #include <api/module.hh>
 
 namespace api
 {
-static class RootVM {
+static class VM {
 public:
-    virtual ~RootVM();
+    virtual ~VM();
     void demand();
     lua_State *lua = nullptr;
-} root_vm;
+} vm;
 
-RootVM::~RootVM()
+VM::~VM()
 {
     if(lua)
         lua_close(lua);
 }
 
-void RootVM::demand()
+void VM::demand()
 {
     if(!lua) {
         lua = luaL_newstate();
@@ -39,16 +39,16 @@ void RootVM::demand()
     }
 }
 
-VM::VM()
+Context::Context()
 {
-    root_vm.demand();
-    lua = lua_newthread(root_vm.lua);
-    ref_id = luaL_ref(root_vm.lua, LUA_REGISTRYINDEX);
+    vm.demand();
+    lua = lua_newthread(vm.lua);
+    ref_id = luaL_ref(vm.lua, LUA_REGISTRYINDEX);
 }
 
-VM::~VM()
+Context::~Context()
 {
     // The Lua thread should be GC'ed after that
-    luaL_unref(root_vm.lua, LUA_REGISTRYINDEX, ref_id);
+    luaL_unref(vm.lua, LUA_REGISTRYINDEX, ref_id);
 }
 } // namespace api

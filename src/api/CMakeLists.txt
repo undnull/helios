@@ -8,6 +8,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 target_sources(helios PRIVATE
-    "${CMAKE_CURRENT_LIST_DIR}/api.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/context.cc"
     "${CMAKE_CURRENT_LIST_DIR}/core.cc"
     "${CMAKE_CURRENT_LIST_DIR}/module.cc")

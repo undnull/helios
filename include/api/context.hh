@@ -1,5 +1,5 @@
 /*
- * api.hh
+ * context.hh
  * Created: 2021-03-22, 00:14:15.
  * Copyright (C) 2021, Kirill GPRB.
  * 
@@ -15,10 +15,10 @@
 
 namespace api
 {
-class VM {
+class Context {
 public:
-    VM();
-    virtual ~VM();
+    Context();
+    virtual ~Context();
     constexpr lua_State *get() const;
 
 private:
@@ -26,7 +26,7 @@ private:
     int ref_id;
 };
 
-inline constexpr lua_State *VM::get() const
+inline constexpr lua_State *Context::get() const
 {
     return lua;
 }

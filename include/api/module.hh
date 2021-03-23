@@ -8,7 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <api/api.hh>
+#include <common.hh>
+
+#include <lua.hpp>
 
 namespace api
 {
