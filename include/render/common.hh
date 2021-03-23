@@ -11,9 +11,9 @@
 #include <data/transform.hh>
 #include <data/vertex.hh>
 #include <data/view.hh>
-#include <gfx/framebuffer.hh>
-#include <gfx/pipeline.hh>
-#include <gfx/vertex_array.hh>
+#include <glxx/framebuffer.hh>
+#include <glxx/pipeline.hh>
+#include <glxx/vertex_array.hh>
 #include <util/fs.hh>
 #include <util/logger.hh>
 

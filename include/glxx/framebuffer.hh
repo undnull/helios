@@ -8,9 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <gfx/texture.hh>
+#include <glxx/texture.hh>
 
-namespace gfx
+namespace glxx
 {
 class Framebuffer {
 public:
@@ -70,4 +70,4 @@ inline constexpr GLuint Framebuffer::get() const
 {
     return framebuffer;
 }
-} // namespace gfx
+} // namespace glxx

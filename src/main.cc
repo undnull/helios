@@ -123,7 +123,7 @@ int main(int argc, char **argv)
         // sprite
         struct {
             float2_t size;
-            gfx::Texture texture;
+            glxx::Texture texture;
             data::Transform transform;
         } sprite;
 

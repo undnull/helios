@@ -24,18 +24,18 @@ public:
     SpriteRenderer(int width, int height);
 
     void setView(const data::View &view);
-    void draw(const std::vector<data::Transform> &transforms, const gfx::Texture &texture, const float2_t &size);
+    void draw(const std::vector<data::Transform> &transforms, const glxx::Texture &texture, const float2_t &size);
 
 private:
-    gfx::VertexShader vert;
-    gfx::FragmentShader frag;
-    gfx::Pipeline pipeline;
+    glxx::VertexShader vert;
+    glxx::FragmentShader frag;
+    glxx::Pipeline pipeline;
 
-    gfx::Buffer vbo, ebo;
-    gfx::VertexArray vao;
+    glxx::Buffer vbo, ebo;
+    glxx::VertexArray vao;
 
-    gfx::Buffer ubo;
-    gfx::Buffer ssbo;
+    glxx::Buffer ubo;
+    glxx::Buffer ssbo;
 
     std::vector<float4x4_t> instances;
 };

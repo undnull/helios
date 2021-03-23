@@ -8,9 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <gfx/shader.hh>
+#include <glxx/shader.hh>
 
-namespace gfx
+namespace glxx
 {
 template<ShaderStage T>
 constexpr GLenum SHADER_STAGE_BIT = 0;
@@ -72,4 +72,4 @@ inline constexpr GLuint Pipeline::get() const
 {
     return pipeline;
 }
-} // namespace gfx
+} // namespace glxx

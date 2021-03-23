@@ -31,13 +31,13 @@ SpriteRenderer::SpriteRenderer(int width, int height)
 {
     const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
 
-    ubo.storage<gfx::BufferUsage::DYNAMIC>(sizeof(ubo_s));
+    ubo.storage<glxx::BufferUsage::DYNAMIC>(sizeof(ubo_s));
     ubo.subData(offsetof(ubo_s, projection), &projection_m, sizeof(projection_m));
 
-    vbo.storage<gfx::BufferUsage::STATIC>(sizeof(vertices));
+    vbo.storage<glxx::BufferUsage::STATIC>(sizeof(vertices));
     vbo.subData(0, vertices, sizeof(vertices));
 
-    ebo.storage<gfx::BufferUsage::STATIC>(sizeof(indices));
+    ebo.storage<glxx::BufferUsage::STATIC>(sizeof(indices));
     ebo.subData(0, indices, sizeof(indices));
 
     vao.bindVertexBuffer(vbo, 0, offsetof(data::vertex, position), sizeof(data::vertex));
@@ -71,7 +71,7 @@ void SpriteRenderer::setView(const data::View &view)
     ubo.subData(offsetof(ubo_s, view), &view_m, sizeof(view_m));
 }
 
-void SpriteRenderer::draw(const std::vector<data::Transform> &transforms, const gfx::Texture &texture, const float2_t &size)
+void SpriteRenderer::draw(const std::vector<data::Transform> &transforms, const glxx::Texture &texture, const float2_t &size)
 {
     // The sprite mesh is internally set to be a unit one ([0.0, 0.0] to [1.0, 1.0])
     // thus the additional scale matrix will just resize it to the target size
@@ -86,7 +86,7 @@ void SpriteRenderer::draw(const std::vector<data::Transform> &transforms, const 
     const size_t num_instances = instances.size();
     const size_t ssbo_size = sizeof(float4x4_t) * num_instances;
 
-    ssbo.storage<gfx::BufferUsage::DYNAMIC>(ssbo_size);
+    ssbo.storage<glxx::BufferUsage::DYNAMIC>(ssbo_size);
     ssbo.subData(0, instances.data(), ssbo_size);
 
     glUseProgram(0);

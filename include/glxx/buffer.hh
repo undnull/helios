@@ -8,11 +8,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <common.hh>
-
 #include <glad/glad.h>
+#include <utility>
 
-namespace gfx
+namespace glxx
 {
 enum class BufferUsage {
     STATIC,
@@ -88,4 +87,4 @@ inline constexpr GLuint Buffer::get() const
 {
     return buffer;
 }
-} // namespace gfx
+} // namespace glxx

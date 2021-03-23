@@ -8,9 +8,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <gfx/buffer.hh>
+#include <glxx/buffer.hh>
 
-namespace gfx
+namespace glxx
 {
 template<typename T>
 constexpr unsigned int ATTRIBUTE_FORMAT = 0;
@@ -96,4 +96,4 @@ inline constexpr unsigned int VertexArray::get() const
 {
     return vaobj;
 }
-} // namespace gfx
+} // namespace glxx

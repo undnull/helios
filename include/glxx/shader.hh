@@ -8,11 +8,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <common.hh>
-
 #include <glad/glad.h>
+#include <utility>
 
-namespace gfx
+namespace glxx
 {
 enum class ShaderStage {
     VERTEX,
@@ -141,4 +140,4 @@ inline constexpr GLuint Shader<T>::get() const
 {
     return program;
 }
-} // namespace gfx
+} // namespace glxx
