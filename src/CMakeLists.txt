@@ -9,7 +9,6 @@
 #
 target_sources(helios PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/main.cc")
-add_subdirectory(api)
 add_subdirectory(data)
 add_subdirectory(input)
 add_subdirectory(render)

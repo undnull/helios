@@ -7,9 +7,6 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <api/context.hh>
-#include <api/core.hh>
-#include <api/event.hh>
 #include <data/image.hh>
 #include <data/vidmode.hh>
 #include <input/keyboard.hh>
@@ -74,19 +71,9 @@ static void errorCallback(int code, const char *message)
     util::log("glfw error %d: %s", code, message);
 }
 
-API_EVENT(devtest, "game.main");
-
 int main(int argc, char **argv)
 {
     util::CommandLine args(argc, argv);
-
-    // new scope to be sure we kill the fork vm
-    // before killing the root vm
-    {
-        api::Context ctx;
-        api::include(ctx.get(), "assets/scripts/init.lua");
-        API_EVENT_CALL(devtest, ctx.get());
-    }
 
     glfwSetErrorCallback(errorCallback);
     if(!glfwInit())

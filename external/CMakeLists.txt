@@ -31,8 +31,5 @@ target_link_libraries(helios imgui)
 add_subdirectory(json)
 target_link_libraries(helios json)
 
-add_subdirectory(lua)
-target_link_libraries(helios lua)
-
 add_subdirectory(stb)
 target_link_libraries(helios stb)

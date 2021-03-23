@@ -7,7 +7,6 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <api/module.hh>
 #include <util/logger.hh>
 
 #include <fstream>
@@ -46,50 +45,3 @@ const std::string &getLastLog()
     return last_log;
 }
 } // namespace util
-
-/**
- * API: logger.*
- * Implements the engine logger for Lua.
- */
-API_MODULE(logger);
-
-/**
- * API: function logger.log(...): void
- * Prints something in js-styled way.
- */
-API_FUNCTION(logger, log)
-{
-    const int top = lua_gettop(lua);
-
-    std::stringstream ss;
-    for(int i = 1; i <= top; i++) {
-        ss << luaL_checkstring(lua, i);
-        ss << "\t";
-    }
-
-    util::log(ss.str());
-
-    return 0;
-}
-
-/**
- * API: function logger.dlog(...): void
- * Prints something in js-styled way if the
- * project is built for debugging.
- */
-API_FUNCTION(logger, dlog)
-{
-#ifndef NDEBUG
-    const int top = lua_gettop(lua);
-
-    std::stringstream ss;
-    for(int i = 1; i <= top; i++) {
-        ss << luaL_checkstring(lua, i);
-        ss << "\t";
-    }
-
-    util::log(ss.str());
-#endif
-
-    return 0;
-}
