@@ -10,4 +10,5 @@
 target_sources(helios PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/context.cc"
     "${CMAKE_CURRENT_LIST_DIR}/core.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/event.cc"
     "${CMAKE_CURRENT_LIST_DIR}/module.cc")

@@ -8,6 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <api/context.hh>
+#include <api/event.hh>
 #include <api/module.hh>
 
 namespace api
@@ -35,6 +36,10 @@ void VM::demand()
             lua_createtable(lua, static_cast<int>(functions.size() - 1), 0);
             luaL_setfuncs(lua, functions.data(), 0);
             lua_setglobal(lua, module->name);
+        }
+        for(Event *event = Event::base; event; event = event->next) {
+            lua_newtable(lua);
+            event->ref_id = luaL_ref(lua, LUA_REGISTRYINDEX);
         }
     }
 }

@@ -9,6 +9,7 @@
  */
 #include <api/context.hh>
 #include <api/core.hh>
+#include <api/event.hh>
 #include <data/image.hh>
 #include <data/vidmode.hh>
 #include <input/keyboard.hh>
@@ -73,6 +74,8 @@ static void errorCallback(int code, const char *message)
     util::log("glfw error %d: %s", code, message);
 }
 
+API_EVENT(devtest, "game.main");
+
 int main(int argc, char **argv)
 {
     util::CommandLine args(argc, argv);
@@ -82,6 +85,7 @@ int main(int argc, char **argv)
     {
         api::Context ctx;
         api::include(ctx.get(), "assets/scripts/init.lua");
+        API_EVENT_CALL(devtest, ctx.get());
     }
 
     glfwSetErrorCallback(errorCallback);
