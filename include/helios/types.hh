@@ -16,8 +16,6 @@
 #include <stddef.h>
 #include <utility>
 
-using size2_t = glm::vec<2, size_t, glm::packed_highp>;
-
 using float2_t = glm::vec<2, float, glm::packed_highp>;
 using float3_t = glm::vec<3, float, glm::packed_highp>;
 using float4_t = glm::vec<4, float, glm::packed_highp>;
@@ -28,14 +26,3 @@ struct vertex {
     float2_t position;
     float2_t texcoord;
 };
-
-namespace std
-{
-template<>
-struct hash<size2_t> {
-    size_t operator()(const size2_t &v) const
-    {
-        return (v.x * 73856093) ^ (v.y * 19349663);
-    }
-};
-} // namespace std

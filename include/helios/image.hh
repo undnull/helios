@@ -37,7 +37,7 @@ public:
 
 private:
     int width, height, comp;
-    void *pixels;
+    unsigned char *pixels;
 };
 
 inline constexpr int Image::getWidth() const
