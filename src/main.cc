@@ -7,31 +7,23 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <data/image.hh>
-#include <data/vidmode.hh>
-#include <input/keyboard.hh>
-#include <render/sprite_renderer.hh>
-#include <ui/logger_out.hh>
-#include <ui/menu_bar.hh>
-#include <ui/ui.hh>
-#include <util/clock.hh>
-#include <util/logger.hh>
-
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+#include <helios/image.hh>
+#include <helios/logger.hh>
+#include <helios/plat/clock.hh>
+#include <helios/plat/window.hh>
+#include <helios/render/sprite_renderer.hh>
+#include <helios/util/args.hh>
 
 static void debugCallback(unsigned int src, unsigned int type, unsigned int id, unsigned int severity, int length, const char *msg, const void *arg)
 {
+    Logger logger;
     switch(severity) {
         case GL_DEBUG_SEVERITY_HIGH:
         case GL_DEBUG_SEVERITY_MEDIUM:
-            util::log("opengl: %s", msg);
+            logger.log("opengl: %s", msg);
             break;
         default:
-            util::dlog("opengl: %s", msg);
+            logger.dlog("opengl: %s", msg);
             break;
     }
 }
@@ -57,7 +49,7 @@ static bool checkGLSuitability()
     const gl_extension *extension = extensions;
     do {
         if(!extension->present) {
-            util::log("opengl: extension %s is not present", extension->id);
+            Logger().log("opengl: extension %s is not present", extension->id);
             return false;
         }
         extension++;
@@ -68,35 +60,23 @@ static bool checkGLSuitability()
 
 static void errorCallback(int code, const char *message)
 {
-    util::log("glfw error %d: %s", code, message);
+    Logger().log("glfw error %d: %s", code, message);
 }
 
 int main(int argc, char **argv)
 {
-    util::CommandLine args(argc, argv);
+    util::Args args(argc, argv);
+
+    Logger logger;
+    logger.log("Logger test");
 
     glfwSetErrorCallback(errorCallback);
     if(!glfwInit())
         return 1;
 
-    data::VidMode vidmode;
-    vidmode.loadFromFile("vidmode.json");
-    vidmode.loadFromArgs(args);
+    plat::Window window(800, 600, "Window");
+    window.makeContextCurrent();
 
-    glfwWindowHint(GLFW_SAMPLES, 4);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_DECORATED, vidmode.border);
-    GLFWwindow *window = glfwCreateWindow(vidmode.width, vidmode.height, "helios", vidmode.monitor, nullptr);
-    if(!window) {
-        glfwTerminate();
-        return 1;
-    }
-
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
-
-    glfwSetKeyCallback(window, input::keyCallback);
-
-    glfwMakeContextCurrent(window);
     if(!gladLoadGL()) {
         glfwTerminate();
         return 1;
@@ -107,7 +87,7 @@ int main(int argc, char **argv)
         return false;
     }
 
-    glfwSwapInterval(vidmode.swap_interval);
+    window.setSwapInterval(1);
 
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -123,11 +103,11 @@ int main(int argc, char **argv)
         // sprite
         struct {
             float2_t size;
-            glxx::Texture texture;
-            data::Transform transform;
+            gl::Texture texture;
+            math::Transform transform;
         } sprite;
 
-        data::Image image;
+        Image image;
         if(!image.loadFromFile("assets/textures/bruh.jpg"))
             return false;
 
@@ -137,7 +117,7 @@ int main(int argc, char **argv)
         sprite.size = float2_t(100.0f, 100.0f);
 
         sprite.texture.storage(width, height, GL_RGBA16F);
-        sprite.texture.subImage(width, height, data::Image::TEXTURE_FORMAT, data::Image::TEXTURE_TYPE, image.getPixels());
+        sprite.texture.subImage(width, height, Image::TEXTURE_FORMAT, Image::TEXTURE_TYPE, image.getPixels());
         sprite.texture.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         sprite.texture.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         sprite.texture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -145,7 +125,7 @@ int main(int argc, char **argv)
 
         sprite.transform.setOrigin(float2_t(50.0f, 50.0f));
 
-        std::vector<data::Transform> transforms;
+        std::vector<math::Transform> transforms;
 
         // Sprite #1
         sprite.transform.setPosition(float2_t(100.0f, 100.0f));
@@ -165,45 +145,28 @@ int main(int argc, char **argv)
         // Sprite #5 = 2, 3 and 4 combined
         transforms.push_back(sprite.transform);
 
-        render::SpriteRenderer sprite_renderer(vidmode.width, vidmode.height);
+        render::SpriteRenderer sprite_renderer(800, 600);
 
-        data::View view;
+        math::View view;
         sprite_renderer.setView(view);
 
         //ui::init(window);
         //ui::LoggerOut logger_out;
         //ui::MenuBar menu_bar;
 
-        util::Clock clock;
+        plat::Clock clock;
         float sincos_angle = 0.0f;
 
-        util::Clock perf;
+        plat::Clock perf;
         float perf_frametime = 0.0f;
 
-        while(!glfwWindowShouldClose(window)) {
+        while(!window.shouldClose()) {
             const float frametime = clock.reset();
             perf_frametime += frametime;
             perf_frametime *= 0.5f;
 
-            {
-                float2_t velocity = float2_t(0.0f, 0.0f);
-                if(input::isKeyPressed(GLFW_KEY_W))
-                    velocity.y += 1.0f;
-                if(input::isKeyPressed(GLFW_KEY_A))
-                    velocity.x += 1.0f;
-                if(input::isKeyPressed(GLFW_KEY_S))
-                    velocity.y += -1.0f;
-                if(input::isKeyPressed(GLFW_KEY_D))
-                    velocity.x += -1.0f;
-
-                if(glm::abs(glm::length(velocity)) > 0.0f) {
-                    view.move(velocity * 128.0f * frametime);
-                    sprite_renderer.setView(view);
-                }
-            }
-
             if(perf.getTime() >= 1.0f) {
-                util::log("average frametime: %f (%f FPS)", perf_frametime, 1.0f / perf_frametime);
+                logger.log("average frametime: %f (%f FPS)", perf_frametime, 1.0f / perf_frametime);
                 perf.reset();
             }
 
@@ -236,15 +199,10 @@ int main(int argc, char **argv)
             //}
 
             glBindProgramPipeline(0);
-            glfwSwapBuffers(window);
-            glfwPollEvents();
+            window.swapBuffers();
+            window.handleEvents();
         }
     }
-
-    glfwDestroyWindow(window);
-    glfwTerminate();
-
-    vidmode.saveToFile("vidmode.json");
 
     return 0;
 }

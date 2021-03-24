@@ -7,13 +7,14 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <render/sprite_renderer.hh>
-
+#include <helios/logger.hh>
+#include <helios/plat/fs.hh>
+#include <helios/render/sprite_renderer.hh>
 #include <algorithm>
 
 namespace render
 {
-static const data::vertex vertices[] = {
+static const vertex vertices[] = {
     { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
     { { 1.0f, 0.0f }, { 1.0f, 0.0f } },
     { { 1.0f, 1.0f }, { 1.0f, 1.0f } },
@@ -29,19 +30,21 @@ static const GLuint indices[NUM_INDICES] = {
 
 SpriteRenderer::SpriteRenderer(int width, int height)
 {
+    Logger logger;
+
     const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
 
-    ubo.storage<glxx::BufferUsage::DYNAMIC>(sizeof(ubo_s));
+    ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
     ubo.subData(offsetof(ubo_s, projection), &projection_m, sizeof(projection_m));
 
-    vbo.storage<glxx::BufferUsage::STATIC>(sizeof(vertices));
+    vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
     vbo.subData(0, vertices, sizeof(vertices));
 
-    ebo.storage<glxx::BufferUsage::STATIC>(sizeof(indices));
+    ebo.storage<gl::BufferUsage::STATIC>(sizeof(indices));
     ebo.subData(0, indices, sizeof(indices));
 
-    vao.bindVertexBuffer(vbo, 0, offsetof(data::vertex, position), sizeof(data::vertex));
-    vao.bindVertexBuffer(vbo, 1, offsetof(data::vertex, texcoord), sizeof(data::vertex));
+    vao.bindVertexBuffer(vbo, 0, offsetof(vertex, position), sizeof(vertex));
+    vao.bindVertexBuffer(vbo, 1, offsetof(vertex, texcoord), sizeof(vertex));
     vao.bindElementBuffer(ebo);
 
     vao.enableAttribute(0);
@@ -53,25 +56,25 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = util::readBinaryFile("assets/shaders/sprite.vert.spv");
+    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/sprite.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
-        util::log("sprite.vert: %s", vert.getInfoLog());
+        logger.log("sprite.vert: %s", vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = util::readBinaryFile("assets/shaders/sprite.frag.spv");
+    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/sprite.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
-        util::log("sprite.frag: %s", frag.getInfoLog());
+        logger.log("sprite.frag: %s", frag.getInfoLog());
 
     pipeline.stage(vert);
     pipeline.stage(frag);
 }
 
-void SpriteRenderer::setView(const data::View &view)
+void SpriteRenderer::setView(const math::View &view)
 {
     const float4x4_t view_m = view.getMatrix();
     ubo.subData(offsetof(ubo_s, view), &view_m, sizeof(view_m));
 }
 
-void SpriteRenderer::draw(const std::vector<data::Transform> &transforms, const glxx::Texture &texture, const float2_t &size)
+void SpriteRenderer::draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size)
 {
     // The sprite mesh is internally set to be a unit one ([0.0, 0.0] to [1.0, 1.0])
     // thus the additional scale matrix will just resize it to the target size
@@ -79,14 +82,14 @@ void SpriteRenderer::draw(const std::vector<data::Transform> &transforms, const 
     ubo.subData(offsetof(ubo_s, scale), &size_m, sizeof(size_m));
 
     instances.clear();
-    std::transform(transforms.cbegin(), transforms.cend(), std::back_inserter(instances), [](const data::Transform &t) {
+    std::transform(transforms.cbegin(), transforms.cend(), std::back_inserter(instances), [](const math::Transform &t) {
         return t.getMatrix();
     });
 
     const size_t num_instances = instances.size();
     const size_t ssbo_size = sizeof(float4x4_t) * num_instances;
 
-    ssbo.storage<glxx::BufferUsage::DYNAMIC>(ssbo_size);
+    ssbo.storage<gl::BufferUsage::DYNAMIC>(ssbo_size);
     ssbo.subData(0, instances.data(), ssbo_size);
 
     glUseProgram(0);

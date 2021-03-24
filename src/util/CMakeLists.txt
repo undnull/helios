@@ -8,5 +8,4 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 target_sources(helios PRIVATE
-    "${CMAKE_CURRENT_LIST_DIR}/command_line.cc"
-    "${CMAKE_CURRENT_LIST_DIR}/logger.cc")
+    "${CMAKE_CURRENT_LIST_DIR}/args.cc")

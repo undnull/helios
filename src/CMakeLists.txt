@@ -8,9 +8,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 target_sources(helios PRIVATE
+    "${CMAKE_CURRENT_LIST_DIR}/image.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/logger.cc"
     "${CMAKE_CURRENT_LIST_DIR}/main.cc")
-add_subdirectory(data)
-add_subdirectory(input)
 add_subdirectory(render)
-add_subdirectory(ui)
 add_subdirectory(util)
