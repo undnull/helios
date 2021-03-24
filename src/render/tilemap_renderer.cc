@@ -29,7 +29,7 @@ static const GLuint indices[NUM_INDICES] = {
 
 TilemapRenderer::TilemapRenderer(int width, int height)
 {
-    Logger logger("tilemap_renderer");
+    Logger logger("TilemapRenderer");
 
     const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
 
@@ -59,11 +59,11 @@ TilemapRenderer::TilemapRenderer(int width, int height)
 
     const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/tilemap.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
-        logger.log("sprite.vert: %s", vert.getInfoLog());
+        logger.log("%s", vert.getInfoLog());
 
     const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/tilemap.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
-        logger.log("sprite.frag: %s", frag.getInfoLog());
+        logger.log("%s", frag.getInfoLog());
 
     pipeline.stage(vert);
     pipeline.stage(frag);

@@ -103,8 +103,10 @@ inline bool Shader<T>::link(const void *binary, size_t size)
         GLint length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 
-        info_log = new char[length];
-        glGetShaderInfoLog(shader, length, nullptr, info_log);
+        if(length) {
+            info_log = new char[length];
+            glGetShaderInfoLog(shader, length, nullptr, info_log);
+        }
 
         glDeleteShader(shader);
         return false;
@@ -120,8 +122,10 @@ inline bool Shader<T>::link(const void *binary, size_t size)
         int length;
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
 
-        info_log = new char[length];
-        glGetProgramInfoLog(program, length, nullptr, info_log);
+        if(length) {
+            info_log = new char[length];
+            glGetProgramInfoLog(program, length, nullptr, info_log);
+        }
 
         return false;
     }

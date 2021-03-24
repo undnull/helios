@@ -32,11 +32,13 @@ static inline const std::vector<uint8_t> readBinaryFile(const path &path)
 
     std::vector<uint8_t> buffer;
 
-    ifs.seekg(0, std::ios::end);
-    buffer.reserve(ifs.tellg());
-    ifs.seekg(0, std::ios::beg);
-
-    buffer.insert(buffer.begin(), std::istream_iterator<uint8_t>(ifs), std::istream_iterator<uint8_t>());
+    if(ifs.good()) {
+        ifs.seekg(0, std::ios::end);
+        buffer.reserve(ifs.tellg());
+        ifs.seekg(0, std::ios::beg);
+        buffer.insert(buffer.begin(), std::istream_iterator<uint8_t>(ifs), std::istream_iterator<uint8_t>());
+    }
+    
     return buffer;
 }
 

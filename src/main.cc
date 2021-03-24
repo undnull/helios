@@ -18,7 +18,7 @@
 
 static void debugCallback(unsigned int src, unsigned int type, unsigned int id, unsigned int severity, int length, const char *msg, const void *arg)
 {
-    Logger logger("gl");
+    Logger logger("OpenGL");
     switch(severity) {
         case GL_DEBUG_SEVERITY_HIGH:
         case GL_DEBUG_SEVERITY_MEDIUM:

@@ -14,6 +14,6 @@ namespace plat
 {
 void Context::onError(int code, const char *message)
 {
-    Logger("glfw").log("error %d: %s", code, message);
+    Logger("GLFW").log("error %d: %s", code, message);
 }
 } // namespace plat
