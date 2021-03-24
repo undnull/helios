@@ -22,13 +22,20 @@ sampler2D tileset : register(S0);
 sampler2D tilemap : register(S1);
 
 /**
- * Based on
- *  https://blog.tojicode.com/2012/07/sprite-tile-maps-on-gpu.html
+ * Basically what it does it take a pixel from the tilemap
+ * and pick a tile from a tileset assigned to the tilemap.
+ * So the pixel color (0; 0; M) means that the tile at (0; 0)
+ * will be used for displaying.
+ * Based on: https://blog.tojicode.com/2012/07/sprite-tile-maps-on-gpu.html
  */
 float4 main(ps_input input) : SV_Target
 {
     float2 pixcoord = input.texcoord * tilemap_size * tile_size;
     float4 color = tex2D(tilemap, input.texcoord);
+
+    // Discard fully white pixels
+    if(color.r == 1.0 && color.g == 1.0)
+        return float4(0.0, 0.0, 0.0, 0.0);
 
     float2 tile_coord = fmod(pixcoord, tile_size);
     float2 tile_offset = floor(color.rg * 256.0) * tile_size;
