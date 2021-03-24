@@ -77,8 +77,6 @@ void TilemapRenderer::setView(const math::View &view)
 
 void TilemapRenderer::draw(const math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset)
 {
-    // The tilemap mesh is internally set to be a unit one ([0.0, 0.0] to [1.0, 1.0])
-    // thus the additional scale matrix will just resize it to the target size
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
     ubo0.subData(offsetof(ubo0_s, scale), &size_m, sizeof(size_m));
 

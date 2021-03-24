@@ -13,6 +13,7 @@
 #include <helios/plat/clock.hh>
 #include <helios/plat/context.hh>
 #include <helios/plat/window.hh>
+#include <helios/render/background_renderer.hh>
 #include <helios/render/tilemap_renderer.hh>
 #include <helios/util/args.hh>
 
@@ -82,7 +83,7 @@ int main(int argc, char **argv)
 
     PLAT_CREATE_CONTEXT();
 
-    plat::Window window(800, 600, "Window");
+    plat::Window window(1152, 648, "Window");
     window.makeContextCurrent();
 
     if(!gl::load()) {
@@ -105,6 +106,10 @@ int main(int argc, char **argv)
     plat::Clock perf_timer, clock;
     float perf_frametime = 0.0f;
 
+    Image bg_img;
+    if(!bg_img.loadFromFile("assets/textures/parallax.png"))
+        return 1;
+
     Image tilemap_img;
     if(!tilemap_img.loadFromFile("assets/textures/tilemap.png"))
         return 1;
@@ -112,6 +117,14 @@ int main(int argc, char **argv)
     Image tileset_img;
     if(!tileset_img.loadFromFile("assets/textures/tileset.png"))
         return 1;
+
+    gl::Texture bg;
+    bg.storage(bg_img.getWidth(), bg_img.getHeight(), GL_RGBA16F);
+    bg.subImage(bg_img.getWidth(), bg_img.getHeight(), Image::TEXTURE_FORMAT, Image::TEXTURE_TYPE, bg_img.getPixels());
+    bg.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    bg.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    bg.setParameter(GL_TEXTURE_WRAP_S, GL_REPEAT);
+    bg.setParameter(GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     gl::Texture tilemap;
     tilemap.storage(tilemap_img.getWidth(), tilemap_img.getHeight(), GL_RGBA16F);
@@ -134,8 +147,11 @@ int main(int argc, char **argv)
 
     math::View view;
 
-    render::TilemapRenderer renderer(800, 600);
-    renderer.setView(view);
+    render::BackgroundRenderer background_renderer(1152, 648);
+    background_renderer.setView(view);
+
+    render::TilemapRenderer tilemap_renderer(1152, 648);
+    tilemap_renderer.setView(view);
 
     while(!window.shouldClose()) {
         const float frametime = clock.reset();
@@ -154,7 +170,9 @@ int main(int argc, char **argv)
             if(move_flags & MOVE_LEFT)
                 velocity.x -= speed;
             view.move(velocity * frametime);
-            renderer.setView(view);
+            logger.log("Position: (%.02f; %.02f)", view.getPosition().x, view.getPosition().y);
+            background_renderer.setView(view);
+            tilemap_renderer.setView(view);
         }
 
         if(perf_timer.getTime() >= 1.0f) {
@@ -162,7 +180,8 @@ int main(int argc, char **argv)
             perf_timer.reset();
         }
 
-        renderer.draw(transform, tilemap_size, tileset_size, tile_size, tilemap, tileset);
+        background_renderer.draw(bg, float2_t(0.1f, 0.0f));
+        tilemap_renderer.draw(transform, tilemap_size, tileset_size, tile_size, tilemap, tileset);
 
         glBindProgramPipeline(0);
         window.swapBuffers();

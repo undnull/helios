@@ -1,6 +1,6 @@
 /*
- * sprite_renderer.cc
- * Created: 2021-03-08, 19:02:15.
+ * background_renderer.cc
+ * Created: 2021-03-24, 23:14:25.
  * Copyright (C) 2021, Kirill GPRB.
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -9,8 +9,7 @@
  */
 #include <helios/logger.hh>
 #include <helios/plat/fs.hh>
-#include <helios/render/sprite_renderer.hh>
-#include <algorithm>
+#include <helios/render/background_renderer.hh>
 
 namespace render
 {
@@ -28,14 +27,18 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-SpriteRenderer::SpriteRenderer(int width, int height)
+BackgroundRenderer::BackgroundRenderer(int width, int height)
 {
-    Logger logger("SpriteRenderer");
+    Logger logger("BackgroundRenderer");
 
-    const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
+    const float2_t target_size = float2_t(width, height);
+    const float4x4_t projection = glm::ortho(0.0f, target_size.x, target_size.y, 0.0f, -1.0f, 1.0f);
+    const float4x4_t scale = glm::scale(float4x4_t(1.0f), float3_t(target_size, 1.0f));
 
     ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
-    ubo.subData(offsetof(ubo_s, projection), &projection_m, sizeof(projection_m));
+    ubo.subData(offsetof(ubo_s, projection), &projection, sizeof(projection));
+    ubo.subData(offsetof(ubo_s, scale), &scale, sizeof(scale));
+    ubo.subData(offsetof(ubo_s, target_size), &target_size, sizeof(target_size));
 
     vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
     vbo.subData(0, vertices, sizeof(vertices));
@@ -56,11 +59,11 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/sprite.vert.spv");
+    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/background.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         logger.log(vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/sprite.frag.spv");
+    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/background.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         logger.log(frag.getInfoLog());
 
@@ -68,34 +71,21 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     pipeline.stage(frag);
 }
 
-void SpriteRenderer::setView(const math::View &view)
+void BackgroundRenderer::setView(const math::View &view)
 {
-    const float4x4_t view_m = view.getMatrix();
-    ubo.subData(offsetof(ubo_s, view), &view_m, sizeof(view_m));
+    const float2_t view_transform = view.getPosition();
+    ubo.subData(offsetof(ubo_s, view_transform), &view_transform, sizeof(view_transform));
 }
 
-void SpriteRenderer::draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size)
+void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &scroll_factor)
 {
-    const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
-    ubo.subData(offsetof(ubo_s, scale), &size_m, sizeof(size_m));
-
-    instances.clear();
-    std::transform(transforms.cbegin(), transforms.cend(), std::back_inserter(instances), [](const math::Transform &t) {
-        return t.getMatrix();
-    });
-
-    const size_t num_instances = instances.size();
-    const size_t ssbo_size = sizeof(float4x4_t) * num_instances;
-
-    ssbo.storage<gl::BufferUsage::DYNAMIC>(ssbo_size);
-    ssbo.subData(0, instances.data(), ssbo_size);
+    ubo.subData(offsetof(ubo_s, scroll_factor), &scroll_factor, sizeof(scroll_factor));
 
     glUseProgram(0);
     glBindProgramPipeline(pipeline.get());
     glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo.get());
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo.get());
     glBindTextureUnit(0, texture.get());
     glBindVertexArray(vao.get());
-    glDrawElementsInstanced(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(num_instances));
+    glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);
 }
 } // namespace render
