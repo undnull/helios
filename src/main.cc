@@ -13,7 +13,7 @@
 #include <helios/plat/clock.hh>
 #include <helios/plat/context.hh>
 #include <helios/plat/window.hh>
-#include <helios/render/sprite_renderer.hh>
+#include <helios/render/tilemap_renderer.hh>
 #include <helios/util/args.hh>
 
 static void debugCallback(unsigned int src, unsigned int type, unsigned int id, unsigned int severity, int length, const char *msg, const void *arg)
@@ -56,112 +56,55 @@ int main(int argc, char **argv)
     const unsigned int nvidia_131185 = 131185;
     glDebugMessageControl(GL_DEBUG_SOURCE_API, GL_DEBUG_TYPE_OTHER, GL_DONT_CARE, 1, &nvidia_131185, GL_FALSE);
 
-    // All the GL-related (objects) stuff should be done
-    // inside of this scope to avoid destructor calls when
-    // the window is destroyed and the GL context is gone
-    {
-        // sprite
-        struct {
-            float2_t size;
-            gl::Texture texture;
-            math::Transform transform;
-        } sprite;
+    plat::Clock perf_timer, clock;
+    float perf_frametime = 0.0f;
 
-        Image image;
-        if(!image.loadFromFile("assets/textures/bruh.jpg"))
-            return false;
+    Image tilemap_img;
+    if(!tilemap_img.loadFromFile("assets/textures/tilemap.png"))
+        return 1;
+    
+    Image tileset_img;
+    if(!tileset_img.loadFromFile("assets/textures/tileset.png"))
+        return 1;
 
-        int width, height;
-        image.getSize(width, height);
+    gl::Texture tilemap;
+    tilemap.storage(tilemap_img.getWidth(), tilemap_img.getHeight(), GL_RGBA16F);
+    tilemap.subImage(tilemap_img.getWidth(), tilemap_img.getHeight(), Image::TEXTURE_FORMAT, Image::TEXTURE_TYPE, tilemap_img.getPixels());
+    tilemap.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    tilemap.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        sprite.size = float2_t(100.0f, 100.0f);
+    gl::Texture tileset;
+    tileset.storage(tileset_img.getWidth(), tileset_img.getHeight(), GL_RGBA16F);
+    tileset.subImage(tileset_img.getWidth(), tileset_img.getHeight(), Image::TEXTURE_FORMAT, Image::TEXTURE_TYPE, tileset_img.getPixels());
+    tileset.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    tileset.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        sprite.texture.storage(width, height, GL_RGBA16F);
-        sprite.texture.subImage(width, height, Image::TEXTURE_FORMAT, Image::TEXTURE_TYPE, image.getPixels());
-        sprite.texture.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        sprite.texture.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        sprite.texture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        sprite.texture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    const float tile_size = 16.0f;
+    const float2_t tilemap_size = { tilemap_img.getWidth(), tilemap_img.getHeight() };
+    const float2_t tileset_size = { tileset_img.getWidth(), tileset_img.getHeight() };
 
-        sprite.transform.setOrigin(float2_t(50.0f, 50.0f));
+    math::View view;
+    math::Transform transform;
+    transform.setScale(10.0f);
 
-        std::vector<math::Transform> transforms;
+    render::TilemapRenderer renderer(800, 600);
+    renderer.setView(view);
 
-        // Sprite #1
-        sprite.transform.setPosition(float2_t(100.0f, 100.0f));
-        transforms.push_back(sprite.transform);
+    while(!window.shouldClose()) {
+        const float frametime = clock.reset();
+        perf_frametime += frametime;
+        perf_frametime *= 0.5f;
 
-        // Sprite #2
-        sprite.transform.setPosition(float2_t(250.0f, 100.0f));
-        transforms.push_back(sprite.transform);
-
-        // Sprite #3
-        sprite.transform.setPosition(float2_t(400.0f, 100.0f));
-        transforms.push_back(sprite.transform);
-
-        // Sprite #4
-        transforms.push_back(sprite.transform);
-
-        // Sprite #5 = 2, 3 and 4 combined
-        transforms.push_back(sprite.transform);
-
-        render::SpriteRenderer sprite_renderer(800, 600);
-
-        math::View view;
-        sprite_renderer.setView(view);
-
-        //ui::init(window);
-        //ui::LoggerOut logger_out;
-        //ui::MenuBar menu_bar;
-
-        plat::Clock clock;
-        float sincos_angle = 0.0f;
-
-        plat::Clock perf;
-        float perf_frametime = 0.0f;
-
-        while(!window.shouldClose()) {
-            const float frametime = clock.reset();
-            perf_frametime += frametime;
-            perf_frametime *= 0.5f;
-
-            if(perf.getTime() >= 1.0f) {
-                logger.log("average frametime: %f (%f FPS)", perf_frametime, 1.0f / perf_frametime);
-                perf.reset();
-            }
-
-            transforms[0].rotate(90.0f * frametime);
-            transforms[1].rotate(90.0f * frametime * cos(sincos_angle));
-            transforms[2].setScale(sin(sincos_angle));
-            transforms[3].setPosition(float2_t(550.0f, 100.0f) + 42.0f * float2_t(sin(sincos_angle), cos(sincos_angle)));
-            //transforms[3].move(50.0f * float2_t(sin(sincos_angle), cos(sincos_angle)));
-
-            transforms[4].rotate(90.0f * frametime * cos(sincos_angle));
-            transforms[4].setScale(sin(sincos_angle));
-            transforms[4].setPosition(float2_t(250.0f, 350.0f) + 75.0f * float2_t(sin(sincos_angle), cos(sincos_angle)));
-            //transforms[4].move(50.0f * float2_t(sin(sincos_angle), cos(sincos_angle)));
-
-            sincos_angle += frametime;
-
-            glClear(GL_COLOR_BUFFER_BIT);
-            glUseProgram(0);
-
-            sprite_renderer.draw(transforms, sprite.texture, sprite.size);
-
-            //const ImGuiIO &io = ui::beginFrame();
-            //logger_out.draw(io);
-            //menu_bar.draw(io);
-            //ui::endFrame();
-
-            //if(menu_bar.file_exit) {
-            //    glfwSetWindowShouldClose(window, GLFW_TRUE);
-            //    menu_bar.file_exit = false;
-            //}
-
-            glBindProgramPipeline(0);
-            window.swapBuffers();
-            window.handleEvents();
+        if(perf_timer.getTime() >= 1.0f) {
+            logger.log("average frametime: %f (%f FPS)", perf_frametime, 1.0f / perf_frametime);
+            perf_timer.reset();
         }
+
+        renderer.draw(transform, tilemap_size, tileset_size, tile_size, tilemap, tileset);
+
+        glBindProgramPipeline(0);
+        window.swapBuffers();
+        window.handleEvents();
     }
 
     return 0;

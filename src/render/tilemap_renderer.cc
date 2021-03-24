@@ -1,6 +1,6 @@
 /*
- * sprite_renderer.cc
- * Created: 2021-03-08, 19:02:15.
+ * tilemap_renderer.cc
+ * Created: 2021-03-24, 15:14:30.
  * Copyright (C) 2021, Kirill GPRB.
  * 
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -9,8 +9,7 @@
  */
 #include <helios/logger.hh>
 #include <helios/plat/fs.hh>
-#include <helios/render/sprite_renderer.hh>
-#include <algorithm>
+#include <helios/render/tilemap_renderer.hh>
 
 namespace render
 {
@@ -28,14 +27,16 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-SpriteRenderer::SpriteRenderer(int width, int height)
+TilemapRenderer::TilemapRenderer(int width, int height)
 {
-    Logger logger("sprite_renderer");
+    Logger logger("tilemap_renderer");
 
     const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
 
-    ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
-    ubo.subData(offsetof(ubo_s, projection), &projection_m, sizeof(projection_m));
+    ubo0.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo0_s));
+    ubo0.subData(offsetof(ubo0_s, projection), &projection_m, sizeof(projection_m));
+
+    ubo1.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo1_s));
 
     vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
     vbo.subData(0, vertices, sizeof(vertices));
@@ -56,11 +57,11 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/sprite.vert.spv");
+    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/tilemap.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         logger.log("sprite.vert: %s", vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/sprite.frag.spv");
+    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/tilemap.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         logger.log("sprite.frag: %s", frag.getInfoLog());
 
@@ -68,36 +69,35 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     pipeline.stage(frag);
 }
 
-void SpriteRenderer::setView(const math::View &view)
+void TilemapRenderer::setView(const math::View &view)
 {
     const float4x4_t view_m = view.getMatrix();
-    ubo.subData(offsetof(ubo_s, view), &view_m, sizeof(view_m));
+    ubo0.subData(offsetof(ubo0_s, view), &view_m, sizeof(view_m));
 }
 
-void SpriteRenderer::draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size)
+void TilemapRenderer::draw(const math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset)
 {
-    // The sprite mesh is internally set to be a unit one ([0.0, 0.0] to [1.0, 1.0])
+    // The tilemap mesh is internally set to be a unit one ([0.0, 0.0] to [1.0, 1.0])
     // thus the additional scale matrix will just resize it to the target size
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
-    ubo.subData(offsetof(ubo_s, scale), &size_m, sizeof(size_m));
+    ubo0.subData(offsetof(ubo0_s, scale), &size_m, sizeof(size_m));
 
-    instances.clear();
-    std::transform(transforms.cbegin(), transforms.cend(), std::back_inserter(instances), [](const math::Transform &t) {
-        return t.getMatrix();
-    });
+    const float4x4_t transform_m = transform.getMatrix();
+    ubo0.subData(offsetof(ubo0_s, transform), &transform_m, sizeof(transform_m));
 
-    const size_t num_instances = instances.size();
-    const size_t ssbo_size = sizeof(float4x4_t) * num_instances;
-
-    ssbo.storage<gl::BufferUsage::DYNAMIC>(ssbo_size);
-    ssbo.subData(0, instances.data(), ssbo_size);
+    ubo1_s ubo1_i;
+    ubo1_i.tileset_size = tileset_size;
+    ubo1_i.tilemap_size = size;
+    ubo1_i.tile_size = tile_size;
+    ubo1.subData(0, &ubo1_i, sizeof(ubo1_i));
 
     glUseProgram(0);
     glBindProgramPipeline(pipeline.get());
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo.get());
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo.get());
-    glBindTextureUnit(0, texture.get());
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo0.get());
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, ubo1.get());
+    glBindTextureUnit(0, tileset.get());
+    glBindTextureUnit(1, tilemap.get());
     glBindVertexArray(vao.get());
-    glDrawElementsInstanced(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(num_instances));
+    glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);
 }
 } // namespace render
