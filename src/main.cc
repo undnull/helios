@@ -30,6 +30,49 @@ static void debugCallback(unsigned int src, unsigned int type, unsigned int id, 
     }
 }
 
+static constexpr int MOVE_UP = 1;
+static constexpr int MOVE_DOWN = 2;
+static constexpr int MOVE_LEFT = 4;
+static constexpr int MOVE_RIGHT = 8;
+
+static int move_flags = 0;
+
+static void onKey(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+    if(action == GLFW_PRESS || action == GLFW_REPEAT) {
+        switch(key) {
+            case GLFW_KEY_W:
+                move_flags |= MOVE_DOWN;
+                break;
+            case GLFW_KEY_S:
+                move_flags |= MOVE_UP;
+                break;
+            case GLFW_KEY_D:
+                move_flags |= MOVE_LEFT;
+                break;
+            case GLFW_KEY_A:
+                move_flags |= MOVE_RIGHT;
+                break;
+        }
+    }
+    else {
+        switch(key) {
+            case GLFW_KEY_W:
+                move_flags &= ~MOVE_DOWN;
+                break;
+            case GLFW_KEY_S:
+                move_flags &= ~MOVE_UP;
+                break;
+            case GLFW_KEY_D:
+                move_flags &= ~MOVE_LEFT;
+                break;
+            case GLFW_KEY_A:
+                move_flags &= ~MOVE_RIGHT;
+                break;
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
     util::Args args(argc, argv);
@@ -48,6 +91,9 @@ int main(int argc, char **argv)
     }
 
     window.setSwapInterval(1);
+
+    glfwSetKeyCallback(window.get(), onKey);
+    glfwSetInputMode(window.get(), GLFW_STICKY_KEYS, GLFW_TRUE);
 
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -83,9 +129,10 @@ int main(int argc, char **argv)
     const float2_t tilemap_size = { tilemap_img.getWidth(), tilemap_img.getHeight() };
     const float2_t tileset_size = { tileset_img.getWidth(), tileset_img.getHeight() };
 
-    math::View view;
     math::Transform transform;
     transform.setScale(10.0f);
+
+    math::View view;
 
     render::TilemapRenderer renderer(800, 600);
     renderer.setView(view);
@@ -94,6 +141,21 @@ int main(int argc, char **argv)
         const float frametime = clock.reset();
         perf_frametime += frametime;
         perf_frametime *= 0.5f;
+
+        if(move_flags) {
+            const float speed = 256.0f;
+            float2_t velocity = float2_t(0.0f, 0.0f);
+            if(move_flags & MOVE_UP)
+                velocity.y -= speed;
+            if(move_flags & MOVE_DOWN)
+                velocity.y += speed;
+            if(move_flags & MOVE_RIGHT)
+                velocity.x += speed;
+            if(move_flags & MOVE_LEFT)
+                velocity.x -= speed;
+            view.move(velocity * frametime);
+            renderer.setView(view);
+        }
 
         if(perf_timer.getTime() >= 1.0f) {
             logger.log("average frametime: %f (%f FPS)", perf_frametime, 1.0f / perf_frametime);
