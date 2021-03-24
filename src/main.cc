@@ -9,6 +9,7 @@
  */
 #include <helios/image.hh>
 #include <helios/logger.hh>
+#include <helios/gl/loader.hh>
 #include <helios/plat/clock.hh>
 #include <helios/plat/window.hh>
 #include <helios/render/sprite_renderer.hh>
@@ -26,36 +27,6 @@ static void debugCallback(unsigned int src, unsigned int type, unsigned int id, 
             logger.dlog("opengl: %s", msg);
             break;
     }
-}
-
-static bool checkGLSuitability()
-{
-    if(GLAD_GL_VERSION_4_6)
-        return true;
-
-    struct gl_extension final {
-        const char *id;
-        const int present;
-    };
-
-    const gl_extension extensions[] = {
-        //{ "ARB_texture_filter_anisotropic", GLAD_GL_ARB_texture_filter_anisotropic },
-        { "ARB_shader_storage_buffer_object", GLAD_GL_ARB_shader_storage_buffer_object },
-        { "ARB_direct_state_access", GLAD_GL_ARB_direct_state_access },
-        { "ARB_gl_spirv", GLAD_GL_ARB_gl_spirv },
-        { nullptr, 0 }
-    };
-
-    const gl_extension *extension = extensions;
-    do {
-        if(!extension->present) {
-            Logger().log("opengl: extension %s is not present", extension->id);
-            return false;
-        }
-        extension++;
-    } while(extension->id && extension->present);
-
-    return true;
 }
 
 static void errorCallback(int code, const char *message)
@@ -77,12 +48,7 @@ int main(int argc, char **argv)
     plat::Window window(800, 600, "Window");
     window.makeContextCurrent();
 
-    if(!gladLoadGL()) {
-        glfwTerminate();
-        return 1;
-    }
-
-    if(!checkGLSuitability()) {
+    if(!gl::load()) {
         glfwTerminate();
         return false;
     }
