@@ -11,6 +11,7 @@
 #include <helios/logger.hh>
 #include <helios/gl/loader.hh>
 #include <helios/plat/clock.hh>
+#include <helios/plat/context.hh>
 #include <helios/plat/window.hh>
 #include <helios/render/sprite_renderer.hh>
 #include <helios/util/args.hh>
@@ -29,11 +30,6 @@ static void debugCallback(unsigned int src, unsigned int type, unsigned int id, 
     }
 }
 
-static void errorCallback(int code, const char *message)
-{
-    Logger().log("glfw error %d: %s", code, message);
-}
-
 int main(int argc, char **argv)
 {
     util::Args args(argc, argv);
@@ -41,9 +37,7 @@ int main(int argc, char **argv)
     Logger logger;
     logger.log("Logger test");
 
-    glfwSetErrorCallback(errorCallback);
-    if(!glfwInit())
-        return 1;
+    PLAT_CREATE_CONTEXT();
 
     plat::Window window(800, 600, "Window");
     window.makeContextCurrent();
