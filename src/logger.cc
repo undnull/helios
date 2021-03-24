@@ -25,8 +25,15 @@ void Logger::log(const std::string &str)
     strftime(datetime, sizeof(datetime), "[%Y-%m-%d, %H:%M:%S]", localtime(&cur_time));
 
     std::stringstream ss;
+
     ss << datetime;
     ss << " ";
+
+    if(source) {
+        ss << source;
+        ss << ": ";
+    }
+
     ss << str;
 
     std::cerr << ss.str() << std::endl;

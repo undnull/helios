@@ -14,7 +14,10 @@
 
 class Logger {
 public:
+    Logger(const char *source = nullptr);
+
     void log(const std::string &str);
+    void dlog(const std::string &str);
 
     template<typename... VA>
     constexpr void log(const std::string &fmt, VA &&... args);
@@ -23,10 +26,23 @@ public:
     constexpr void dlog(const std::string &fmt, VA &&... args);
 
 private:
+    const char *source;
     static std::mutex mutex;
     static std::ofstream logfile;
     static std::ofstream logfile_last;
 };
+
+inline Logger::Logger(const char *source) : source(source)
+{
+
+}
+
+inline void Logger::dlog(const std::string &msg)
+{
+#ifndef NDEBUG
+    log(msg);
+#endif
+}
 
 template<typename... VA>
 inline constexpr void Logger::log(const std::string &fmt, VA &&... args)
