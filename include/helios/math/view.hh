@@ -17,6 +17,7 @@ class View {
 public:
     View();
 
+    void setSize(const float2_t &size);
     void setPosition(const float2_t &position);
     void setRotation(float rotation);
     void setZoomFactor(float zoom_v);
@@ -25,20 +26,18 @@ public:
     void rotate(float angle);
     void zoom(float f);
 
+    const float2_t &getSize() const;
     const float2_t &getPosition() const;
     float getRotation() const;
     float getZoomFactor() const;
 
-    void update();
-
-    const float4x4_t &getMatrix() const;
+    const float4x4_t getMatrix() const;
 
 private:
+    float2_t size;
     float2_t position;
     float rotation;
     float zoom_v;
-
-    float4x4_t matrix;
 };
 
 inline View::View()
@@ -46,45 +45,47 @@ inline View::View()
     position = float2_t(0.0f, 0.0f);
     rotation = 0.0f;
     zoom_v = 1.0f;
+}
 
-    matrix = float4x4_t(1.0f);
-    update();
+inline void View::setSize(const float2_t &size)
+{
+    this->size = size;
 }
 
 inline void View::setPosition(const float2_t &position)
 {
     this->position = position;
-    update();
 }
 
 inline void View::setRotation(float rotation)
 {
-    this->rotation = rotation;
-    update();
+    this->rotation = glm::mod(rotation, 360.0f);
 }
 
 inline void View::setZoomFactor(float zoom_v)
 {
     this->zoom_v = zoom_v;
-    update();
 }
 
 inline void View::move(const float2_t &velocity)
 {
     position += velocity;
-    update();
 }
 
 inline void View::rotate(float angle)
 {
     rotation += angle;
-    update();
+    rotation = glm::mod(rotation, 360.0f);
 }
 
 inline void View::zoom(float f)
 {
     zoom_v *= f;
-    update();
+}
+
+inline const float2_t &View::getSize() const
+{
+    return size;
 }
 
 inline const float2_t &View::getPosition() const
@@ -102,16 +103,14 @@ inline float View::getZoomFactor() const
     return zoom_v;
 }
 
-inline void View::update()
+inline const float4x4_t View::getMatrix() const
 {
-    matrix = float4x4_t(1.0f);
-    matrix = glm::translate(matrix, float3_t(position, 0.0f));
+    float4x4_t matrix = float4x4_t(1.0f);
+    matrix = glm::translate(matrix, float3_t(size * 0.5f, 0.0f));
     matrix = glm::rotate(matrix, glm::radians(rotation), float3_t(0.0f, 0.0f, 1.0f));
     matrix = glm::scale(matrix, 1.0f / float3_t(zoom_v, zoom_v, 1.0f));
-}
-
-inline const float4x4_t &View::getMatrix() const
-{
+    matrix = glm::translate(matrix, float3_t(-size * 0.5f, 0.0f));
+    matrix = glm::translate(matrix, float3_t(position, 0.0f));
     return matrix;
 }
 } // namespace math

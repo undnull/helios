@@ -22,8 +22,11 @@ cbuffer ubo : register(B0) {
     row_major float4x4 projection;
     row_major float4x4 scale;
     float2 target_size;
-    float2 view_transform;
+    float2 texture_size;
     float2 scroll_factor;
+    float2 view_position;
+    float view_rotation;
+    float view_zoom;
 };
 
 vs_output main(vs_input input)
@@ -34,9 +37,28 @@ vs_output main(vs_input input)
     output.position = mul(output.position, scale);
     output.position = mul(output.position, projection);
 
+    float texture_aspect = texture_size.x / texture_size.y;
+    float target_aspect = target_size.x / target_size.y;
+    float aspect_fix = texture_aspect / target_aspect;
+
+    float s = sin(view_rotation);
+    float c = cos(view_rotation);
+
     output.texcoord = input.texcoord;
-    output.texcoord -= view_transform * scroll_factor * 0.001;
-    output.texcoord.x *= target_size.x / target_size.y;
+
+    output.texcoord.y *= aspect_fix;
+    output.texcoord.y -= aspect_fix * 0.5 - 0.5;
+
+    output.texcoord -= 0.5;
+
+    output.texcoord.x *= texture_aspect;
+    output.texcoord = mul(output.texcoord, float2x2(c, -s, s, c));
+    output.texcoord.x /= texture_aspect;
+
+    output.texcoord *= view_zoom;
+    output.texcoord -= view_position * scroll_factor * 0.001;
+
+    output.texcoord += 0.5;
 
     return output;
 }

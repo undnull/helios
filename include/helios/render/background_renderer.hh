@@ -21,15 +21,18 @@ public:
         float4x4_t projection;
         float4x4_t scale;
         float2_t target_size;
-        float2_t view_transform;
+        float2_t texture_size;
         float2_t scroll_factor;
+        float2_t view_position;
+        float view_rotation;
+        float view_zoom;
     };
 
 public:
     BackgroundRenderer(int width, int height);
 
     void setView(const math::View &view);
-    void draw(const gl::Texture &texture, const float2_t &scroll_factor);
+    void draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor);
 
 private:
     gl::VertexShader vert;

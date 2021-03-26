@@ -31,49 +31,6 @@ static void debugCallback(unsigned int src, unsigned int type, unsigned int id, 
     }
 }
 
-static constexpr int MOVE_UP = 1;
-static constexpr int MOVE_DOWN = 2;
-static constexpr int MOVE_LEFT = 4;
-static constexpr int MOVE_RIGHT = 8;
-
-static int move_flags = 0;
-
-static void onKey(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-    if(action == GLFW_PRESS || action == GLFW_REPEAT) {
-        switch(key) {
-            case GLFW_KEY_W:
-                move_flags |= MOVE_DOWN;
-                break;
-            case GLFW_KEY_S:
-                move_flags |= MOVE_UP;
-                break;
-            case GLFW_KEY_D:
-                move_flags |= MOVE_LEFT;
-                break;
-            case GLFW_KEY_A:
-                move_flags |= MOVE_RIGHT;
-                break;
-        }
-    }
-    else {
-        switch(key) {
-            case GLFW_KEY_W:
-                move_flags &= ~MOVE_DOWN;
-                break;
-            case GLFW_KEY_S:
-                move_flags &= ~MOVE_UP;
-                break;
-            case GLFW_KEY_D:
-                move_flags &= ~MOVE_LEFT;
-                break;
-            case GLFW_KEY_A:
-                move_flags &= ~MOVE_RIGHT;
-                break;
-        }
-    }
-}
-
 int main(int argc, char **argv)
 {
     util::Args args(argc, argv);
@@ -92,9 +49,6 @@ int main(int argc, char **argv)
     }
 
     window.setSwapInterval(1);
-
-    glfwSetKeyCallback(window.get(), onKey);
-    glfwSetInputMode(window.get(), GLFW_STICKY_KEYS, GLFW_TRUE);
 
     glEnable(GL_DEBUG_OUTPUT);
     glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
@@ -138,14 +92,17 @@ int main(int argc, char **argv)
     tileset.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     tileset.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    const float2_t bg_size = { bg_img.getWidth(), bg_img.getHeight() };
+
     const float tile_size = 16.0f;
     const float2_t tilemap_size = { tilemap_img.getWidth(), tilemap_img.getHeight() };
     const float2_t tileset_size = { tileset_img.getWidth(), tileset_img.getHeight() };
 
     math::Transform transform;
-    transform.setScale(10.0f);
+    transform.setScale(50.0f);
 
     math::View view;
+    view.setSize(float2_t(1152, 648));
 
     render::BackgroundRenderer background_renderer(1152, 648);
     background_renderer.setView(view);
@@ -158,19 +115,27 @@ int main(int argc, char **argv)
         perf_frametime += frametime;
         perf_frametime *= 0.5f;
 
-        if(move_flags) {
-            const float speed = 256.0f;
+        {
             float2_t velocity = float2_t(0.0f, 0.0f);
-            if(move_flags & MOVE_UP)
-                velocity.y -= speed;
-            if(move_flags & MOVE_DOWN)
-                velocity.y += speed;
-            if(move_flags & MOVE_RIGHT)
-                velocity.x += speed;
-            if(move_flags & MOVE_LEFT)
-                velocity.x -= speed;
+            float angle = 0.0f;
+            if(glfwGetKey(window.get(), GLFW_KEY_W) == GLFW_PRESS)
+                velocity.y += 64.0f;
+            if(glfwGetKey(window.get(), GLFW_KEY_S) == GLFW_PRESS)
+                velocity.y -= 64.0f;
+            if(glfwGetKey(window.get(), GLFW_KEY_D) == GLFW_PRESS)
+                velocity.x -= 64.0f;
+            if(glfwGetKey(window.get(), GLFW_KEY_A) == GLFW_PRESS)
+                velocity.x += 64.0f;
+            if(glfwGetKey(window.get(), GLFW_KEY_Q) == GLFW_PRESS)
+                angle -= 0.5f;
+            if(glfwGetKey(window.get(), GLFW_KEY_E) == GLFW_PRESS)
+                angle += 0.5f;
+            if(glfwGetKey(window.get(), GLFW_KEY_F1) == GLFW_PRESS)
+                view.zoom(1.1f);
+            if(glfwGetKey(window.get(), GLFW_KEY_F2) == GLFW_PRESS)
+                view.zoom(0.9f);
             view.move(velocity * frametime);
-            logger.log("Position: (%.02f; %.02f)", view.getPosition().x, view.getPosition().y);
+            view.rotate(angle);
             background_renderer.setView(view);
             tilemap_renderer.setView(view);
         }
@@ -180,7 +145,11 @@ int main(int argc, char **argv)
             perf_timer.reset();
         }
 
-        background_renderer.draw(bg, float2_t(0.1f, 0.0f));
+        glDisable(GL_BLEND);
+        background_renderer.draw(bg, bg_size, float2_t(0.5f, 0.5f));
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         tilemap_renderer.draw(transform, tilemap_size, tileset_size, tile_size, tilemap, tileset);
 
         glBindProgramPipeline(0);

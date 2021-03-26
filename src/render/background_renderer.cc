@@ -73,12 +73,18 @@ BackgroundRenderer::BackgroundRenderer(int width, int height)
 
 void BackgroundRenderer::setView(const math::View &view)
 {
-    const float2_t view_transform = view.getPosition();
-    ubo.subData(offsetof(ubo_s, view_transform), &view_transform, sizeof(view_transform));
+    const float2_t view_position = view.getPosition();
+    const float view_rotation = glm::radians(view.getRotation());
+    const float view_zoom = view.getZoomFactor();
+
+    ubo.subData(offsetof(ubo_s, view_position), &view_position, sizeof(view_position));
+    ubo.subData(offsetof(ubo_s, view_rotation), &view_rotation, sizeof(view_rotation));
+    ubo.subData(offsetof(ubo_s, view_zoom), &view_zoom, sizeof(view_zoom));
 }
 
-void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &scroll_factor)
+void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor)
 {
+    ubo.subData(offsetof(ubo_s, texture_size), &texture_size, sizeof(texture_size));
     ubo.subData(offsetof(ubo_s, scroll_factor), &scroll_factor, sizeof(scroll_factor));
 
     glUseProgram(0);

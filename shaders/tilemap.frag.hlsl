@@ -32,8 +32,8 @@ float4 main(ps_input input) : SV_Target
     float2 pixcoord = input.texcoord * tilemap_size * tile_size;
     float4 color = tex2D(tilemap, input.texcoord);
 
-    // Discard white pixels
-    if(color.r == 1.0 && color.g == 1.0)
+    // Discard white tiles
+    if(color.r == 1.0 || color.g == 1.0)
         return float4(0.0, 0.0, 0.0, 0.0);
 
     float2 tile_coord = fmod(pixcoord, tile_size);
