@@ -13,7 +13,7 @@
 #include <helios/gl/vertex_array.hh>
 #include <helios/math/view.hh>
 
-namespace render
+namespace hx::render
 {
 class BackgroundRenderer {
 public:
@@ -44,4 +44,4 @@ private:
 
     gl::Buffer ubo;
 };
-} // namespace render
+} // namespace hx::render

@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 #include <vector>
 
-namespace gl
+namespace hx::gl
 {
 bool load()
 {
@@ -21,9 +21,8 @@ bool load()
         ext = ext && GLAD_GL_ARB_separate_shader_objects;
         ext = ext && GLAD_GL_ARB_direct_state_access;
         ext = ext && GLAD_GL_ARB_gl_spirv;
-        //return GLAD_GL_VERSION_4_6 || ext;
-        return ext;
+        return GLAD_GL_VERSION_4_6 || ext;
     }
     return false;
 }
-} // namespace gl
+} // namespace hx::gl

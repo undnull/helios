@@ -10,7 +10,7 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
-namespace plat
+namespace hx::glfw
 {
 class Clock {
 public:
@@ -40,4 +40,4 @@ inline float Clock::reset()
     start = cur_time;
     return delta;
 }
-} // namespace plat
+} // namespace hx::plat

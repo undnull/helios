@@ -11,7 +11,7 @@
 #include <GLFW/glfw3.h>
 #include <exception>
 
-namespace plat
+namespace hx::glfw
 {
 class Context {
 public:
@@ -33,8 +33,8 @@ inline Context::~Context()
 {
     glfwTerminate();
 }
-} // namespace plat
+} // namespace hx::glfw
 
-#define PLAT_CREATE_CONTEXT()     \
-    plat::Context x_plat_context; \
-    static_cast<void>(x_plat_context)
+#define HX_CREATE_GLFW_CONTEXT()        \
+    hx::glfw::Context x_glfw_context;   \
+    static_cast<void>(x_glfw_context)

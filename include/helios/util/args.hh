@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-namespace util
+namespace hx::util
 {
 class Args {
 public:
@@ -31,4 +31,4 @@ public:
 private:
     std::vector<option> options;
 };
-} // namespace util
+} // namespace hx::util

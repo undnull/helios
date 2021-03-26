@@ -8,11 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <helios/logger.hh>
-#include <helios/plat/fs.hh>
+#include <helios/fs.hh>
 #include <helios/render/sprite_renderer.hh>
 #include <algorithm>
 
-namespace render
+namespace hx::render
 {
 static const vertex vertices[] = {
     { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
@@ -56,11 +56,11 @@ SpriteRenderer::SpriteRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/sprite.vert.spv");
+    const std::vector<uint8_t> vert_spv = fs::readBinaryFile("assets/shaders/sprite.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         logger.log(vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/sprite.frag.spv");
+    const std::vector<uint8_t> frag_spv = fs::readBinaryFile("assets/shaders/sprite.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         logger.log(frag.getInfoLog());
 
@@ -98,4 +98,4 @@ void SpriteRenderer::draw(const std::vector<math::Transform> &transforms, const 
     glBindVertexArray(vao.get());
     glDrawElementsInstanced(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(num_instances));
 }
-} // namespace render
+} // namespace hx::render

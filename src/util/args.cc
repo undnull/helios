@@ -9,7 +9,7 @@
  */
 #include <helios/util/args.hh>
 
-namespace util
+namespace hx::util
 {
 static inline const bool isOption(const char *option)
 {
@@ -65,4 +65,4 @@ const char *Args::getArgument(const std::string &opt) const
     }
     return nullptr;
 }
-} // namespace util
+} // namespace hx::util

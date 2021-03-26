@@ -10,6 +10,8 @@
 #include <helios/image.hh>
 #include <stb_image.h>
 
+namespace hx
+{
 Image::Image()
 {
     width = -1;
@@ -54,9 +56,10 @@ void Image::clear()
     pixels = nullptr;
 }
 
-bool Image::loadFromFile(const plat::fs::path &path)
+bool Image::loadFromFile(const fs::path &path)
 {
     stbi_image_free(pixels);
     pixels = stbi_load(path.string().c_str(), &width, &height, &comp, STBI_rgb_alpha);
     return !!pixels;
 }
+} // namespace hx

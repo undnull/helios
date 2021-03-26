@@ -14,7 +14,7 @@
 #include <helios/math/transform.hh>
 #include <helios/math/view.hh>
 
-namespace render
+namespace hx::render
 {
 class TilemapRenderer {
 public:
@@ -48,4 +48,4 @@ private:
     gl::Buffer ubo0;
     gl::Buffer ubo1;
 };
-} // namespace render
+} // namespace hx::render

@@ -10,7 +10,7 @@
 #pragma once
 #include <helios/gl/buffer.hh>
 
-namespace gl
+namespace hx::gl
 {
 template<typename T>
 constexpr unsigned int ATTRIBUTE_FORMAT = 0;
@@ -96,4 +96,4 @@ inline constexpr unsigned int VertexArray::get() const
 {
     return vaobj;
 }
-} // namespace gl
+} // namespace hx::gl

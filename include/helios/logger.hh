@@ -12,6 +12,8 @@
 #include <fstream>
 #include <mutex>
 
+namespace hx
+{
 class Logger {
 public:
     Logger(const char *source = nullptr);
@@ -57,3 +59,4 @@ inline constexpr void Logger::dlog(const std::string &fmt, VA &&... args)
     log(util::format(fmt, std::forward<VA>(args)...));
 #endif
 }
+} // namespace hx

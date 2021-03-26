@@ -9,8 +9,11 @@
  */
 #pragma once
 
-#define VERSION_MAJOR 0
-#define VERSION_MINOR 0
-#define VERSION_PATCH 1
+namespace hx
+{
+static constexpr const int VERSION_MAJOR = 0;
+static constexpr const int VERSION_MINOR = 0;
+static constexpr const int VERSION_PATCH = 1;
 
-#define VERSION_STRING "0.0.1"
+static constexpr const char *VERSION = "0.0.1";
+} // namespace hx

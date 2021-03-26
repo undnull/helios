@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 #include <utility>
 
-namespace gl
+namespace hx::gl
 {
 class Texture {
 public:
@@ -90,4 +90,4 @@ inline constexpr GLuint Texture::get() const
 {
     return texture;
 }
-} // namespace gl
+} // namespace hx::gl

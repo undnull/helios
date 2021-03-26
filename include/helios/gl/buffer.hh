@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 #include <utility>
 
-namespace gl
+namespace hx::gl
 {
 enum class BufferUsage {
     STATIC,
@@ -87,4 +87,4 @@ inline constexpr GLuint Buffer::get() const
 {
     return buffer;
 }
-} // namespace gl
+} // namespace hx::gl

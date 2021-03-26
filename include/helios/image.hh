@@ -8,9 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <helios/plat/fs.hh>
+#include <helios/fs.hh>
 #include <glad/glad.h>
 
+namespace hx
+{
 class Image {
 public:
     Image();
@@ -23,7 +25,7 @@ public:
     virtual ~Image();
 
     void clear();
-    bool loadFromFile(const plat::fs::path &path);
+    bool loadFromFile(const fs::path &path);
 
     constexpr int getWidth() const;
     constexpr int getHeight() const;
@@ -60,3 +62,4 @@ inline constexpr const void *Image::getPixels() const
 {
     return pixels;
 }
+} // namespace hx

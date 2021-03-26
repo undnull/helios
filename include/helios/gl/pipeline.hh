@@ -10,7 +10,7 @@
 #pragma once
 #include <helios/gl/shader.hh>
 
-namespace gl
+namespace hx::gl
 {
 template<ShaderStage T>
 constexpr GLenum SHADER_STAGE_BIT = 0;
@@ -72,4 +72,4 @@ inline constexpr GLuint Pipeline::get() const
 {
     return pipeline;
 }
-} // namespace gl
+} // namespace hx::gl

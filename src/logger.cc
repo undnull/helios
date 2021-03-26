@@ -8,10 +8,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <helios/logger.hh>
-#include <helios/plat/fs.hh>
 #include <iostream>
 #include <time.h>
+#include <sstream>
 
+namespace hx
+{
 std::mutex Logger::mutex;
 std::ofstream Logger::logfile("./helios.log", std::ios::out | std::ios::app);
 std::ofstream Logger::logfile_last("./helios.latest.log", std::ios::out);
@@ -40,3 +42,4 @@ void Logger::log(const std::string &str)
     logfile << ss.str() << std::endl;
     logfile_last << ss.str() << std::endl;
 }
+} // namespace hx

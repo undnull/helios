@@ -10,7 +10,7 @@
 #pragma once
 #include <helios/gl/texture.hh>
 
-namespace gl
+namespace hx::gl
 {
 class Framebuffer {
 public:
@@ -70,4 +70,4 @@ inline constexpr GLuint Framebuffer::get() const
 {
     return framebuffer;
 }
-} // namespace gl
+} // namespace hx::gl

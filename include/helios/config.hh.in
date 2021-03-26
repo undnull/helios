@@ -9,8 +9,11 @@
  */
 #pragma once
 
-#define VERSION_MAJOR @helios_VERSION_MAJOR@
-#define VERSION_MINOR @helios_VERSION_MINOR@
-#define VERSION_PATCH @helios_VERSION_PATCH@
+namespace hx
+{
+static constexpr const int VERSION_MAJOR = @helios_VERSION_MAJOR@;
+static constexpr const int VERSION_MINOR = @helios_VERSION_MINOR@;
+static constexpr const int VERSION_PATCH = @helios_VERSION_PATCH@;
 
-#define VERSION_STRING "@helios_VERSION@"
+static constexpr const char *VERSION = "@helios_VERSION@";
+} // namespace hx

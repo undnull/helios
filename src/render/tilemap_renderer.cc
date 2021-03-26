@@ -8,10 +8,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <helios/logger.hh>
-#include <helios/plat/fs.hh>
+#include <helios/fs.hh>
 #include <helios/render/tilemap_renderer.hh>
 
-namespace render
+namespace hx::render
 {
 static const vertex vertices[] = {
     { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
@@ -57,11 +57,11 @@ TilemapRenderer::TilemapRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/tilemap.vert.spv");
+    const std::vector<uint8_t> vert_spv = fs::readBinaryFile("assets/shaders/tilemap.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         logger.log("%s", vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/tilemap.frag.spv");
+    const std::vector<uint8_t> frag_spv = fs::readBinaryFile("assets/shaders/tilemap.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         logger.log("%s", frag.getInfoLog());
 
@@ -98,4 +98,4 @@ void TilemapRenderer::draw(const math::Transform &transform, const float2_t &siz
     glBindVertexArray(vao.get());
     glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);
 }
-} // namespace render
+} // namespace hx::render

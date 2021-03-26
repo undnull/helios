@@ -15,7 +15,7 @@
 #include <helios/math/view.hh>
 #include <vector>
 
-namespace render
+namespace hx::render
 {
 class SpriteRenderer {
 public:
@@ -44,4 +44,4 @@ private:
 
     std::vector<float4x4_t> instances;
 };
-} // namespace render
+} // namespace hx::render

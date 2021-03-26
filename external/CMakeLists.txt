@@ -16,20 +16,20 @@ if(POLICY CMP0079)
 endif()
 
 add_subdirectory(glad)
-target_link_libraries(helios glad)
+target_link_libraries(helios PUBLIC glad)
 
 add_subdirectory(glfw)
-target_link_libraries(helios glfw)
-target_compile_definitions(helios PRIVATE GLFW_INCLUDE_NONE=1)
+target_link_libraries(helios PUBLIC glfw)
+target_compile_definitions(helios PUBLIC GLFW_INCLUDE_NONE=1)
 
 add_subdirectory(glm)
-target_link_libraries(helios glm)
+target_link_libraries(helios PUBLIC glm)
 
-add_subdirectory(imgui)
-target_link_libraries(helios imgui)
+#add_subdirectory(imgui)
+#target_link_libraries(helios PUBLIC imgui)
 
-add_subdirectory(json)
-target_link_libraries(helios json)
+#add_subdirectory(json)
+#target_link_libraries(helios PUBLIC json)
 
 add_subdirectory(stb)
-target_link_libraries(helios stb)
+target_link_libraries(helios PRIVATE stb)

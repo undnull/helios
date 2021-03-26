@@ -12,11 +12,13 @@ project(helios VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_executable(helios "")
+add_library(helios STATIC "")
 
 # warning C4996: This function or variable may be unsafe.
-target_compile_definitions(helios PRIVATE _CRT_SECURE_NO_WARNINGS=1)
+target_compile_definitions(helios PUBLIC _CRT_SECURE_NO_WARNINGS=1)
 
 add_subdirectory(external)
 add_subdirectory(include)
 add_subdirectory(src)
+
+add_subdirectory(game)

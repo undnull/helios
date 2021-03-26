@@ -8,12 +8,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <helios/logger.hh>
-#include <helios/plat/context.hh>
+#include <helios/glfw/context.hh>
 
-namespace plat
+namespace hx::glfw
 {
 void Context::onError(int code, const char *message)
 {
     Logger("GLFW").log("error %d: %s", code, message);
 }
-} // namespace plat
+} // namespace hx::glfw

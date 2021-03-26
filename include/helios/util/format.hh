@@ -13,7 +13,7 @@
 #include <utility>
 #include <vector>
 
-namespace util
+namespace hx::util
 {
 template<typename... VA>
 static inline constexpr const std::string format(const std::string &fmt, VA &&... args)
@@ -27,4 +27,4 @@ static inline constexpr const std::string format(const std::string &fmt, VA &&..
 
     return std::string(buffer.data());
 }
-} // namespace util
+} // namespace hx::util

@@ -11,7 +11,7 @@
 #include <helios/types.hh>
 #include <glm/gtc/matrix_transform.hpp>
 
-namespace math
+namespace hx::math
 {
 class View {
 public:
@@ -113,4 +113,4 @@ inline const float4x4_t View::getMatrix() const
     matrix = glm::translate(matrix, float3_t(position, 0.0f));
     return matrix;
 }
-} // namespace math
+} // namespace hx::math

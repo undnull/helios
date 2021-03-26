@@ -15,8 +15,8 @@
 #include <string>
 #include <vector>
 
-MERGE_NAMESPACE(plat::fs, std::filesystem);
-namespace plat::fs
+MERGE_NAMESPACE(hx::fs, std::filesystem);
+namespace hx::fs
 {
 static inline const std::string readTextFile(const path &path)
 {
@@ -46,4 +46,4 @@ static inline void writeTextFile(const path &path, const std::string &str)
 {
     std::ofstream(path, std::ios::out) << str;
 }
-} // namespace plat::fs
+} // namespace hx::plat::fs

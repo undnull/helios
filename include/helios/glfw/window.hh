@@ -11,7 +11,7 @@
 #include <GLFW/glfw3.h>
 #include <utility>
 
-namespace plat
+namespace hx::glfw
 {
 class Window {
 public:
@@ -111,4 +111,4 @@ inline constexpr GLFWwindow *Window::get() const
 {
     return window;
 }
-} // namespace plat
+} // namespace hx::glfw

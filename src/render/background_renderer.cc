@@ -8,10 +8,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include <helios/logger.hh>
-#include <helios/plat/fs.hh>
+#include <helios/fs.hh>
 #include <helios/render/background_renderer.hh>
 
-namespace render
+namespace hx::render
 {
 static const vertex vertices[] = {
     { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
@@ -59,11 +59,11 @@ BackgroundRenderer::BackgroundRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = plat::fs::readBinaryFile("assets/shaders/background.vert.spv");
+    const std::vector<uint8_t> vert_spv = fs::readBinaryFile("assets/shaders/background.vert.spv");
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         logger.log(vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = plat::fs::readBinaryFile("assets/shaders/background.frag.spv");
+    const std::vector<uint8_t> frag_spv = fs::readBinaryFile("assets/shaders/background.frag.spv");
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         logger.log(frag.getInfoLog());
 
@@ -94,4 +94,4 @@ void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &textur
     glBindVertexArray(vao.get());
     glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);
 }
-} // namespace render
+} // namespace hx::render

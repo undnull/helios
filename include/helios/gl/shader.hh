@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 #include <utility>
 
-namespace gl
+namespace hx::gl
 {
 enum class ShaderStage {
     VERTEX,
@@ -144,4 +144,4 @@ inline constexpr GLuint Shader<T>::get() const
 {
     return program;
 }
-} // namespace gl
+} // namespace hx::gl
