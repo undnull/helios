@@ -41,22 +41,45 @@ fi
 for src in $sources
 do
     xspv=$(basename "$src" .hlsl)
+    progressbar "Compile $xspv.hlsl" 0 6
     md5_c=$(md5sum "$src" | awk '{ print $1 }')
     md5_o=$(cat "$build_dir/$xspv.md5" 2> /dev/null)
+    progressbar "Compile $xspv.hlsl" 1 6
     if [[ "$md5_c" == "$md5_o" ]] && [[ "$1" != "rebuild" ]]
     then
-        progressbar "Skip unchanged $xspv.hlsl" 4 4
+        progressbar "Compile $xspv.hlsl" 6 6
         continue
     else
-        progressbar "Compile $xspv.hlsl" 0 4
-        glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src"
-        progressbar "Compile $xspv.hlsl" 1 4
-        spirv-cross "$build_dir/$xspv.spv" > "$build_dir/$xspv.glsl"
-        progressbar "Compile $xspv.hlsl" 2 4
-        glslangValidator --quiet -G -e main -o "$spirv_dir/$xspv.spv" "$build_dir/$xspv.glsl"
-        progressbar "Compile $xspv.hlsl" 3 4
+        truncate -s 0 "$build_dir/$xspv.md5"
+
+        progressbar "Compile $xspv.hlsl" 2 6
+        eout=$(glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src")
+        if (( $? != 0 ))
+        then
+            printf "\n$eout"
+            continue
+        fi
+
+        progressbar "Compile $xspv.hlsl" 3 6
+        eout=$(spirv-cross "$build_dir/$xspv.spv" > "$build_dir/$xspv.glsl")
+        if (( $? != 0 ))
+        then
+            printf "\n$eout"
+            continue
+        fi
+
+        progressbar "Compile $xspv.hlsl" 4 6
+        eout=$(glslangValidator --quiet -G -e main -o "$spirv_dir/$xspv.spv" "$build_dir/$xspv.glsl")
+        if (( $? != 0 ))
+        then
+            printf "\n$eout"
+            continue
+        fi
+
+        progressbar "Compile $xspv.hlsl" 5 6
         echo "$md5_c" > "$build_dir/$xspv.md5"
-        progressbar "Compile $xspv.hlsl" 4 4
+
+        progressbar "Compile $xspv.hlsl" 6 6
     fi
 done
 exit 0
