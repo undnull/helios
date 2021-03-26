@@ -12,8 +12,8 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <utility>
 
 using float2_t = glm::vec<2, float, glm::packed_highp>;

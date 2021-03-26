@@ -38,7 +38,7 @@ static inline const std::vector<uint8_t> readBinaryFile(const path &path)
         ifs.seekg(0, std::ios::beg);
         buffer.insert(buffer.begin(), std::istream_iterator<uint8_t>(ifs), std::istream_iterator<uint8_t>());
     }
-    
+
     return buffer;
 }
 

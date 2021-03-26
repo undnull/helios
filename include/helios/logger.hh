@@ -32,9 +32,9 @@ private:
     static std::ofstream logfile_last;
 };
 
-inline Logger::Logger(const char *source) : source(source)
+inline Logger::Logger(const char *source)
+    : source(source)
 {
-
 }
 
 inline void Logger::dlog(const std::string &msg)

@@ -7,9 +7,9 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <helios/gl/loader.hh>
 #include <helios/image.hh>
 #include <helios/logger.hh>
-#include <helios/gl/loader.hh>
 #include <helios/plat/clock.hh>
 #include <helios/plat/context.hh>
 #include <helios/plat/window.hh>
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     Image tilemap_img;
     if(!tilemap_img.loadFromFile("assets/textures/tilemap.png"))
         return 1;
-    
+
     Image tileset_img;
     if(!tileset_img.loadFromFile("assets/textures/tileset.png"))
         return 1;
