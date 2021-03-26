@@ -13,6 +13,7 @@
 #include <helios/gl/vertex_array.hh>
 #include <helios/math/transform.hh>
 #include <helios/math/view.hh>
+#include <helios/fs.hh>
 #include <vector>
 
 namespace hx::render
@@ -25,8 +26,12 @@ public:
         float4x4_t view;
     };
 
+    const fs::path DEFAULT_VERT = "assets/shaders/sprite.vert.spv";
+    const fs::path DEFAULT_FRAG = "assets/shaders/sprite.frag.spv";
+
 public:
     SpriteRenderer(int width, int height);
+    SpriteRenderer(int width, int height, const fs::path &vs, const fs::path &fs);
 
     void setView(const math::View &view);
     void draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size);
@@ -44,4 +49,10 @@ private:
 
     std::vector<float4x4_t> instances;
 };
+
+inline SpriteRenderer::SpriteRenderer(int width, int height)
+    : SpriteRenderer(width, height, DEFAULT_VERT, DEFAULT_FRAG)
+{
+
+}
 } // namespace hx::render

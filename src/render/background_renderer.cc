@@ -27,7 +27,7 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-BackgroundRenderer::BackgroundRenderer(int width, int height)
+BackgroundRenderer::BackgroundRenderer(int width, int height, const fs::path &vs, const fs::path &fs)
 {
     Logger logger("BackgroundRenderer");
 
@@ -59,11 +59,11 @@ BackgroundRenderer::BackgroundRenderer(int width, int height)
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
 
-    const std::vector<uint8_t> vert_spv = fs::readBinaryFile("assets/shaders/background.vert.spv");
+    const std::vector<uint8_t> vert_spv = fs::readBinaryFile(vs);
     if(!vert.link(vert_spv.data(), vert_spv.size()))
         logger.log(vert.getInfoLog());
 
-    const std::vector<uint8_t> frag_spv = fs::readBinaryFile("assets/shaders/background.frag.spv");
+    const std::vector<uint8_t> frag_spv = fs::readBinaryFile(fs);
     if(!frag.link(frag_spv.data(), frag_spv.size()))
         logger.log(frag.getInfoLog());
 

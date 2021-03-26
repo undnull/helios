@@ -12,6 +12,7 @@
 #include <helios/gl/texture.hh>
 #include <helios/gl/vertex_array.hh>
 #include <helios/math/view.hh>
+#include <helios/fs.hh>
 
 namespace hx::render
 {
@@ -28,7 +29,11 @@ public:
         float view_zoom;
     };
 
+    const fs::path DEFAULT_VERT = "assets/shaders/background.vert.spv";
+    const fs::path DEFAULT_FRAG = "assets/shaders/background.frag.spv";
+
 public:
+    BackgroundRenderer(int width, int height, const fs::path &vs, const fs::path &fs);
     BackgroundRenderer(int width, int height);
 
     void setView(const math::View &view);
@@ -44,4 +49,10 @@ private:
 
     gl::Buffer ubo;
 };
+
+inline BackgroundRenderer::BackgroundRenderer(int width, int height)
+    : BackgroundRenderer(width, height, DEFAULT_VERT, DEFAULT_FRAG)
+{
+
+}
 } // namespace hx::render

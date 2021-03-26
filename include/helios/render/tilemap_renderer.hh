@@ -31,8 +31,12 @@ public:
         float tile_size;
     };
 
+    const fs::path DEFAULT_VERT = "assets/shaders/tilemap.vert.spv";
+    const fs::path DEFAULT_FRAG = "assets/shaders/tilemap.frag.spv";
+
 public:
     TilemapRenderer(int width, int height);
+    TilemapRenderer(int width, int height, const fs::path &vs, const fs::path &fs);
 
     void setView(const math::View &view);
     void draw(const math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset);
@@ -48,4 +52,10 @@ private:
     gl::Buffer ubo0;
     gl::Buffer ubo1;
 };
+
+inline TilemapRenderer::TilemapRenderer(int width, int height)
+    : TilemapRenderer(width, height, DEFAULT_VERT, DEFAULT_FRAG)
+{
+
+}
 } // namespace hx::render
