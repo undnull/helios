@@ -26,12 +26,11 @@ public:
         float4x4_t view;
     };
 
-    const fs::path DEFAULT_VERT = "assets/shaders/sprite.vert.spv";
-    const fs::path DEFAULT_FRAG = "assets/shaders/sprite.frag.spv";
+    static constexpr const char *DEFAULT_VERT = "assets/shaders/sprite.vert.spv";
+    static constexpr const char *DEFAULT_FRAG = "assets/shaders/sprite.frag.spv";
 
 public:
-    SpriteRenderer(int width, int height);
-    SpriteRenderer(int width, int height, const fs::path &vs, const fs::path &fs);
+    SpriteRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
     void setView(const math::View &view);
     void draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size);
@@ -49,10 +48,4 @@ private:
 
     std::vector<float4x4_t> instances;
 };
-
-inline SpriteRenderer::SpriteRenderer(int width, int height)
-    : SpriteRenderer(width, height, DEFAULT_VERT, DEFAULT_FRAG)
-{
-
-}
 } // namespace hx::render
