@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - ".github/workflows/doxygen.yml"
+    - "doc/Doxygen"
     - "include/**"
     - "src/**"
 
@@ -22,6 +23,7 @@ jobs:
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
+        doxyfile-path: "./doc/Doxyfile"
         github_token: ${{secrets.GITHUB_TOKEN}}
         publish_dir: "./doc/html"
         user_name: "github-actions[bot]"
