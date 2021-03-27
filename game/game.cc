@@ -27,7 +27,7 @@ constexpr const int HEIGHT = 648;
 
 constexpr const float C_SPEED = 128.0f; // 128 pixels/second
 constexpr const float R_SPEED = 45.0f;  // 45 degrees/second
-constexpr const float Z_SPEED = 0.01f;
+constexpr const float Z_SPEED = 0.01f;  // A zoom factor
 
 struct background {
     float2_t scroll;
