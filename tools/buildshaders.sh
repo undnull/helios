@@ -56,7 +56,7 @@ do
         eout=$(glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$build_dir/$xspv.spv" "$src")
         if (( $? != 0 ))
         then
-            printf "\n$eout"
+            printf "\n$eout\n"
             continue
         fi
 
@@ -64,7 +64,7 @@ do
         eout=$(spirv-cross "$build_dir/$xspv.spv" > "$build_dir/$xspv.glsl")
         if (( $? != 0 ))
         then
-            printf "\n$eout"
+            printf "\n$eout\n"
             continue
         fi
 
@@ -72,7 +72,7 @@ do
         eout=$(glslangValidator --quiet -G -e main -o "$spirv_dir/$xspv.spv" "$build_dir/$xspv.glsl")
         if (( $? != 0 ))
         then
-            printf "\n$eout"
+            printf "\n$eout\n"
             continue
         fi
 
