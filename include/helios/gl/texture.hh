@@ -13,25 +13,93 @@
 
 namespace hx::gl
 {
+/**
+ * @brief A chunk of GPU memory to store image data.
+ * 
+ */
 class Texture {
 public:
+    /**
+     * @brief Constructs a new texture.
+     * 
+     */
     Texture();
+
+    /**
+     * @brief Steals the handle from an existing texture.
+     * 
+     * @param rhs Existing texture.
+     */
     Texture(Texture &&rhs);
     Texture(const Texture &rhs) = delete;
 
+    /**
+     * @brief Destroys the texture.
+     * 
+     */
     virtual ~Texture();
 
+    /**
+     * @brief Steals the handle from an existing texture.
+     * 
+     * @param rhs Existing texture.
+     * @return this
+     */
     Texture &operator=(Texture &&rhs);
     Texture &operator=(const Texture &rhs) = delete;
 
+    /**
+     * @brief Initializes the texture's GPU-side immutable storage.
+     * 
+     * @note This should be called once, otherwise
+     * a GL error will be generated.
+     *
+     * @param width Texture width in pixels.
+     * @param height Texture height in pixels.
+     * @param format Internal storage format.
+     */
     void storage(int width, int height, GLenum format);
+
+    /**
+     * @brief Writes a chunk of data to the GPU-side texture storage.
+     * 
+     * @param width Data's width in pixels.
+     * @param height Data's height in pixels.
+     * @param format Data's format (eg. GL_RGBA).
+     * @param type Data's type (per-pixel, eg. GL_UNSIGNED_BYTE).
+     * @param pixels Data pointer.
+     */
     void subImage(int width, int height, GLenum format, GLenum type, const void *pixels);
 
+    /**
+     * @brief Sets a texture parameter.
+     * 
+     * @param pname Parameter's name.
+     * @param value Parameter's value.
+     */
     void setParameter(GLenum pname, int value);
+
+    /**
+     * @brief Sets a texture parameter.
+     * 
+     * @param pname Parameter's name.
+     * @param value Parameter's value.
+     */
     void setParameter(GLenum pname, float value);
 
+    /**
+     * @brief Generates a mipmap.
+     * 
+     * @note I honestly don't know why would it
+     * be used for a 2D applcation...
+     */
     void generateMipmap();
 
+    /**
+     * @brief Returns an OpenGL handle of the texture.
+     * 
+     * @return An OpenGL handle.
+     */
     constexpr GLuint get() const;
 
 private:

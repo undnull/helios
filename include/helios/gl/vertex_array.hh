@@ -17,26 +17,90 @@ constexpr unsigned int ATTRIBUTE_FORMAT = 0;
 template<>
 constexpr unsigned int ATTRIBUTE_FORMAT<float> = GL_FLOAT;
 
+/**
+ * @brief A combination of vertex and element buffers.
+ * 
+ * VAOs are used to actually draw stuff.
+ */
 class VertexArray {
 public:
+    /**
+     * @brief Constructs a new vertex array.
+     * 
+     */
     VertexArray();
+
+    /**
+     * @brief Steals the handle from an existing vertex array.
+     * 
+     * @param rhs Existing vertex array.
+     */
     VertexArray(VertexArray &&rhs);
     VertexArray(const VertexArray &rhs) = delete;
 
+    /**
+     * @brief Destroys the vertex array.
+     * 
+     */
     virtual ~VertexArray();
 
+    /**
+     * @brief Steals the handle from an existing vertex array.
+     * 
+     * @param rhs Existing vertex array.
+     * @return this
+     */
     VertexArray &operator=(VertexArray &&rhs);
     VertexArray &operator=(const VertexArray &rhs) = delete;
 
+    /**
+     * @brief Binds an element buffer to the vertex array.
+     * 
+     * @param ebo Element buffer.
+     */
     void bindElementBuffer(const Buffer &ebo);
+
+    /**
+     * @brief Binds a vertex buffer to the vertex array.
+     * 
+     * @param vbo Vertex buffer.
+     * @param binding Binding index.
+     * @param offset Buffer offset in bytes.
+     * @param stride Size of a single element in the buffer.
+     */
     void bindVertexBuffer(const Buffer &vbo, unsigned int binding, size_t offset, size_t stride);
 
+    /**
+     * @brief Enables a vertex attribute.
+     * 
+     * @param attrib Attribute index.
+     */
     void enableAttribute(unsigned int attrib);
 
+    /**
+     * @brief Sets the format of a vertex attribute.
+     * 
+     * @tparam T Attribute type.
+     * @param attrib Attribute index.
+     * @param count Number of T elements.
+     * @param normalized Should these elements be normalized?
+     */
     template<typename T>
     void setAttributeFormat(unsigned int attrib, size_t count, bool normalized);
+
+    /**
+     * @brief Binds a vertex attribute to a bound vertex buffer.
+     * 
+     * @param attrib Attribute index.
+     * @param binding Vertex buffer binding index.
+     */
     void setAttributeBinding(unsigned int attrib, unsigned int binding);
 
+    /**
+     * @brief Returns an OpenGL handle of the vertex array.
+     * 
+     * @return An OpenGL handle.
+     */
     constexpr unsigned int get() const;
 
 private:

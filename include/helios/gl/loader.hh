@@ -13,6 +13,17 @@
 
 namespace hx::gl
 {
+/**
+ * @brief Loads the needed GL version and checks
+ * for the required extensions.
+ *
+ * Since the project is using the latest GL features,
+ * we would need to check for those features to be present.
+ *
+ * @note If OpenGL 4.6 is present, returns true regardless of the extensions.
+ *
+ * @return true if the loading succeeded and false otherwise.
+ */
 bool load()
 {
     if(gladLoadGL()) {

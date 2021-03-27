@@ -19,20 +19,58 @@ constexpr GLenum SHADER_STAGE_BIT<ShaderStage::VERTEX> = GL_VERTEX_SHADER_BIT;
 template<>
 constexpr GLenum SHADER_STAGE_BIT<ShaderStage::FRAGMENT> = GL_FRAGMENT_SHADER_BIT;
 
+/**
+ * @brief A combination of different shader stages.
+ * 
+ * In the latest GL versions pipelines are more useful
+ * than just programs: different shader program
+ * stages can be mixed on fly!
+ */
 class Pipeline {
 public:
+    /**
+     * @brief Constructs a new pipeline.
+     * 
+     */
     Pipeline();
+
+    /**
+     * @brief Steals the handle of an existing pipeline.
+     * 
+     * @param rhs Existing pipeline.
+     */
     Pipeline(Pipeline &&rhs);
     Pipeline(const Pipeline &rhs) = delete;
 
+    /**
+     * @brief Destroys the pipeline.
+     * 
+     */
     virtual ~Pipeline();
 
+    /**
+     * @brief Steals the handle of an existing pipeline.
+     * 
+     * @param rhs Existing pipeline.
+     * @return this
+     */
     Pipeline &operator=(Pipeline &&rhs);
     Pipeline &operator=(const Pipeline &rhs) = delete;
 
+    /**
+     * @brief Attaches a new shader stage to the pipeline.
+     * 
+     * @tparam T Shader stage.
+     * @param shader Shader.
+     */
     template<ShaderStage T>
     void stage(const Shader<T> &shader);
 
+    /**
+     * @brief Returns an OpenGL handle of the pipeline.
+     * 
+     * @return An OpenGL handle.
+     */
     constexpr GLuint get() const;
 
 private:

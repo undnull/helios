@@ -12,11 +12,31 @@
 
 namespace hx::glfw
 {
+/**
+ * @brief A time counter.
+ * 
+ * The time values are in seconds.
+ */
 class Clock {
 public:
+    /**
+     * @brief Constructs and starts a new clock.
+     * 
+     */
     Clock();
 
+    /**
+     * @brief Returns the elapsed time.
+     * 
+     * @return Elapsed time.
+     */
     float getTime() const;
+
+    /**
+     * @brief Resets the clock.
+     * 
+     * @return Elapsed time.
+     */
     float reset();
 
 private:

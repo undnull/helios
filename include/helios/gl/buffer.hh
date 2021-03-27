@@ -13,6 +13,12 @@
 
 namespace hx::gl
 {
+/**
+ * @brief A buffer usage hint.
+ * 
+ * Usage hints help the GPU to correctly manage
+ * the buffer's allocated memory.
+ */
 enum class BufferUsage {
     STATIC,
     STREAM,
@@ -28,21 +34,66 @@ constexpr GLenum BUFFER_USAGE<BufferUsage::STREAM> = GL_STREAM_DRAW;
 template<>
 constexpr GLenum BUFFER_USAGE<BufferUsage::DYNAMIC> = GL_DYNAMIC_DRAW;
 
+/**
+ * @brief A general-purpose chunk of GPU-side memory.
+ * 
+ * Buffers are widely used across the GL wrapper
+ * for drawing and storing uniform data.
+ */
 class Buffer {
 public:
+    /**
+     * @brief Constructs a new buffer.
+     * 
+     */
     Buffer();
+
+    /**
+     * @brief Steals the handle from an existing buffer.
+     * 
+     * @param rhs Existing buffer.
+     */
     Buffer(Buffer &&rhs);
     Buffer(const Buffer &&rhs) = delete;
 
+    /**
+     * @brief Destroys the buffer.
+     * 
+     */
     virtual ~Buffer();
 
+    /**
+     * @brief Steals the handle from an existing buffer.
+     * 
+     * @param rhs Existing buffer.
+     * @return this
+     */
     Buffer &operator=(Buffer &&rhs);
     Buffer &operator=(const Buffer &rhs) = delete;
 
+    /**
+     * @brief Initializes the buffer's GPU-side immutable data storage.
+     * 
+     * @tparam T Buffer usage.
+     * @param size New size in bytes.
+     */
     template<BufferUsage T>
     void storage(size_t size);
+
+    /**
+     * @brief Writes a chunk of data to the GPU-side buffer storage.
+     * 
+     * @param offset Write offset in bytes.
+     * @param data Data to write.
+     * @param size Data size in bytes.
+     */
     void subData(size_t offset, const void *data, size_t size);
 
+    /**
+     * @brief Returns an OpenGL handle of the buffer.
+     * 
+     * @return An OpenGL handle.
+     */
     constexpr GLuint get() const;
 
 private:

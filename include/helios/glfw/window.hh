@@ -13,28 +13,90 @@
 
 namespace hx::glfw
 {
+/**
+ * @brief A window.
+ * 
+ */
 class Window {
 public:
+    /**
+     * @brief Opens a new window.
+     * 
+     * @param width Window width in pixels.
+     * @param height Window height in pixels.
+     * @param title Window title.
+     * @param fullscreen Fullscreen.
+     * @param border False if window is borderless.
+     * @param samples Number of samples (MSAA).
+     */
     Window(int width, int height, const char *title, bool fullscreen = false, bool border = true, int samples = 0);
-    Window(Window &&rhs);
+    Window(Window &&rhs) = delete;
     Window(const Window &rhs) = delete;
 
+    /**
+     * @brief Closes the window.
+     * 
+     */
     virtual ~Window();
 
     Window &operator=(Window &&rhs);
     Window &operator=(const Window &rhs) = delete;
 
+    /**
+     * @brief Sets the window title.
+     * 
+     * @param title Window title.
+     */
     void setTitle(const char *title);
+
+    /**
+     * @brief Sets the window swap interval.
+     * 
+     * Swap interval of 0 means that vertical sync is disabled.
+     *
+     * @param interval Swap interval.
+     */
     void setSwapInterval(int interval);
+
+    /**
+     * @brief Sets the window close status.
+     * 
+     * @param close True if window needs to be closed.
+     */
     void setShouldClose(bool close);
 
+    /**
+     * @brief Returns window close status.
+     * 
+     * @return true if window is going to close.
+     */
     bool shouldClose() const;
 
+    /**
+     * @brief Makes the OpenGL context current.
+     * 
+     */
     void makeContextCurrent();
 
+    /**
+     * @brief Swaps the window buffers.
+     * 
+     */
     void swapBuffers();
+
+    /**
+     * @brief Handles events.
+     * 
+     * @note Calls glfwWaitEventsTimeout() if the window
+     * is out of focus therefore saves some CPU time.
+     */
     void handleEvents();
 
+    /**
+     * @brief Returns a pointer to the actual GLFW window.
+     * 
+     * @return Window pointer.
+     */
     constexpr GLFWwindow *get() const;
 
 private:
@@ -50,22 +112,9 @@ inline Window::Window(int width, int height, const char *title, bool fullscreen,
     glfwMakeContextCurrent(window);
 }
 
-inline Window::Window(Window &&rhs)
-{
-    window = rhs.window;
-    rhs.window = nullptr;
-}
-
 inline Window::~Window()
 {
     glfwDestroyWindow(window);
-}
-
-inline Window &Window::operator=(Window &&rhs)
-{
-    Window copy(std::move(rhs));
-    std::swap(copy.window, window);
-    return *this;
 }
 
 inline void Window::setTitle(const char *title)

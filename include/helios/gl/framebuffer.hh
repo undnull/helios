@@ -12,21 +12,64 @@
 
 namespace hx::gl
 {
+/**
+ * @brief A render target.
+ * 
+ * Framebuffers are used as target for rendering
+ * so that deferred lighting can be implemented.
+ */
 class Framebuffer {
 public:
+    /**
+     * @brief Constructs a new framebuffer.
+     * 
+     */
     Framebuffer();
+    
+    /**
+     * @brief Steals the handle from an existing framebuffer.
+     * 
+     * @param rhs Existing framebuffer.
+     */
     Framebuffer(Framebuffer &&rhs);
     Framebuffer(const Framebuffer &rhs) = delete;
 
+    /**
+     * @brief Destroys the framebuffer.
+     * 
+     */
     virtual ~Framebuffer();
 
+    /**
+     * @brief Steals the handle from an existing framebuffer.
+     * 
+     * @param rhs Existing framebuffer.
+     * @return this
+     */
     Framebuffer &operator=(Framebuffer &&rhs);
     Framebuffer &operator=(const Framebuffer &rhs) = delete;
 
+    /**
+     * @brief Attaches a texture to the framebuffer's attachment point.
+     * 
+     * @param attachment Texture attachment.
+     * @param texture Texture to attachs.
+     * @param level Texture level.
+     */
     void attach(GLenum attachment, const Texture &texture, GLint level);
 
+    /**
+     * @brief Checks the buffer completion status.
+     * 
+     * @return true if the framebuffer is complete and false otherwise.
+     */
     bool isComplete();
 
+    /**
+     * @brief Returns an OpenGL handle of the framebuffer.
+     * 
+     * @return An OpenGL handle.
+     */
     constexpr GLuint get() const;
 
 private:
