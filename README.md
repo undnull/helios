@@ -1,5 +1,5 @@
 # Helios
-[![Doxygen](https://github.com/undnull/helios/actions/workflows/doxygen.yml/badge.svg)](https://github.com/undnull/helios/actions/workflows/doxygen.yml)  
+[![Doxygen](https://github.com/undnull/helios/actions/workflows/doxygen.yml/badge.svg)](https://github.com/undnull/helios/actions/workflows/doxygen.yml) [![Issues](https://img.shields.io/github/issues/undnull/helios?style=flat-square)](https://github.com/undnull/helios/issues) [![License](https://img.shields.io/github/license/undnull/helios?style=flat-square)](LICENSE)  
 
 Helios is a general-purpose set of libraries and abstractions to make the life of a 2D graphics programmer easier.  
 You may call it "SFML, but a bit closer to the hardware" game engine.  
