@@ -26,7 +26,7 @@ Well...
    ```bash
    cd helios
    cmake -B build .
-   ```bash
+   ```
 3. Build it:
    ```bash
    cmake --build build
