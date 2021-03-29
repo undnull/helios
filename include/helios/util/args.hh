@@ -13,6 +13,10 @@
 
 namespace hx::util
 {
+/**
+ * @brief Command line parser.
+ * 
+ */
 class Args {
 public:
     struct option {
@@ -22,10 +26,34 @@ public:
     };
 
 public:
+    /**
+     * @brief Constructor
+     * 
+     */
     Args(int argc, char **argv);
 
+    /**
+     * @brief Checks if the option is present.
+     * 
+     * @param option Option name.
+     * @return true if an option is present, false otherwise.
+     */
     bool hasOption(const std::string &option) const;
+
+    /**
+     * @brief Checks if the option has an argument.
+     * 
+     * @param option Option name.
+     * @return true if an option is present and has an argument, false otherwise.
+     */
     bool hasArgument(const std::string &option) const;
+
+    /**
+     * @brief Gets an argument of an option.
+     * 
+     * @param option Option name.
+     * @return Argument value or nullptr if option is not present or doesn't have an argument.
+     */
     const char *getArgument(const std::string &option) const;
 
 private:

@@ -13,24 +13,100 @@
 
 namespace hx::math
 {
+/**
+ * @brief Camera transformation.
+ * 
+ */
 class View {
 public:
+    /**
+     * @brief Constructor.
+     * 
+     */
     View();
 
+    /**
+     * @brief Sets the camera viewport size.
+     * 
+     * @param size Screen size in pixels.
+     */
     void setSize(const float2_t &size);
+
+    /**
+     * @brief Sets the camera position.
+     * 
+     * @param position Camera position in pixels.
+     */
     void setPosition(const float2_t &position);
+
+    /**
+     * @brief Sets the camera rotation.
+     * 
+     * @param rotation Camera rotation in degrees.
+     */
     void setRotation(float rotation);
+
+    /**
+     * @brief Sets the camera zoom factor.
+     * 
+     * @param zoom_v Zoom factor.
+     */
     void setZoomFactor(float zoom_v);
 
+    /**
+     * @brief Moves the camera.
+     * 
+     * @param velocity Delta.
+     */
     void move(const float2_t &velocity);
+
+    /**
+     * @brief Rotates the camera.
+     * 
+     * @param angle Delta.
+     */
     void rotate(float angle);
+
+    /**
+     * @brief Zooms the camera.
+     * 
+     * @param f Factor.
+     */
     void zoom(float f);
 
+    /**
+     * @brief Gets the camera viewport size.
+     * 
+     * @return Viewport size in pixels.
+     */
     const float2_t &getSize() const;
+
+    /**
+     * @brief Gets the camera position.
+     * 
+     * @return Camera position in pixels.
+     */
     const float2_t &getPosition() const;
+
+    /**
+     * @brief Gets the camera rotation.
+     * 
+     * @return Camera rotation in degrees.
+     */
     float getRotation() const;
+
+    /**
+     * @brief Gets the camera zoom factor.
+     * 
+     * @return Zoom factor.
+     */
     float getZoomFactor() const;
 
+    /**
+     * @brief Generates a view matrix of the camera.
+     * 
+     * @return View matrix.
+     */
     const float4x4_t getMatrix() const;
 
 private:

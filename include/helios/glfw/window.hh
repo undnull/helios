@@ -14,19 +14,19 @@
 namespace hx::glfw
 {
 /**
- * @brief A window.
+ * @brief Window wrapper.
  * 
  */
 class Window {
 public:
     /**
-     * @brief Opens a new window.
+     * @brief Constructor
      * 
-     * @param width Window width in pixels.
-     * @param height Window height in pixels.
+     * @param width Width in pixels.
+     * @param height Height in pixels.
      * @param title Window title.
-     * @param fullscreen Fullscreen.
-     * @param border False if window is borderless.
+     * @param fullscreen 
+     * @param border False if borderless.
      * @param samples Number of samples (MSAA).
      */
     Window(int width, int height, const char *title, bool fullscreen = false, bool border = true, int samples = 0);
@@ -34,12 +34,13 @@ public:
     Window(const Window &rhs) = delete;
 
     /**
-     * @brief Closes the window.
+     * @brief Destructor.
      * 
+     * Closes the window.
      */
     virtual ~Window();
 
-    Window &operator=(Window &&rhs);
+    Window &operator=(Window &&rhs) = delete;
     Window &operator=(const Window &rhs) = delete;
 
     /**
@@ -52,28 +53,29 @@ public:
     /**
      * @brief Sets the window swap interval.
      * 
-     * Swap interval of 0 means that vertical sync is disabled.
-     *
+     * @note Swap interval of 0 means that vertical
+     * synchronization is disabled.
+     * 
      * @param interval Swap interval.
      */
     void setSwapInterval(int interval);
 
     /**
-     * @brief Sets the window close status.
+     * @brief Sets the window close flag.
      * 
      * @param close True if window needs to be closed.
      */
     void setShouldClose(bool close);
 
     /**
-     * @brief Returns window close status.
+     * @brief Gets the window close flag value.
      * 
-     * @return true if window is going to close.
+     * @return true if the window needs to be closed.
      */
     bool shouldClose() const;
 
     /**
-     * @brief Makes the OpenGL context current.
+     * @brief Makes the GL context current.
      * 
      */
     void makeContextCurrent();
@@ -85,17 +87,17 @@ public:
     void swapBuffers();
 
     /**
-     * @brief Handles events.
+     * @brief Polls and calls GLFW events.
      * 
-     * @note Calls glfwWaitEventsTimeout() if the window
-     * is out of focus therefore saves some CPU time.
+     * @note If the window is out of focus, glfwWaitEventsInterval
+     * will be used saving some CPU time.
      */
     void handleEvents();
 
     /**
-     * @brief Returns a pointer to the actual GLFW window.
+     * @brief Returns the GLFW window.
      * 
-     * @return Window pointer.
+     * @return GLFW window.
      */
     constexpr GLFWwindow *get() const;
 

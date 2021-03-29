@@ -22,6 +22,10 @@ using float4_t = glm::vec<4, float, glm::packed_highp>;
 
 using float4x4_t = glm::mat<4, 4, float, glm::packed_highp>;
 
+/**
+ * @brief 2D vertex.
+ * 
+ */
 struct vertex {
     float2_t position;
     float2_t texcoord;

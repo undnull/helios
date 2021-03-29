@@ -18,20 +18,19 @@ template<>
 constexpr unsigned int ATTRIBUTE_FORMAT<float> = GL_FLOAT;
 
 /**
- * @brief A combination of vertex and element buffers.
+ * @brief Combination of vertex and element buffers.
  * 
- * VAOs are used to actually draw stuff.
  */
 class VertexArray {
 public:
     /**
-     * @brief Constructs a new vertex array.
+     * @brief Constructor
      * 
      */
     VertexArray();
 
     /**
-     * @brief Steals the handle from an existing vertex array.
+     * @brief Move constructor.
      * 
      * @param rhs Existing vertex array.
      */
@@ -39,13 +38,13 @@ public:
     VertexArray(const VertexArray &rhs) = delete;
 
     /**
-     * @brief Destroys the vertex array.
+     * @brief Destructor
      * 
      */
     virtual ~VertexArray();
 
     /**
-     * @brief Steals the handle from an existing vertex array.
+     * @brief Assign operator.
      * 
      * @param rhs Existing vertex array.
      * @return this
@@ -54,14 +53,14 @@ public:
     VertexArray &operator=(const VertexArray &rhs) = delete;
 
     /**
-     * @brief Binds an element buffer to the vertex array.
+     * @brief Binds an element buffer.
      * 
      * @param ebo Element buffer.
      */
     void bindElementBuffer(const Buffer &ebo);
 
     /**
-     * @brief Binds a vertex buffer to the vertex array.
+     * @brief Binds a vertex buffer.
      * 
      * @param vbo Vertex buffer.
      * @param binding Binding index.
@@ -97,7 +96,7 @@ public:
     void setAttributeBinding(unsigned int attrib, unsigned int binding);
 
     /**
-     * @brief Returns an OpenGL handle of the vertex array.
+     * @brief Gets an OpenGL handle of the vertex array.
      * 
      * @return An OpenGL handle.
      */

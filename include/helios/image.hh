@@ -13,24 +13,82 @@
 
 namespace hx
 {
+/**
+ * @brief Image container.
+ * 
+ */
 class Image {
 public:
+    /**
+     * @brief Constructor.
+     * 
+     */
     Image();
+
+    /**
+     * @brief Move constructor.
+     * 
+     * @param rhs Existing image.
+     */
     Image(Image &&rhs);
     Image(const Image &rhs) = delete;
 
+    /**
+     * @brief Assign operator.
+     * 
+     * @param rhs Existing image
+     * @return this
+     */
     Image &operator=(Image &&rhs);
     Image &operator=(const Image &rhs) = delete;
 
+    /**
+     * @brief Destructor.
+     * 
+     */
     virtual ~Image();
 
+    /**
+     * @brief Destructor
+     * 
+     */
     void clear();
+
+    /**
+     * @brief Creates a pixel buffer from a file.
+     * 
+     * @param path File path.
+     * @return true if succeeded, false otherwise.
+     */
     bool loadFromFile(const fs::path &path);
 
+    /**
+     * @brief Gets the width of the Image.
+     * 
+     * @return Width in pixels.
+     */
     constexpr int getWidth() const;
+
+    /**
+     * @brief Gets the height of the image.
+     * 
+     * @return Height in pixels.
+     */
     constexpr int getHeight() const;
+
+    /**
+     * @brief Gets the size of the image.
+     * 
+     * @param width Width in pixels.
+     * @param height Height in pixels.
+     */
     constexpr void getSize(int &width, int &height) const;
 
+    /**
+     * @brief Gets the pointer to the pixel buffer.
+     * 
+     * @return Pixel buffer pointer.
+     */
     constexpr const void *getPixels() const;
 
 public:

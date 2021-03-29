@@ -14,29 +14,30 @@
 namespace hx::glfw
 {
 /**
- * @brief A wrapper class for GLFW.
+ * @brief A wrapper class for GLFW init and shutdown functions.
  * 
- * Before use GLFW needs to be initialized; this class
- * provides an easier way of doing that.
  */
 class Context {
 public:
     /**
-     * @brief Initializes GLFW.
-     *
-     * If glfwInit() has failed, std::terminate() is called.
+     * @brief Constructor.
+     * 
+     * Calls glfwInit().
+     * 
+     * @note If glfwInit() failed, std::terminate() is called.
      */
     Context();
 
     /**
-     * @brief De-initializes GLFW.
+     * @brief Destructor.
      * 
+     * Calls glfwShutdown().
      */
     virtual ~Context();
 
 private:
     /**
-     * @brief Error callback.
+     * @brief Error handler.
      * 
      * @param code Error code.
      * @param message Error message.

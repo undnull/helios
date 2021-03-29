@@ -9,6 +9,12 @@
  */
 #pragma once
 
+/**
+ * @brief Merges namespaces together.
+ * 
+ * @param target Namespace to merge with.
+ * @param source Namespace to merge.
+ */
 #define MERGE_NAMESPACE(target, source) \
     namespace target                    \
     {                                   \

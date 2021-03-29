@@ -13,24 +13,100 @@
 
 namespace hx::math
 {
+/**
+ * @brief Object transform.
+ * 
+ */
 class Transform {
 public:
+    /**
+     * @brief Constructor
+     * 
+     */
     Transform();
 
+    /**
+     * @brief Sets the object origin.
+     * 
+     * @param origin Origin in pixels.
+     */
     void setOrigin(const float2_t &origin);
+
+    /**
+     * @brief Sets the object position.
+     * 
+     * @param position Position in pixels.
+     */
     void setPosition(const float2_t &position);
+
+    /**
+     * @brief Sets the object rotation.
+     * 
+     * @param rotation Rotation in degrees.
+     */
     void setRotation(float rotation);
+
+    /**
+     * @brief Sets the object scale.
+     * 
+     * @param scale_v Scale.
+     */
     void setScale(float scale_v);
 
+    /**
+     * @brief Moves the object.
+     * 
+     * @param velocity Delta.
+     */
     void move(const float2_t &velocity);
+
+    /**
+     * @brief Rotates the object.
+     * 
+     * @param angle Delta.
+     */
     void rotate(float angle);
+
+    /**
+     * @brief Scales the object.
+     * 
+     * @param f Scale factor.
+     */
     void scale(float f);
 
+    /**
+     * @brief Gets the object origin.
+     * 
+     * @return Origin in pixels.
+     */
     const float2_t &getOrigin() const;
+
+    /**
+     * @brief Gets the object position.
+     * 
+     * @return Position in pixels.
+     */
     const float2_t &getPosition() const;
+
+    /**
+     * @brief Gets the object rotation.
+     * 
+     * @return Rotation in degrees.
+     */
     float getRotation() const;
+
+    /**
+     * @brief Gets the object Scale.
+     * 
+     * @return Scale factor.
+     */
     float getScale() const;
 
+    /**
+     * @brief Generates a model matrix of the object.
+     * 
+     * @return Model matrix.
+     */
     const float4x4_t getMatrix() const;
 
 private:

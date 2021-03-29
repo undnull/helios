@@ -13,21 +13,19 @@
 namespace hx::gl
 {
 /**
- * @brief A render target.
+ * @brief Render target.
  * 
- * Framebuffers are used as target for rendering
- * so that deferred lighting can be implemented.
  */
 class Framebuffer {
 public:
     /**
-     * @brief Constructs a new framebuffer.
+     * @brief Constructor
      * 
      */
     Framebuffer();
     
     /**
-     * @brief Steals the handle from an existing framebuffer.
+     * @brief Move constructor.
      * 
      * @param rhs Existing framebuffer.
      */
@@ -35,13 +33,13 @@ public:
     Framebuffer(const Framebuffer &rhs) = delete;
 
     /**
-     * @brief Destroys the framebuffer.
+     * @brief Destructor
      * 
      */
     virtual ~Framebuffer();
 
     /**
-     * @brief Steals the handle from an existing framebuffer.
+     * @brief Assign operator.
      * 
      * @param rhs Existing framebuffer.
      * @return this
@@ -66,7 +64,7 @@ public:
     bool isComplete();
 
     /**
-     * @brief Returns an OpenGL handle of the framebuffer.
+     * @brief Gets an OpenGL handle of the framebuffer.
      * 
      * @return An OpenGL handle.
      */

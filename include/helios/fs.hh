@@ -18,6 +18,12 @@
 MERGE_NAMESPACE(hx::fs, std::filesystem);
 namespace hx::fs
 {
+/**
+ * @brief Reads a text file to a string.
+ * 
+ * @param path File path.
+ * @return File contents or an empty string.
+ */
 static inline const std::string readTextFile(const path &path)
 {
     std::stringstream ss;
@@ -25,6 +31,12 @@ static inline const std::string readTextFile(const path &path)
     return ss.str();
 }
 
+/**
+ * @brief Reads a binary file to a vector<uint8_t>
+ * 
+ * @param path File path.
+ * @return File contents or an empty vector.
+ */
 static inline const std::vector<uint8_t> readBinaryFile(const path &path)
 {
     std::ifstream ifs(path, std::ios::in | std::ios::binary);
@@ -42,6 +54,12 @@ static inline const std::vector<uint8_t> readBinaryFile(const path &path)
     return buffer;
 }
 
+/**
+ * @brief Writes a text file.
+ * 
+ * @param path File path.
+ * @param str File contents.
+ */
 static inline void writeTextFile(const path &path, const std::string &str)
 {
     std::ofstream(path, std::ios::out) << str;

@@ -16,8 +16,16 @@
 
 namespace hx::render
 {
+/**
+ * @brief Tilemap renderer.
+ * 
+ */
 class TilemapRenderer {
 public:
+    /**
+     * @brief Uniform Buffer structure
+     * 
+     */
     struct alignas(16) ubo0_s {
         float4x4_t projection;
         float4x4_t scale;
@@ -25,6 +33,10 @@ public:
         float4x4_t transform;
     };
 
+    /**
+     * @brief Uniform Buffer structure
+     * 
+     */
     struct alignas(16) ubo1_s {
         float2_t tileset_size;
         float2_t tilemap_size;
@@ -35,9 +47,33 @@ public:
     static constexpr const char *DEFAULT_FRAG = "assets/shaders/tilemap.frag.spv";
 
 public:
+    /**
+     * @brief Constructor.
+     * 
+     * @param width Target width in pixels.
+     * @param height Target height in pixels.
+     * @param vs Vertex shader file path.
+     * @param fs Fragment shader file path.
+     */
     TilemapRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
+    /**
+     * @brief Sets the view parameters.
+     * 
+     * @param view
+     */
     void setView(const math::View &view);
+
+    /**
+     * @brief Draws a tilemap.
+     * 
+     * @param transform Tilemap transform.
+     * @param size Tilemap size in pixels.
+     * @param tileset_size Tileset size in pixels.
+     * @param tile_size Tile size in pixels.
+     * @param tilemap Tilemap texture (acts as a lookup table).
+     * @param tileset Tileset texture.
+     */
     void draw(const math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset);
 
 private:

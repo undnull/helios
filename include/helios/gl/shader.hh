@@ -14,10 +14,8 @@
 namespace hx::gl
 {
 /**
- * @brief A shader stage.
+ * @brief Shader stage.
  * 
- * Shader stages define the way the shader is going
- * to be running (per-vertex, per-fragment, etc.).
  */
 enum class ShaderStage {
     VERTEX,
@@ -32,24 +30,21 @@ template<>
 constexpr GLenum SHADER_STAGE<ShaderStage::FRAGMENT> = GL_FRAGMENT_SHADER;
 
 /**
- * @brief A GPU-side program.
+ * @brief GPU-side program.
  * 
- * Helios shaders are mainly written in HLSL
- * and pre-compiled to SPIR-V.
- *
  * @tparam T Shader stage.
  */
 template<ShaderStage T>
 class Shader {
 public:
     /**
-     * @brief Constructs a new shader.
+     * @brief Constructor
      * 
      */
     Shader();
 
     /**
-     * @brief Steals the handle from an existing shader.
+     * @brief Move constructor.
      * 
      * @param rhs Existing shader.
      */
@@ -57,13 +52,13 @@ public:
     Shader(const Shader &rhs) = delete;
 
     /**
-     * @brief Destroys the shader.
+     * @brief Destructor
      * 
      */
     virtual ~Shader();
 
     /**
-     * @brief Steals the handle from an existing shader.
+     * @brief Assign operator.
      * 
      * @param rhs Existing shader.
      * @return this
@@ -72,28 +67,23 @@ public:
     Shader &operator=(const Shader &rhs) = delete;
 
     /**
-     * @brief Loads a SPIR-V binary and specializes then
-     * links the shader program.
+     * @brief Loads a SPIR-V binary, specializes and links the shader.
      * 
      * @param binary SPIR-V binary.
      * @param size Binary size in bytes.
-     * @return true if the shader is linked successfully
-     * and false otherwise.
+     * @return true if succeeded and false otherwise.
      */
     bool link(const void *binary, size_t size);
 
     /**
-     * @brief Returns a shader info log.
-     *
-     * Info log is usually an error or a warning message that
-     * indicates that something went wrong or it's going to.
+     * @brief Gets the shader info log.
      *
      * @return Info log or nullptr if not present.
      */
     constexpr const char *getInfoLog() const;
 
     /**
-     * @brief Returns an OpenGL handle of the shader.
+     * @brief Gets an OpenGL handle of the shader.
      * 
      * @return An OpenGL handle.
      */

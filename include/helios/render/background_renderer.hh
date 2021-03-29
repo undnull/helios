@@ -16,8 +16,16 @@
 
 namespace hx::render
 {
+/**
+ * @brief Scrolling background renderer.
+ * 
+ */
 class BackgroundRenderer {
 public:
+    /**
+     * @brief Uniform Buffer structure.
+     * 
+     */
     struct ubo_s {
         float4x4_t projection;
         float4x4_t scale;
@@ -33,9 +41,30 @@ public:
     static constexpr const char *DEFAULT_FRAG = "assets/shaders/background.frag.spv";
 
 public:
+    /**
+     * @brief Constructor
+     * 
+     * @param width Target width in pixels.
+     * @param height Target height in pixels.
+     * @param vs Vertex shader file path.
+     * @param fs Fragment shader file path.
+     */
     BackgroundRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
+    /**
+     * @brief Sets the view parameters.
+     * 
+     * @param view
+     */
     void setView(const math::View &view);
+
+    /**
+     * @brief Draws a background layer.
+     * 
+     * @param texture Background texture.
+     * @param texture_size Background texture's size.
+     * @param scroll_factor Scrolling factor (pseudo-distance).
+     */
     void draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor);
 
 private:

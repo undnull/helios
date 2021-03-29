@@ -18,8 +18,16 @@
 
 namespace hx::render
 {
+/**
+ * @brief Sprite renderer.
+ * 
+ */
 class SpriteRenderer {
 public:
+    /**
+     * @brief Uniform Buffer structure.
+     * 
+     */
     struct alignas(16) ubo_s {
         float4x4_t projection;
         float4x4_t scale;
@@ -30,9 +38,30 @@ public:
     static constexpr const char *DEFAULT_FRAG = "assets/shaders/sprite.frag.spv";
 
 public:
+    /**
+     * @brief Constructor.
+     * 
+     * @param width Target width in pixels.
+     * @param height Target height in pixels.
+     * @param vs Vertex shader file path.
+     * @param fs Fragment shader file path.
+     */
     SpriteRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
+    /**
+     * @brief Sets the view parameters.
+     * 
+     * @param view
+     */
     void setView(const math::View &view);
+
+    /**
+     * @brief Draws sprites.
+     * 
+     * @param transforms Intances' transforms.
+     * @param texture Sprite texture.
+     * @param size Sprite/Texture size in pixels.
+     */
     void draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size);
 
 private:

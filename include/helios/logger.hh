@@ -14,16 +14,48 @@
 
 namespace hx
 {
+/**
+ * @brief Monostate logger.
+ * 
+ */
 class Logger {
 public:
+    /**
+     * @brief Constructor.
+     * 
+     * @param source Log source.
+     */
     Logger(const char *source = nullptr);
 
+    /**
+     * @brief Prints something.
+     * 
+     * @param str Message.
+     */
     void log(const std::string &str);
+
+    /**
+     * @brief Prints something (debug).
+     * 
+     * @param str Message.
+     */
     void dlog(const std::string &str);
 
+    /**
+     * @brief Prints something.
+     * 
+     * @param fmt Format string.
+     * @param args Argument list.
+     */
     template<typename... VA>
     constexpr void log(const std::string &fmt, VA &&... args);
 
+    /**
+     * @brief Prints something (debug).
+     * 
+     * @param fmt Format string.
+     * @param args Argument list.
+     */
     template<typename... VA>
     constexpr void dlog(const std::string &fmt, VA &&... args);
 

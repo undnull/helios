@@ -15,6 +15,13 @@
 
 namespace hx::util
 {
+/**
+ * @brief Generates a string formatted in printf-styled way.
+ * 
+ * @param fmt Format string.
+ * @param args Argument list.
+ * @return Formatted string or fmt if snprintf() failed.
+ */
 template<typename... VA>
 static inline constexpr const std::string format(const std::string &fmt, VA &&... args)
 {

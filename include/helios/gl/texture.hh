@@ -14,19 +14,19 @@
 namespace hx::gl
 {
 /**
- * @brief A chunk of GPU memory to store image data.
+ * @brief Chunk of GPU memory to store image data.
  * 
  */
 class Texture {
 public:
     /**
-     * @brief Constructs a new texture.
+     * @brief Constructor
      * 
      */
     Texture();
 
     /**
-     * @brief Steals the handle from an existing texture.
+     * @brief Move constructor.
      * 
      * @param rhs Existing texture.
      */
@@ -34,13 +34,13 @@ public:
     Texture(const Texture &rhs) = delete;
 
     /**
-     * @brief Destroys the texture.
+     * @brief Destructor
      * 
      */
     virtual ~Texture();
 
     /**
-     * @brief Steals the handle from an existing texture.
+     * @brief Assign operator.
      * 
      * @param rhs Existing texture.
      * @return this
@@ -49,10 +49,9 @@ public:
     Texture &operator=(const Texture &rhs) = delete;
 
     /**
-     * @brief Initializes the texture's GPU-side immutable storage.
+     * @brief Initializes the texture's GPU-side storage.
      * 
-     * @note This should be called once, otherwise
-     * a GL error will be generated.
+     * @note This should be called once, otherwise an OpenGL error will be generated.
      *
      * @param width Texture width in pixels.
      * @param height Texture height in pixels.
@@ -96,7 +95,7 @@ public:
     void generateMipmap();
 
     /**
-     * @brief Returns an OpenGL handle of the texture.
+     * @brief Gets an OpenGL handle of the texture.
      * 
      * @return An OpenGL handle.
      */
