@@ -24,7 +24,7 @@ namespace hx::gl
  *
  * @return true if the loading succeeded and false otherwise.
  */
-bool load()
+static inline bool load()
 {
     if(gladLoadGL()) {
         bool ext = true;
