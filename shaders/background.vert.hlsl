@@ -18,15 +18,19 @@ struct vs_output {
     float2 texcoord : TEXCOORD0;
 };
 
-cbuffer ubo : register(B0) {
+cbuffer ubo0 : register(B0) {
     row_major float4x4 projection;
     row_major float4x4 scale;
     float2 target_size;
-    float2 texture_size;
-    float2 scroll_factor;
     float2 view_position;
     float view_rotation;
     float view_zoom;
+};
+
+cbuffer ubo1 : register(B1) {
+    float2 texture_size;
+    float2 scroll_factor;
+    bool fit;
 };
 
 vs_output main(vs_input input)
@@ -59,6 +63,12 @@ vs_output main(vs_input input)
     output.texcoord -= view_position * scroll_factor * 0.001;
 
     output.texcoord += 0.5;
+
+    if(!fit) {
+        float2 scale = texture_size / target_size;
+        scale.y *= aspect_fix;
+        output.texcoord /= scale;
+    }
 
     return output;
 }

@@ -9,6 +9,7 @@
  */
 #pragma once
 #include <GLFW/glfw3.h>
+#include <functional>
 #include <utility>
 
 namespace hx::glfw
@@ -19,17 +20,19 @@ namespace hx::glfw
  */
 class Window {
 public:
+    template<typename T>
+    using handler_list = std::vector<std::function<T>>;
+
+public:
     /**
      * @brief Constructor
      * 
      * @param width Width in pixels.
      * @param height Height in pixels.
      * @param title Window title.
-     * @param fullscreen 
-     * @param border False if borderless.
-     * @param samples Number of samples (MSAA).
+     * @param fullscreen
      */
-    Window(int width, int height, const char *title, bool fullscreen = false, bool border = true, int samples = 0);
+    Window(int width, int height, const char *title, bool fullscreen = false);
     Window(Window &&rhs) = delete;
     Window(const Window &rhs) = delete;
 
@@ -102,15 +105,20 @@ public:
     constexpr GLFWwindow *get() const;
 
 private:
+    static void onWindowSize(GLFWwindow *window, int width, int height);
+
+public:
+    std::function<void(int, int)> on_resize;
+
+private:
     GLFWwindow *window;
 };
 
-inline Window::Window(int width, int height, const char *title, bool fullscreen, bool border, int samples)
+inline Window::Window(int width, int height, const char *title, bool fullscreen)
 {
-    glfwWindowHint(GLFW_DECORATED, border ? GLFW_TRUE : GLFW_FALSE);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_SAMPLES, samples);
     window = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+    glfwSetWindowUserPointer(window, this);
+    glfwSetWindowSizeCallback(window, onWindowSize);
     glfwMakeContextCurrent(window);
 }
 

@@ -63,11 +63,11 @@ BlitRenderer::BlitRenderer(const fs::path &vs, const fs::path &fs)
     pipeline.stage(frag);
 }
 
-void BlitRenderer::draw(const gl::Texture &texture)
+void BlitRenderer::draw(const gl::Texture &source)
 {
     glUseProgram(0);
     glBindProgramPipeline(pipeline.get());
-    glBindTextureUnit(0, texture.get());
+    glBindTextureUnit(0, source.get());
     glBindVertexArray(vao.get());
     glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);
 }

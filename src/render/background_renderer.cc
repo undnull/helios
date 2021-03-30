@@ -27,18 +27,12 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-BackgroundRenderer::BackgroundRenderer(int width, int height, const fs::path &vs, const fs::path &fs)
+BackgroundRenderer::BackgroundRenderer(bool stretch, const fs::path &vs, const fs::path &fs)
 {
     Logger logger("BackgroundRenderer");
 
-    const float2_t target_size = float2_t(width, height);
-    const float4x4_t projection = glm::ortho(0.0f, target_size.x, target_size.y, 0.0f, -1.0f, 1.0f);
-    const float4x4_t scale = glm::scale(float4x4_t(1.0f), float3_t(target_size, 1.0f));
-
-    ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
-    ubo.subData(offsetof(ubo_s, projection), &projection, sizeof(projection));
-    ubo.subData(offsetof(ubo_s, scale), &scale, sizeof(scale));
-    ubo.subData(offsetof(ubo_s, target_size), &target_size, sizeof(target_size));
+    ubo0.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo0_s));
+    ubo1.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo1_s));
 
     vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
     vbo.subData(0, vertices, sizeof(vertices));
@@ -71,25 +65,30 @@ BackgroundRenderer::BackgroundRenderer(int width, int height, const fs::path &vs
     pipeline.stage(frag);
 }
 
-void BackgroundRenderer::setView(const math::View &view)
+void BackgroundRenderer::setView(math::View &view)
 {
-    const float2_t view_position = view.getPosition();
-    const float view_rotation = glm::radians(view.getRotation());
-    const float view_zoom = view.getZoomFactor();
-
-    ubo.subData(offsetof(ubo_s, view_position), &view_position, sizeof(view_position));
-    ubo.subData(offsetof(ubo_s, view_rotation), &view_rotation, sizeof(view_rotation));
-    ubo.subData(offsetof(ubo_s, view_zoom), &view_zoom, sizeof(view_zoom));
+    ubo0_s ubo0_i;
+    ubo0_i.projection = view.getProjectionMatrix();
+    ubo0_i.scale = glm::scale(float4x4_t(1.0f), float3_t(view.getSize(), 0.0f));
+    ubo0_i.target_size = view.getSize();
+    ubo0_i.view_position = view.getPosition();
+    ubo0_i.view_rotation = glm::radians(view.getRotation());
+    ubo0_i.view_zoom = view.getZoomFactor();
+    ubo0.subData(0, &ubo0_i, sizeof(ubo0_i));
 }
 
-void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor)
+void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor, bool fit)
 {
-    ubo.subData(offsetof(ubo_s, texture_size), &texture_size, sizeof(texture_size));
-    ubo.subData(offsetof(ubo_s, scroll_factor), &scroll_factor, sizeof(scroll_factor));
+    ubo1_s ubo1_i;
+    ubo1_i.texture_size = texture_size;
+    ubo1_i.scroll_factor = scroll_factor;
+    ubo1_i.fit = fit ? 1 : 0;
+    ubo1.subData(0, &ubo1_i, sizeof(ubo1_i));
 
     glUseProgram(0);
     glBindProgramPipeline(pipeline.get());
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo.get());
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, ubo0.get());
+    glBindBufferBase(GL_UNIFORM_BUFFER, 1, ubo1.get());
     glBindTextureUnit(0, texture.get());
     glBindVertexArray(vao.get());
     glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);

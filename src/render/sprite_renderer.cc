@@ -28,14 +28,11 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-SpriteRenderer::SpriteRenderer(int width, int height, const fs::path &vs, const fs::path &fs)
+SpriteRenderer::SpriteRenderer(const fs::path &vs, const fs::path &fs)
 {
     Logger logger("SpriteRenderer");
 
-    const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
-
     ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
-    ubo.subData(offsetof(ubo_s, projection), &projection_m, sizeof(projection_m));
 
     vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
     vbo.subData(0, vertices, sizeof(vertices));
@@ -68,19 +65,21 @@ SpriteRenderer::SpriteRenderer(int width, int height, const fs::path &vs, const 
     pipeline.stage(frag);
 }
 
-void SpriteRenderer::setView(const math::View &view)
+void SpriteRenderer::setView(math::View &view)
 {
-    const float4x4_t view_m = view.getMatrix();
-    ubo.subData(offsetof(ubo_s, view), &view_m, sizeof(view_m));
+    ubo_s ubo_i;
+    ubo_i.projection = view.getProjectionMatrix();
+    ubo_i.view = view.getViewMatrix();
+    ubo.subData(0, &ubo_i, sizeof(ubo_i));
 }
 
-void SpriteRenderer::draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size)
+void SpriteRenderer::draw(std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size)
 {
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
     ubo.subData(offsetof(ubo_s, scale), &size_m, sizeof(size_m));
 
     instances.clear();
-    std::transform(transforms.cbegin(), transforms.cend(), std::back_inserter(instances), [](const math::Transform &t) {
+    std::transform(transforms.begin(), transforms.end(), std::back_inserter(instances), [](math::Transform &t) {
         return t.getMatrix();
     });
 

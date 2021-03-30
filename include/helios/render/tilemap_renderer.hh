@@ -51,19 +51,17 @@ public:
     /**
      * @brief Constructor.
      * 
-     * @param width Target width in pixels.
-     * @param height Target height in pixels.
      * @param vs Vertex shader file path.
      * @param fs Fragment shader file path.
      */
-    TilemapRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
+    TilemapRenderer(const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
     /**
      * @brief Sets the view parameters.
      * 
-     * @param view
+     * @param view View.
      */
-    void setView(const math::View &view);
+    void setView(math::View &view);
 
     /**
      * @brief Draws a tilemap.
@@ -75,7 +73,7 @@ public:
      * @param tilemap Tilemap texture (acts as a lookup table).
      * @param tileset Tileset texture.
      */
-    void draw(const math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset);
+    void draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset);
 
 private:
     gl::VertexShader vert;

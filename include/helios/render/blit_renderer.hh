@@ -36,9 +36,9 @@ public:
     /**
      * @brief Draws a full-frame textued quad.
      * 
-     * @param texture Texture.
+     * @param source Texture.
      */
-    void draw(const gl::Texture &texture);
+    void draw(const gl::Texture &source);
 
 private:
     gl::VertexShader vert;

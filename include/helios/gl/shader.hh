@@ -90,6 +90,8 @@ public:
     constexpr GLuint get() const;
 
 private:
+    std::vector<GLuint> constant_index;
+    std::vector<GLuint> constant_value;
     char *info_log;
     GLuint program;
 };

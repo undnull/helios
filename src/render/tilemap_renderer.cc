@@ -27,15 +27,11 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-TilemapRenderer::TilemapRenderer(int width, int height, const fs::path &vs, const fs::path &fs)
+TilemapRenderer::TilemapRenderer(const fs::path &vs, const fs::path &fs)
 {
     Logger logger("TilemapRenderer");
 
-    const float4x4_t projection_m = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
-
     ubo0.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo0_s));
-    ubo0.subData(offsetof(ubo0_s, projection), &projection_m, sizeof(projection_m));
-
     ubo1.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo1_s));
 
     vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
@@ -69,13 +65,15 @@ TilemapRenderer::TilemapRenderer(int width, int height, const fs::path &vs, cons
     pipeline.stage(frag);
 }
 
-void TilemapRenderer::setView(const math::View &view)
+void TilemapRenderer::setView(math::View &view)
 {
-    const float4x4_t view_m = view.getMatrix();
-    ubo0.subData(offsetof(ubo0_s, view), &view_m, sizeof(view_m));
+    ubo0_s ubo0_i;
+    ubo0_i.projection = view.getProjectionMatrix();
+    ubo0_i.view = view.getViewMatrix();
+    ubo0.subData(0, &ubo0_i, sizeof(ubo0_i));
 }
 
-void TilemapRenderer::draw(const math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset)
+void TilemapRenderer::draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset)
 {
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
     ubo0.subData(offsetof(ubo0_s, scale), &size_m, sizeof(size_m));

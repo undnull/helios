@@ -107,13 +107,16 @@ public:
      * 
      * @return Model matrix.
      */
-    const float4x4_t getMatrix() const;
+    const float4x4_t &getMatrix();
 
 private:
     float2_t origin;
     float2_t position;
     float rotation;
     float scale_v;
+
+    bool needs_update;
+    float4x4_t matrix;
 };
 
 inline Transform::Transform()
@@ -122,42 +125,49 @@ inline Transform::Transform()
     position = float2_t(0.0f, 0.0f);
     rotation = 0.0f;
     scale_v = 1.0f;
+    needs_update = true;
 }
 
 inline void Transform::setOrigin(const float2_t &origin)
 {
     this->origin = origin;
+    needs_update = true;
 }
 
 inline void Transform::setPosition(const float2_t &position)
 {
     this->position = position;
+    needs_update = true;
 }
 
 inline void Transform::setRotation(float rotation)
 {
     this->rotation = rotation;
+    needs_update = true;
 }
 
 inline void Transform::setScale(float scale_v)
 {
     this->scale_v = scale_v;
+    needs_update = true;
 }
 
 inline void Transform::move(const float2_t &velocity)
 {
     position += velocity;
+    needs_update = true;
 }
 
 inline void Transform::rotate(float angle)
 {
     rotation += angle;
-    rotation = fmodf(rotation, 360.0f);
+    needs_update = true;
 }
 
 inline void Transform::scale(float f)
 {
     scale_v *= f;
+    needs_update = true;
 }
 
 inline const float2_t &Transform::getOrigin() const
@@ -180,13 +190,16 @@ inline float Transform::getScale() const
     return scale_v;
 }
 
-inline const float4x4_t Transform::getMatrix() const
+inline const float4x4_t &Transform::getMatrix()
 {
-    float4x4_t matrix = float4x4_t(1.0f);
-    matrix = glm::translate(matrix, float3_t(position, 0.0f));
-    matrix = glm::rotate(matrix, glm::radians(rotation), float3_t(0.0f, 0.0f, 1.0f));
-    matrix = glm::scale(matrix, float3_t(scale_v, scale_v, 1.0f));
-    matrix = glm::translate(matrix, float3_t(-origin, 0.0f));
+    if(needs_update) {
+        matrix = float4x4_t(1.0f);
+        matrix = glm::translate(matrix, float3_t(position, 0.0f));
+        matrix = glm::rotate(matrix, glm::radians(rotation), float3_t(0.0f, 0.0f, 1.0f));
+        matrix = glm::scale(matrix, float3_t(scale_v, scale_v, 1.0f));
+        matrix = glm::translate(matrix, float3_t(-origin, 0.0f));
+    }
+
     return matrix;
 }
 } // namespace hx::math

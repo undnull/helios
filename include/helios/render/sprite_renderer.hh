@@ -41,19 +41,17 @@ public:
     /**
      * @brief Constructor.
      * 
-     * @param width Target width in pixels.
-     * @param height Target height in pixels.
      * @param vs Vertex shader file path.
      * @param fs Fragment shader file path.
      */
-    SpriteRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
+    SpriteRenderer(const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
     /**
-     * @brief Sets the view parameters.
+     * @brief Sets the view.
      * 
      * @param view
      */
-    void setView(const math::View &view);
+    void setView(math::View &view);
 
     /**
      * @brief Draws sprites.
@@ -62,7 +60,7 @@ public:
      * @param texture Sprite texture.
      * @param size Sprite/Texture size in pixels.
      */
-    void draw(const std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size);
+    void draw(std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size);
 
 private:
     gl::VertexShader vert;

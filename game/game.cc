@@ -124,30 +124,17 @@ int main()
     if(!loadTexture("assets/textures/tilemap.png", true, false, tm.texture, tm.size))
         return 1;
 
-    const int FRAMEBUFFER_WIDTH = WIDTH / 4;
-    const int FRAMEBUFFER_HEIGHT = HEIGHT / 4;
-
-    hx::gl::Texture framebuffer_color;
-    framebuffer_color.storage(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGBA16F);
-    framebuffer_color.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    framebuffer_color.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    framebuffer_color.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    framebuffer_color.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    hx::gl::Framebuffer framebuffer;
-    framebuffer.attach(GL_COLOR_ATTACHMENT0, framebuffer_color, 0);
-
     // Unlike SFML view is required to be set up
     // so setup the view
     hx::math::View view;
-    view.setSize(float2_t(WIDTH, HEIGHT));
+    view.setSize(float2_t(WIDTH, HEIGHT) * 0.5f);
 
     // Setup the background renderer
-    hx::render::BackgroundRenderer bg_renderer(WIDTH, HEIGHT);
+    hx::render::BackgroundRenderer bg_renderer;
     bg_renderer.setView(view);
     
     // Setup the tilemap renderer
-    hx::render::TilemapRenderer tm_renderer(WIDTH, HEIGHT);
+    hx::render::TilemapRenderer tm_renderer;
     tm_renderer.setView(view);
 
     // Blit renderer allows rendering of
@@ -156,6 +143,15 @@ int main()
 
     // Enable VSync
     window.setSwapInterval(1);
+
+    window.on_resize = [&](int width, int height) {
+        view.setSize(float2_t(width, height) * 0.5f);
+
+        bg_renderer.setView(view);
+        tm_renderer.setView(view);
+
+        glViewport(0, 0, width, height);
+    };
 
     // To move the camera correctly we need
     // to know the frametime (delta time)
@@ -202,23 +198,16 @@ int main()
             tm_renderer.setView(view);
         }
 
-        // Render to a smaller framebuffer
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
-        glViewport(0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
-
         // Draw the background layer
+        // False means that the background texture won't
+        // be fit to the screen (or target) height.
         glDisable(GL_BLEND);
-        bg_renderer.draw(bg.texture, bg.size, bg.scroll);
-
+        bg_renderer.draw(bg.texture, bg.size, bg.scroll, false);
+        
         // Draw the tilemap layer
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         tm_renderer.draw(tm.t, tm.size, ts.size, ts.tile, tm.texture, ts.texture);
-
-        // Draw the framebuffer contents
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, WIDTH, HEIGHT);
-        blit_renderer.draw(framebuffer_color);
 
         // Make sure we don't have any pipelines bound
         // so third-party overlay programs won't break

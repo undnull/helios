@@ -26,15 +26,24 @@ public:
      * @brief Uniform Buffer structure.
      * 
      */
-    struct ubo_s {
+    struct alignas(16) ubo0_s {
         float4x4_t projection;
         float4x4_t scale;
         float2_t target_size;
-        float2_t texture_size;
-        float2_t scroll_factor;
         float2_t view_position;
         float view_rotation;
         float view_zoom;
+    };
+
+    
+    /**
+     * @brief Uniform Buffer structure.
+     * 
+     */
+    struct alignas(16) ubo1_s {
+        float2_t texture_size;
+        float2_t scroll_factor;
+        GLuint fit;
     };
 
     static constexpr const char *DEFAULT_VERT = "assets/shaders/background.vert.spv";
@@ -44,19 +53,17 @@ public:
     /**
      * @brief Constructor
      * 
-     * @param width Target width in pixels.
-     * @param height Target height in pixels.
      * @param vs Vertex shader file path.
      * @param fs Fragment shader file path.
      */
-    BackgroundRenderer(int width, int height, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
+    BackgroundRenderer(bool stretch = true, const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
 
     /**
-     * @brief Sets the view parameters.
+     * @brief Sets the view.
      * 
-     * @param view
+     * @param view View.
      */
-    void setView(const math::View &view);
+    void setView(math::View &view);
 
     /**
      * @brief Draws a background layer.
@@ -64,8 +71,9 @@ public:
      * @param texture Background texture.
      * @param texture_size Background texture's size.
      * @param scroll_factor Scrolling factor (pseudo-distance).
+     * @param fit Fit to the screen height.
      */
-    void draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor);
+    void draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor, bool fit);
 
 private:
     gl::VertexShader vert;
@@ -75,6 +83,7 @@ private:
     gl::Buffer vbo, ebo;
     gl::VertexArray vao;
 
-    gl::Buffer ubo;
+    gl::Buffer ubo0;
+    gl::Buffer ubo1;
 };
 } // namespace hx::render
