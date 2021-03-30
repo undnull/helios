@@ -124,8 +124,8 @@ int main()
     if(!loadTexture("assets/textures/tilemap.png", true, false, tm.texture, tm.size))
         return 1;
 
-    const int FRAMEBUFFER_WIDTH = WIDTH / 16;
-    const int FRAMEBUFFER_HEIGHT = HEIGHT / 16;
+    const int FRAMEBUFFER_WIDTH = WIDTH / 4;
+    const int FRAMEBUFFER_HEIGHT = HEIGHT / 4;
 
     hx::gl::Texture framebuffer_color;
     framebuffer_color.storage(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGBA16F);
