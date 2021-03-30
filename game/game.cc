@@ -14,12 +14,14 @@
 #include <helios/glfw/clock.hh>
 #include <helios/glfw/context.hh>
 #include <helios/glfw/window.hh>
+#include <helios/gl/framebuffer.hh>
 #include <helios/gl/loader.hh>
 #include <helios/config.hh>
 #include <helios/image.hh>
 #include <helios/logger.hh>
 #include <helios/types.hh>
 #include <helios/render/background_renderer.hh>
+#include <helios/render/blit_renderer.hh>
 #include <helios/render/tilemap_renderer.hh>
 
 constexpr const int WIDTH = 1152;
@@ -122,6 +124,19 @@ int main()
     if(!loadTexture("assets/textures/tilemap.png", true, false, tm.texture, tm.size))
         return 1;
 
+    const int FRAMEBUFFER_WIDTH = WIDTH / 16;
+    const int FRAMEBUFFER_HEIGHT = HEIGHT / 16;
+
+    hx::gl::Texture framebuffer_color;
+    framebuffer_color.storage(FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT, GL_RGBA16F);
+    framebuffer_color.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    framebuffer_color.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    framebuffer_color.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    framebuffer_color.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    hx::gl::Framebuffer framebuffer;
+    framebuffer.attach(GL_COLOR_ATTACHMENT0, framebuffer_color, 0);
+
     // Unlike SFML view is required to be set up
     // so setup the view
     hx::math::View view;
@@ -134,6 +149,10 @@ int main()
     // Setup the tilemap renderer
     hx::render::TilemapRenderer tm_renderer(WIDTH, HEIGHT);
     tm_renderer.setView(view);
+
+    // Blit renderer allows rendering of
+    // full-frame textured quads
+    hx::render::BlitRenderer blit_renderer;
 
     // Enable VSync
     window.setSwapInterval(1);
@@ -183,6 +202,10 @@ int main()
             tm_renderer.setView(view);
         }
 
+        // Render to a smaller framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer.get());
+        glViewport(0, 0, FRAMEBUFFER_WIDTH, FRAMEBUFFER_HEIGHT);
+
         // Draw the background layer
         glDisable(GL_BLEND);
         bg_renderer.draw(bg.texture, bg.size, bg.scroll);
@@ -191,6 +214,11 @@ int main()
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         tm_renderer.draw(tm.t, tm.size, ts.size, ts.tile, tm.texture, ts.texture);
+
+        // Draw the framebuffer contents
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glViewport(0, 0, WIDTH, HEIGHT);
+        blit_renderer.draw(framebuffer_color);
 
         // Make sure we don't have any pipelines bound
         // so third-party overlay programs won't break

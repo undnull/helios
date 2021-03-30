@@ -13,6 +13,7 @@
 #include <helios/gl/vertex_array.hh>
 #include <helios/math/transform.hh>
 #include <helios/math/view.hh>
+#include <helios/fs.hh>
 
 namespace hx::render
 {

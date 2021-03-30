@@ -9,5 +9,6 @@
 #
 target_sources(helios PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/background_renderer.cc"
+    "${CMAKE_CURRENT_LIST_DIR}/blit_renderer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/sprite_renderer.cc"
     "${CMAKE_CURRENT_LIST_DIR}/tilemap_renderer.cc")
