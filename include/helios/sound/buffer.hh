@@ -13,11 +13,32 @@
 
 namespace hx::sound
 {
+/**
+ * @brief A sound buffer.
+ * 
+ */
 template<typename T>
 class Buffer {
 public:
+    /**
+     * @brief Gets the number of channels.
+     * 
+     * @return Number of channels.
+     */
     int getChannelCount() const;
+
+    /**
+     * @brief Gets the sample rate.
+     * 
+     * @return Sample rate.
+     */
     double getSampleRate() const;
+
+    /**
+     * @brief Gets the sample buffer.
+     * 
+     * @return Sample buffer. 
+     */
     const std::vector<float> &getSamples() const;
 };
 

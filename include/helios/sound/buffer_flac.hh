@@ -15,13 +15,45 @@
 
 namespace hx::sound
 {
+/**
+ * @brief A FLAC sound buffer.
+ * 
+ */
 class Buffer_FLAC : public Buffer<Buffer_FLAC> {
 public:
+    /**
+     * @brief Clears the buffer.
+     * 
+     */
     void clear();
+
+    /**
+     * @brief (Re-)loads the buffer from a file.
+     * 
+     * @param path File path.
+     * @return true if succeeded, false otherwise.
+     */
     bool loadFromFile(const fs::path &path);
 
+    /**
+     * @brief Gets the number of channels.
+     * 
+     * @return Number of channels.
+     */
     int getChannelCount() const;
+
+    /**
+     * @brief Gets the sample rate.
+     * 
+     * @return Sample rate.
+     */
     double getSampleRate() const;
+
+    /**
+     * @brief Gets the sample buffer.
+     * 
+     * @return Sample buffer. 
+     */
     const std::vector<float> &getSamples() const;
 
 private:

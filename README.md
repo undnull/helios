@@ -57,9 +57,11 @@ Use clang-format to correct your mistakes!
 Helios is licensed under MPL 2.0 License, see LICENSE for details.
 
 ### Dependencies
+* **dr_libs:** [Public Domain](https://github.com/mackron/dr_libs)
 * **GLAD:** [MIT License](https://github.com/Dav1dde/glad/blob/master/LICENSE)
 * **GLFW:** [zlib License](https://github.com/glfw/glfw/blob/master/LICENSE.md)
 * **GLM:** [MIT License](https://github.com/g-truc/glm/blob/master/copying.txt#L36)
+* **PortAudio:** [MIT License](https://github.com/PortAudio/portaudio/blob/master/LICENSE.txt)
 * **STB:** [Public Domain](https://github.com/nothings/stb/blob/master/LICENSE#L22)
 
 ### Ghost Dependencies

@@ -13,9 +13,24 @@
 
 namespace hx::sound
 {
+/**
+ * @brief PortAudio context wrapper.
+ * 
+ * Works in the similar to hx::glfw::Context way.
+ */
 class Context {
 public:
+    /**
+     * @brief Constructor.
+     * 
+     * @note if Pa_Initialize() has failed, std::terminate() is called.
+     */
     Context();
+
+    /**
+     * @brief Destructor.
+     * 
+     */
     virtual ~Context();
 };
 

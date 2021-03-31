@@ -24,7 +24,7 @@ public:
      * 
      * Calls glfwInit().
      * 
-     * @note If glfwInit() failed, std::terminate() is called.
+     * @note If glfwInit() has failed, std::terminate() is called.
      */
     Context();
 

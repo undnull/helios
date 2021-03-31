@@ -14,8 +14,16 @@
 
 namespace hx::sound
 {
+/**
+ * @brief Output sound stream.
+ * 
+ */
 class OutStream {
 public:
+    /**
+     * @brief Playback status.
+     * 
+     */
     enum class Status {
         Init,
         Stopped,
@@ -24,19 +32,63 @@ public:
     };
 
 public:
+    /**
+     * @brief Constructor.
+     * 
+     */
     OutStream();
+
+    /**
+     * @brief Destructor.
+     * 
+     */
     virtual ~OutStream();
 
+    /**
+     * @brief Initializes the stream with a sound buffer.
+     * 
+     * @param buffer Sound buffer.
+     */
     template<typename T>
-    bool init(const Buffer<T> &buffer);
+    void init(const Buffer<T> &buffer);
 
+    /**
+     * @brief Starts the playback.
+     * 
+     */
     void play();
+
+    /**
+     * @brief Pauses the playback.
+     * 
+     */
     void pause();
+
+    /**
+     * @brief Stops the playback.
+     * 
+     */
     void stop();
 
+    /**
+     * @brief Sets the playback volume.
+     * 
+     * @param volume Playback volume [0.0; 1.0]
+     */
     void setVolume(float volume);
+
+    /**
+     * @brief Sets the loop flag.
+     * 
+     * @param loop Loop flag.
+     */
     void setLoop(bool loop);
 
+    /**
+     * @brief Gets the playback status.
+     * 
+     * @return Playback status.
+     */
     Status getStatus() const;
 
 private:
@@ -70,7 +122,7 @@ inline OutStream::~OutStream()
 }
 
 template<typename T>
-inline bool OutStream::init(const Buffer<T> &buffer)
+inline void OutStream::init(const Buffer<T> &buffer)
 {
     samples.clear();
     Pa_CloseStream(stream);
@@ -81,7 +133,6 @@ inline bool OutStream::init(const Buffer<T> &buffer)
 
     Pa_OpenDefaultStream(&stream, 0, num_channels, paFloat32, buffer.getSampleRate(), paFramesPerBufferUnspecified, paCallback, this);
     Pa_SetStreamFinishedCallback(stream, paFinish);
-    return true;
 }
 
 inline void OutStream::play()
