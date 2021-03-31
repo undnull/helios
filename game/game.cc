@@ -24,6 +24,8 @@
 #include <helios/render/blit_renderer.hh>
 #include <helios/render/tilemap_renderer.hh>
 
+#include <portaudio.h>
+
 constexpr const int WIDTH = 1152;
 constexpr const int HEIGHT = 648;
 
@@ -85,8 +87,79 @@ static bool loadTexture(const hx::fs::path &path, bool repeat, bool filter, hx::
     return false;
 }
 
+struct pa_data {
+    float left;
+    float right;
+};
+
+static int paCallback(const void *in, void *out, unsigned long frames, const PaStreamCallbackTimeInfo *time_info, PaStreamCallbackFlags flags, void *data)
+{
+    pa_data *p_data = reinterpret_cast<pa_data *>(data);
+    float *f_out = reinterpret_cast<float *>(out);
+    for(unsigned long i = 0; i < frames; i++) {
+        *f_out++ = p_data->left * 0.1f;
+        *f_out++ = p_data->right * 0.1f;
+
+        p_data->left += 0.01f;
+        p_data->right += 0.01f;
+
+        if(p_data->left >= 1.0f)
+            p_data->left -= 2.0f;
+        if(p_data->right >= 1.0f)
+            p_data->right -= 2.0f;
+    }
+    return 0;
+}
+
 int main()
 {
+    hx::Logger alogger("PortAudio");
+
+    // PortAudio test
+    PaError err;
+    
+    err = Pa_Initialize();
+    if(err != paNoError) {
+        alogger.log("PA: %s", Pa_GetErrorText(err));
+        return 1;
+    }
+
+    pa_data data;
+    data.left = -1.0f;
+    data.right = -1.0f;
+
+    PaStream *stream;
+    err = Pa_OpenDefaultStream(&stream, 0, 2, paFloat32, 44100, paFramesPerBufferUnspecified, paCallback, &data);
+    if(err != paNoError) {
+        alogger.log("PA: %s", Pa_GetErrorText(err));
+        return 1;
+    }
+
+    err = Pa_StartStream(stream);
+    if(err != paNoError) {
+        alogger.log("PA: %s", Pa_GetErrorText(err));
+        return 1;
+    }
+
+    Pa_Sleep(1000);
+    err = Pa_StopStream(stream);
+    if(err != paNoError) {
+        alogger.log("PA: %s", Pa_GetErrorText(err));
+        return 1;
+    }
+
+    err = Pa_CloseStream(stream);
+    if(err != paNoError) {
+        alogger.log("PA: %s", Pa_GetErrorText(err));
+        return 1;
+    }
+
+    err = Pa_Terminate();
+    if(err != paNoError) {
+        alogger.log("PA: %s", Pa_GetErrorText(err));
+        return 1;
+    }
+
     // Initialize GLFW
     HX_CREATE_GLFW_CONTEXT();
 

@@ -10,6 +10,10 @@
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(PA_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(PA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(PA_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(PA_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 
 if(POLICY CMP0079)
     cmake_policy(SET CMP0079 NEW)
@@ -30,6 +34,9 @@ target_link_libraries(helios PUBLIC glm)
 
 #add_subdirectory(json)
 #target_link_libraries(helios PUBLIC json)
+
+add_subdirectory(portaudio)
+target_link_libraries(helios PUBLIC portaudio_static)
 
 add_subdirectory(stb)
 target_link_libraries(helios PRIVATE stb)
