@@ -11,6 +11,7 @@
 #include <helios/macros.hh>
 #include <filesystem>
 #include <fstream>
+#include <iterator>
 #include <sstream>
 #include <string>
 #include <vector>
