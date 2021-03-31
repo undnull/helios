@@ -10,5 +10,4 @@
 cmake_minimum_required(VERSION 3.10)
 project(stb VERSION 1.3.3.7 LANGUAGES C)
 add_library(stb STATIC "${CMAKE_CURRENT_LIST_DIR}/stb.c")
-target_include_directories(stb PRIVATE "${CMAKE_CURRENT_LIST_DIR}/stb/")
-target_include_directories(stb PUBLIC "${CMAKE_CURRENT_LIST_DIR}/stb/")
+target_include_directories(stb PUBLIC "${CMAKE_CURRENT_LIST_DIR}")

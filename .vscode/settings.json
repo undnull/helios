@@ -5,7 +5,7 @@
         "./external/glfw/include",
         "./external/glm",
         "./external/portaudio/include",
-        "./external/stb/stb"
+        "./external/stb"
     ],
     "C_Cpp.default.cStandard": "gnu99",
     "C_Cpp.default.cppStandard": "gnu++17"

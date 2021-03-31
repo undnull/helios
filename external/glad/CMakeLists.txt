@@ -10,5 +10,4 @@
 cmake_minimum_required(VERSION 3.10)
 project(glad VERSION 0.1.34 LANGUAGES C)
 add_library(glad STATIC "${CMAKE_CURRENT_LIST_DIR}/glad.c")
-target_include_directories(glad PRIVATE "${CMAKE_CURRENT_LIST_DIR}/include/")
 target_include_directories(glad PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include/")
