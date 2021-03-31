@@ -19,6 +19,9 @@ if(POLICY CMP0079)
     cmake_policy(SET CMP0079 NEW)
 endif()
 
+add_subdirectory(dr_x)
+target_link_libraries(helios PUBLIC dr_x)
+
 add_subdirectory(glad)
 target_link_libraries(helios PUBLIC glad)
 

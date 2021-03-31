@@ -12,4 +12,5 @@ target_sources(helios PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/logger.cc")
 add_subdirectory(glfw)
 add_subdirectory(render)
+add_subdirectory(sound)
 add_subdirectory(util)
