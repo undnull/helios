@@ -80,6 +80,9 @@ public:
     /**
      * @brief Godot-ish way of processing the keyboard input.
      * 
+     * The "just-pressed" keys are being reset when
+     * Window::handleEvents() is called.
+     *
      * @param key GLFW key.
      * @return true if the key was the latest pressed one.
      */
@@ -88,6 +91,9 @@ public:
     /**
      * @brief Godot-ish way of processing the keyboard input.
      * 
+     * The "just-released" keys are being reset when
+     * Window::handleEvents() is called.
+     *
      * @param key GLFW key.
      * @return true if the key was the latest released one.
      */
@@ -104,6 +110,9 @@ public:
     /**
      * @brief Keyboard-ish way of processing the mouse input.
      * 
+     * The "just-pressed" buttons are being reset when
+     * Window::handleEvents() is called.
+     *
      * @param key GLFW mouse button.
      * @return true if the button was the latest pressed one.
      */
@@ -112,6 +121,9 @@ public:
     /**
      * @brief Keyboard-ish way of processing the mouse input.
      * 
+     * The "just-released" buttons are being reset when
+     * Window::handleEvents() is called.
+     *
      * @param key GLFW mouse button.
      * @return true if the button was the latest released one.
      */
@@ -184,7 +196,13 @@ inline Window::Window(int width, int height, const char *title, bool fullscreen)
     last_released_mb = GLFW_KEY_UNKNOWN;
     window = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
     glfwSetWindowUserPointer(window, this);
+    glfwSetWindowCloseCallback(window, onClose);
+    glfwSetCursorPosCallback(window, onMousePosition);
+    glfwSetScrollCallback(window, onScroll);
     glfwSetWindowSizeCallback(window, onWindowSize);
+    glfwSetKeyCallback(window, onKey);
+    glfwSetMouseButtonCallback(window, onMouseButton);
+    glfwSetCharCallback(window, onChar);
     glfwMakeContextCurrent(window);
 }
 
@@ -256,6 +274,10 @@ inline void Window::swapBuffers()
 
 inline void Window::handleEvents()
 {
+    last_pressed_key = GLFW_KEY_UNKNOWN;
+    last_released_key = GLFW_KEY_UNKNOWN;
+    last_pressed_mb = GLFW_KEY_UNKNOWN;
+    last_released_mb = GLFW_KEY_UNKNOWN;
     if(glfwGetWindowAttrib(window, GLFW_FOCUSED))
         glfwPollEvents();
     else
