@@ -102,6 +102,30 @@ public:
     bool isKeyPressed(int key) const;
 
     /**
+     * @brief Keyboard-ish way of processing the mouse input.
+     * 
+     * @param key GLFW mouse button.
+     * @return true if the button was the latest pressed one.
+     */
+    bool isMouseButtonJustPressed(int button) const;
+
+    /**
+     * @brief Keyboard-ish way of processing the mouse input.
+     * 
+     * @param key GLFW mouse button.
+     * @return true if the button was the latest released one.
+     */
+    bool isMouseButtonJustReleased(int button) const;
+
+    /**
+     * @brief Keyboard-ish way of processing the mouse input.
+     * 
+     * @param key GLFW mouse button.
+     * @return true if the button  is pressed.
+     */
+    bool isMouseButtonPressed(int button) const;
+
+    /**
      * @brief Makes the GL context current.
      * 
      */
@@ -147,15 +171,17 @@ public:
     std::function<void(unsigned int)> on_char;
 
 private:
-    int last_pressed;
-    int last_released;
+    int last_pressed_key, last_released_key;
+    int last_pressed_mb, last_released_mb;
     GLFWwindow *window;
 };
 
 inline Window::Window(int width, int height, const char *title, bool fullscreen)
 {
-    last_pressed = GLFW_KEY_UNKNOWN;
-    last_released = GLFW_KEY_UNKNOWN;
+    last_pressed_key = GLFW_KEY_UNKNOWN;
+    last_released_key = GLFW_KEY_UNKNOWN;
+    last_pressed_mb = GLFW_KEY_UNKNOWN;
+    last_released_mb = GLFW_KEY_UNKNOWN;
     window = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
     glfwSetWindowUserPointer(window, this);
     glfwSetWindowSizeCallback(window, onWindowSize);
@@ -190,17 +216,32 @@ inline bool Window::shouldClose() const
 
 inline bool Window::isKeyJustPressed(int key) const
 {
-    return key == last_pressed;
+    return key == last_pressed_key;
 }
 
 inline bool Window::isKeyJustReleased(int key) const
 {
-    return key == last_released;
+    return key == last_released_key;
 }
 
 inline bool Window::isKeyPressed(int key) const
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
+}
+
+inline bool Window::isMouseButtonJustPressed(int button) const
+{
+    return button == last_pressed_mb;
+}
+
+inline bool Window::isMouseButtonJustReleased(int button) const
+{
+    return button == last_released_mb;
+}
+
+inline bool Window::isMouseButtonPressed(int button) const
+{
+    return glfwGetMouseButton(window, button) == GLFW_PRESS;
 }
 
 inline void Window::makeContextCurrent()
