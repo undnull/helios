@@ -44,9 +44,9 @@ void Window::onKey(GLFWwindow *window, int key, int scancode, int action, int mo
     Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
     if(wrapper) {
         if(action == GLFW_PRESS)
-            wrapper->last_pressed = key;
+            wrapper->last_pressed_key = key;
         else if(action == GLFW_RELEASE)
-            wrapper->last_released = key;
+            wrapper->last_released_key = key;
         if(wrapper->on_key)
             wrapper->on_key(key, action, mods);
     }
@@ -55,8 +55,14 @@ void Window::onKey(GLFWwindow *window, int key, int scancode, int action, int mo
 void Window::onMouseButton(GLFWwindow *window, int button, int action, int mods)
 {
     Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-    if(wrapper && wrapper->on_mouse_button)
-        wrapper->on_mouse_button(button, action, mods);
+    if(wrapper) {
+        if(action == GLFW_PRESS)
+            wrapper->last_pressed_mb = button;
+        else if(action == GLFW_RELEASE)
+            wrapper->last_released_mb = button;
+        if(wrapper->on_mouse_button)
+            wrapper->on_mouse_button(button, action, mods);
+    }
 }
 
 void Window::onChar(GLFWwindow *window, unsigned int unicode)
