@@ -8,17 +8,17 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 cmake_minimum_required(VERSION 3.10)
-project(helios VERSION 0.0.1)
+project(thorn VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-add_library(helios STATIC "")
+add_library(thorn STATIC "")
 
 # warning C4996: This function or variable may be unsafe.
-target_compile_definitions(helios PUBLIC _CRT_SECURE_NO_WARNINGS=1)
+target_compile_definitions(thorn PUBLIC _CRT_SECURE_NO_WARNINGS=1)
 
 add_subdirectory(external)
 add_subdirectory(include)
 add_subdirectory(src)
 
-add_subdirectory(game)
+add_subdirectory(demo)

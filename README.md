@@ -1,7 +1,7 @@
-# Helios
-[![Doxygen](https://github.com/undnull/helios/actions/workflows/doxygen.yml/badge.svg)](https://github.com/undnull/helios/actions/workflows/doxygen.yml) [![Issues](https://img.shields.io/github/issues/undnull/helios?style=flat)](https://github.com/undnull/helios/issues) [![License](https://img.shields.io/github/license/undnull/helios?style=flat)](https://github.com/undnull/helios/blob/master/LICENSE)  
+# Thorn
+[![Doxygen](https://github.com/undnull/thorn/actions/workflows/doxygen.yml/badge.svg)](https://github.com/undnull/thorn/actions/workflows/doxygen.yml) [![Issues](https://img.shields.io/github/issues/undnull/thorn?style=flat)](https://github.com/undnull/thorn/issues) [![License](https://img.shields.io/github/license/undnull/thorn?style=flat)](https://github.com/undnull/thorn/blob/master/LICENSE)  
 
-Helios is a general-purpose set of libraries and abstractions to make the life of a 2D graphics programmer easier.  
+Thorn is a general-purpose set of libraries and abstractions to make the life of a 2D graphics programmer easier.  
 You may call it "SFML, but a bit closer to the hardware" game engine.  
 
 # Features
@@ -20,11 +20,11 @@ Well...
 ### Standalone
 1. Clone the repo:
    ```bash
-   git clone --recursive https://github.com/undnull/helios.git
+   git clone --recursive https://github.com/undnull/thorn.git
    ```
 2. Setup the CMake environment:
    ```bash
-   cd helios
+   cd thorn
    cmake -B build .
    ```
 3. Build it:
@@ -35,16 +35,16 @@ Well...
 ### Submodule
 1. Add the repo as a submodule:
    ```bash
-   git submodule add https://github.com/undnull/helios.git
+   git submodule add https://github.com/undnull/thorn.git
    git submodule update --init --recursive
    ```
 2. Add the project as a subdirectory in your CMakeLists:
    ```cmake
-   add_subdirectory(helios)
+   add_subdirectory(thorn)
    ```
 3. Add the project as a library to your executable:
    ```cmake
-   target_link_libraries(my_game helios)
+   target_link_libraries(my_game thorn)
    ```
 4. Build the project as usual!
 
@@ -54,17 +54,10 @@ Make sure your code is formatted as [described](CODE_STYLE.md).
 Use clang-format to correct your mistakes!
 
 # Licensing
-Helios is licensed under MPL 2.0 License, see LICENSE for details.
+Thorn is licensed under MPL 2.0 License, see LICENSE for details.
 
 ### Dependencies
-* **dr_libs:** [Public Domain](https://github.com/mackron/dr_libs)
 * **GLAD:** [MIT License](https://github.com/Dav1dde/glad/blob/master/LICENSE)
 * **GLFW:** [zlib License](https://github.com/glfw/glfw/blob/master/LICENSE.md)
 * **GLM:** [MIT License](https://github.com/g-truc/glm/blob/master/copying.txt#L36)
-* **PortAudio:** [MIT License](https://github.com/PortAudio/portaudio/blob/master/LICENSE.txt)
 * **STB:** [Public Domain](https://github.com/nothings/stb/blob/master/LICENSE#L22)
-
-### Ghost Dependencies
-These libraries are present in the repository but not used yet:
-* **ImGui:** [MIT License](https://github.com/ocornut/imgui/blob/master/LICENSE.txt)
-* **JSON:** [MIT License](https://github.com/nlohmann/json/blob/develop/LICENSE.MIT)

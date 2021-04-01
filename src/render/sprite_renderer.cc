@@ -7,12 +7,12 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <helios/logger.hh>
-#include <helios/fs.hh>
-#include <helios/render/sprite_renderer.hh>
+#include <thorn/fs.hh>
+#include <thorn/render/sprite_renderer.hh>
 #include <algorithm>
+#include <iostream>
 
-namespace hx::render
+namespace thorn::render
 {
 static const vertex vertices[] = {
     { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
@@ -30,8 +30,6 @@ static const GLuint indices[NUM_INDICES] = {
 
 SpriteRenderer::SpriteRenderer(const fs::path &vs, const fs::path &fs)
 {
-    Logger logger("SpriteRenderer");
-
     ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
 
     vbo.storage<gl::BufferUsage::STATIC>(sizeof(vertices));
@@ -55,11 +53,11 @@ SpriteRenderer::SpriteRenderer(const fs::path &vs, const fs::path &fs)
 
     const std::vector<uint8_t> vert_spv = fs::readBinaryFile(vs);
     if(!vert.link(vert_spv.data(), vert_spv.size()))
-        logger.log(vert.getInfoLog());
+        std::cerr << vert.getInfoLog() << std::endl;
 
     const std::vector<uint8_t> frag_spv = fs::readBinaryFile(fs);
     if(!frag.link(frag_spv.data(), frag_spv.size()))
-        logger.log(frag.getInfoLog());
+        std::cerr << frag.getInfoLog() << std::endl;
 
     pipeline.stage(vert);
     pipeline.stage(frag);
@@ -97,4 +95,4 @@ void SpriteRenderer::draw(std::vector<math::Transform> &transforms, const gl::Te
     glBindVertexArray(vao.get());
     glDrawElementsInstanced(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr, static_cast<GLsizei>(num_instances));
 }
-} // namespace hx::render
+} // namespace thorn::render

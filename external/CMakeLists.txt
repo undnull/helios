@@ -7,39 +7,24 @@
 # License, v2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
+
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(PA_BUILD_SHARED OFF CACHE BOOL "" FORCE)
-set(PA_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(PA_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(PA_DISABLE_INSTALL ON CACHE BOOL "" FORCE)
 
 if(POLICY CMP0079)
     cmake_policy(SET CMP0079 NEW)
 endif()
 
-add_subdirectory(dr_x)
-target_link_libraries(helios PUBLIC dr_x)
-
 add_subdirectory(glad)
-target_link_libraries(helios PUBLIC glad)
+target_link_libraries(thorn PUBLIC glad)
 
 add_subdirectory(glfw)
-target_link_libraries(helios PUBLIC glfw)
-target_compile_definitions(helios PUBLIC GLFW_INCLUDE_NONE=1)
+target_link_libraries(thorn PUBLIC glfw)
+target_compile_definitions(thorn PUBLIC GLFW_INCLUDE_NONE=1)
 
 add_subdirectory(glm)
-target_link_libraries(helios PUBLIC glm)
-
-#add_subdirectory(imgui)
-#target_link_libraries(helios PUBLIC imgui)
-
-#add_subdirectory(json)
-#target_link_libraries(helios PUBLIC json)
-
-add_subdirectory(portaudio)
-target_link_libraries(helios PUBLIC portaudio_static)
+target_link_libraries(thorn PUBLIC glm)
 
 add_subdirectory(stb)
-target_link_libraries(helios PRIVATE stb)
+target_link_libraries(thorn PUBLIC stb)

@@ -1,5 +1,5 @@
 build/
-helios.log
-helios.latest.log
+thorn.log
+thorn.latest.log
 imgui.ini
 vidmode.json

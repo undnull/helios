@@ -4,6 +4,3 @@
 [submodule "external/glm"]
 	path = external/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "external/portaudio"]
-	path = external/portaudio
-	url = https://github.com/PortAudio/portaudio.git

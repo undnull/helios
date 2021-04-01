@@ -1,11 +1,9 @@
 {
     "C_Cpp.default.includePath": [
         "./include",
-        "./external/dr_x",
         "./external/glad/include",
         "./external/glfw/include",
         "./external/glm",
-        "./external/portaudio/include",
         "./external/stb"
     ],
     "C_Cpp.default.cStandard": "gnu99",

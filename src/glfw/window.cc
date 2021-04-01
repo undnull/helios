@@ -7,9 +7,9 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <helios/glfw/window.hh>
+#include <thorn/glfw/window.hh>
 
-namespace hx::glfw
+namespace thorn::glfw
 {
 void Window::onWindowSize(GLFWwindow *window, int width, int height)
 {
@@ -17,4 +17,4 @@ void Window::onWindowSize(GLFWwindow *window, int width, int height)
     if(wrapper && wrapper->on_resize)
         wrapper->on_resize(width, height);
 }
-} // namespace hx::glfw
+} // namespace thorn::glfw

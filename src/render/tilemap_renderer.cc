@@ -7,11 +7,11 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <helios/logger.hh>
-#include <helios/fs.hh>
-#include <helios/render/tilemap_renderer.hh>
+#include <thorn/fs.hh>
+#include <thorn/render/tilemap_renderer.hh>
+#include <iostream>
 
-namespace hx::render
+namespace thorn::render
 {
 static const vertex vertices[] = {
     { { 0.0f, 0.0f }, { 0.0f, 0.0f } },
@@ -29,8 +29,6 @@ static const GLuint indices[NUM_INDICES] = {
 
 TilemapRenderer::TilemapRenderer(const fs::path &vs, const fs::path &fs)
 {
-    Logger logger("TilemapRenderer");
-
     ubo0.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo0_s));
     ubo1.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo1_s));
 
@@ -55,11 +53,11 @@ TilemapRenderer::TilemapRenderer(const fs::path &vs, const fs::path &fs)
 
     const std::vector<uint8_t> vert_spv = fs::readBinaryFile(vs);
     if(!vert.link(vert_spv.data(), vert_spv.size()))
-        logger.log("%s", vert.getInfoLog());
+        std::cerr << vert.getInfoLog() << std::endl;
 
     const std::vector<uint8_t> frag_spv = fs::readBinaryFile(fs);
     if(!frag.link(frag_spv.data(), frag_spv.size()))
-        logger.log("%s", frag.getInfoLog());
+        std::cerr << frag.getInfoLog() << std::endl;
 
     pipeline.stage(vert);
     pipeline.stage(frag);
@@ -96,4 +94,4 @@ void TilemapRenderer::draw(math::Transform &transform, const float2_t &size, con
     glBindVertexArray(vao.get());
     glDrawElements(GL_TRIANGLES, NUM_INDICES, GL_UNSIGNED_INT, nullptr);
 }
-} // namespace hx::render
+} // namespace thorn::render
