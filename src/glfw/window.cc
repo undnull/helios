@@ -11,10 +11,58 @@
 
 namespace thorn::glfw
 {
+void Window::onClose(GLFWwindow *window)
+{
+    Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+    if(wrapper && wrapper->on_close)
+        wrapper->on_close();
+}
+
+void Window::onMousePosition(GLFWwindow *window, double x, double y)
+{
+    Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+    if(wrapper && wrapper->on_mouse_position)
+        wrapper->on_mouse_position(static_cast<float>(x), static_cast<float>(y));
+}
+
+void Window::onScroll(GLFWwindow *window, double dx, double dy)
+{
+    Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+    if(wrapper && wrapper->on_scroll)
+        wrapper->on_scroll(static_cast<float>(dx), static_cast<float>(dy));
+}
+
 void Window::onWindowSize(GLFWwindow *window, int width, int height)
 {
     Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-    if(wrapper && wrapper->on_resize)
-        wrapper->on_resize(width, height);
+    if(wrapper && wrapper->on_window_size)
+        wrapper->on_window_size(width, height);
+}
+
+void Window::onKey(GLFWwindow *window, int key, int scancode, int action, int mods)
+{
+    Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+    if(wrapper) {
+        if(action == GLFW_PRESS)
+            wrapper->last_pressed = key;
+        else if(action == GLFW_RELEASE)
+            wrapper->last_released = key;
+        if(wrapper->on_key)
+            wrapper->on_key(key, action, mods);
+    }
+}
+
+void Window::onMouseButton(GLFWwindow *window, int button, int action, int mods)
+{
+    Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+    if(wrapper && wrapper->on_mouse_button)
+        wrapper->on_mouse_button(button, action, mods);
+}
+
+void Window::onChar(GLFWwindow *window, unsigned int unicode)
+{
+    Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
+    if(wrapper && wrapper->on_char)
+        wrapper->on_char(unicode);
 }
 } // namespace thorn::glfw

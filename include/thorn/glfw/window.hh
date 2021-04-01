@@ -78,6 +78,30 @@ public:
     bool shouldClose() const;
 
     /**
+     * @brief Godot-ish way of processing the keyboard input.
+     * 
+     * @param key GLFW key.
+     * @return true if the key was the latest pressed one.
+     */
+    bool isKeyJustPressed(int key) const;
+
+    /**
+     * @brief Godot-ish way of processing the keyboard input.
+     * 
+     * @param key GLFW key.
+     * @return true if the key was the latest released one.
+     */
+    bool isKeyJustReleased(int key) const;
+
+    /**
+     * @brief Godot-ish way of processing the keyboard input.
+     * 
+     * @param key GLFW key.
+     * @return true if the key is pressed.
+     */
+    bool isKeyPressed(int key) const;
+
+    /**
      * @brief Makes the GL context current.
      * 
      */
@@ -105,17 +129,33 @@ public:
     constexpr GLFWwindow *get() const;
 
 private:
+    static void onClose(GLFWwindow *window);
+    static void onMousePosition(GLFWwindow *window, double x, double y);
+    static void onScroll(GLFWwindow *window, double dx, double dy);
     static void onWindowSize(GLFWwindow *window, int width, int height);
+    static void onKey(GLFWwindow *window, int key, int scancode, int action, int mods);
+    static void onMouseButton(GLFWwindow *window, int button, int action, int mods);
+    static void onChar(GLFWwindow *window, unsigned int unicode);
 
 public:
-    std::function<void(int, int)> on_resize;
+    std::function<void()> on_close;
+    std::function<void(float, float)> on_mouse_position;
+    std::function<void(float, float)> on_scroll;
+    std::function<void(int, int)> on_window_size;
+    std::function<void(int, int, int)> on_key;
+    std::function<void(int, int, int)> on_mouse_button;
+    std::function<void(unsigned int)> on_char;
 
 private:
+    int last_pressed;
+    int last_released;
     GLFWwindow *window;
 };
 
 inline Window::Window(int width, int height, const char *title, bool fullscreen)
 {
+    last_pressed = GLFW_KEY_UNKNOWN;
+    last_released = GLFW_KEY_UNKNOWN;
     window = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
     glfwSetWindowUserPointer(window, this);
     glfwSetWindowSizeCallback(window, onWindowSize);
@@ -146,6 +186,21 @@ inline void Window::setShouldClose(bool close)
 inline bool Window::shouldClose() const
 {
     return glfwWindowShouldClose(window) == GLFW_TRUE;
+}
+
+inline bool Window::isKeyJustPressed(int key) const
+{
+    return key == last_pressed;
+}
+
+inline bool Window::isKeyJustReleased(int key) const
+{
+    return key == last_released;
+}
+
+inline bool Window::isKeyPressed(int key) const
+{
+    return glfwGetKey(window, key) == GLFW_PRESS;
 }
 
 inline void Window::makeContextCurrent()

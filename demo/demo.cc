@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 
     window.setSwapInterval(1);
 
-    window.on_resize = [&](int width, int height) {
+    window.on_window_size = [&](int width, int height) {
         view.setSize(float2_t(width, height) * 0.5f);
 
         bg_renderer.setView(view);
@@ -142,25 +142,25 @@ int main(int argc, char **argv)
             float rv = 0.0f;
 
             // Camera movement
-            if(glfwGetKey(window.get(), GLFW_KEY_W) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_W))
                 cv.y += C_SPEED;
-            if(glfwGetKey(window.get(), GLFW_KEY_S) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_S))
                 cv.y -= C_SPEED;
-            if(glfwGetKey(window.get(), GLFW_KEY_D) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_D))
                 cv.x -= C_SPEED;
-            if(glfwGetKey(window.get(), GLFW_KEY_A) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_A))
                 cv.x += C_SPEED;
 
             // Camera rotation
-            if(glfwGetKey(window.get(), GLFW_KEY_Q) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_Q))
                 rv += R_SPEED;
-            if(glfwGetKey(window.get(), GLFW_KEY_E) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_E))
                 rv -= R_SPEED;
 
             // Camera zoom
-            if(glfwGetKey(window.get(), GLFW_KEY_F1) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_F1))
                 view.zoom((1.0f + Z_SPEED));
-            if(glfwGetKey(window.get(), GLFW_KEY_F2) == GLFW_PRESS)
+            if(window.isKeyPressed(GLFW_KEY_F2))
                 view.zoom(1.0f / (1.0f + Z_SPEED));
 
             // Update the view itself
