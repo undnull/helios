@@ -23,7 +23,7 @@ public:
      * 
      */
     Framebuffer();
-    
+
     /**
      * @brief Move constructor.
      * 

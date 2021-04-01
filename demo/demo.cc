@@ -9,10 +9,10 @@
  */
 #include <thorn/config.hh>
 #include <thorn/context.hh>
-#include <thorn/image.hh>
 #include <thorn/glad.hh>
 #include <thorn/glfw/clock.hh>
 #include <thorn/glfw/window.hh>
+#include <thorn/image.hh>
 #include <thorn/render/background_renderer.hh>
 #include <thorn/render/tilemap_renderer.hh>
 #include <iostream>
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     if(!loadTexture("assets/textures/tileset.png", true, false, ts.texture, ts.size))
         return 1;
 
-    // Setup the tilemap    
+    // Setup the tilemap
     tilemap tm;
     tm.t.setScale(25.0f);
     if(!loadTexture("assets/textures/tilemap.png", true, false, tm.texture, tm.size))
@@ -183,7 +183,7 @@ int main(int argc, char **argv)
         // be fit to the screen (or target) height.
         glDisable(GL_BLEND);
         bg_renderer.draw(bg.texture, bg.size, bg.scroll, false);
-        
+
         // Draw the tilemap layer
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

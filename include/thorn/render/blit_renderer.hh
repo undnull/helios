@@ -8,10 +8,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <thorn/fs.hh>
 #include <thorn/gl/pipeline.hh>
 #include <thorn/gl/texture.hh>
 #include <thorn/gl/vertex_array.hh>
-#include <thorn/fs.hh>
 
 namespace thorn::render
 {

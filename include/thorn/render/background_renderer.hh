@@ -8,11 +8,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <thorn/fs.hh>
 #include <thorn/gl/pipeline.hh>
 #include <thorn/gl/texture.hh>
 #include <thorn/gl/vertex_array.hh>
 #include <thorn/math/view.hh>
-#include <thorn/fs.hh>
 
 namespace thorn::render
 {
@@ -35,7 +35,6 @@ public:
         float view_zoom;
     };
 
-    
     /**
      * @brief Uniform Buffer structure.
      * 

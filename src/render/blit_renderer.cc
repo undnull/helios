@@ -7,9 +7,9 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <thorn/types.hh>
 #include <thorn/fs.hh>
 #include <thorn/render/blit_renderer.hh>
+#include <thorn/types.hh>
 #include <iostream>
 
 namespace thorn::render

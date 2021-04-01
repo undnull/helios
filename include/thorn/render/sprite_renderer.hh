@@ -8,12 +8,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <thorn/fs.hh>
 #include <thorn/gl/pipeline.hh>
 #include <thorn/gl/texture.hh>
 #include <thorn/gl/vertex_array.hh>
 #include <thorn/math/transform.hh>
 #include <thorn/math/view.hh>
-#include <thorn/fs.hh>
 #include <vector>
 
 namespace thorn::render

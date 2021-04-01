@@ -36,4 +36,4 @@ static inline bool load()
     }
     return false;
 }
-} // namespace thorn::gl
+} // namespace thorn::glad

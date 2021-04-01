@@ -65,4 +65,4 @@ static inline void writeTextFile(const path &path, const std::string &str)
 {
     std::ofstream(path, std::ios::out) << str;
 }
-} // namespace thorn::plat::fs
+} // namespace thorn::fs

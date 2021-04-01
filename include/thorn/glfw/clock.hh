@@ -60,4 +60,4 @@ inline float Clock::reset()
     start = cur_time;
     return delta;
 }
-} // namespace thorn::plat
+} // namespace thorn::glfw
