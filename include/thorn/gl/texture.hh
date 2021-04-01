@@ -13,10 +13,23 @@
 
 namespace thorn::gl
 {
+enum class TextureTarget {
+    TEXTURE_2D,
+    TEXTURE_2D_MULTISAMPLE,
+};
+
+template<TextureTarget T>
+constexpr GLuint TEXTURE_TARGET = 0;
+template<>
+constexpr GLuint TEXTURE_TARGET<TextureTarget::TEXTURE_2D> = GL_TEXTURE_2D;
+template<>
+constexpr GLuint TEXTURE_TARGET<TextureTarget::TEXTURE_2D_MULTISAMPLE> = GL_TEXTURE_2D_MULTISAMPLE;
+
 /**
  * @brief Chunk of GPU memory to store image data.
  * 
  */
+template<TextureTarget T>
 class Texture {
 public:
     /**
@@ -30,8 +43,8 @@ public:
      * 
      * @param rhs Existing texture.
      */
-    Texture(Texture &&rhs);
-    Texture(const Texture &rhs) = delete;
+    Texture(Texture<T> &&rhs);
+    Texture(const Texture<T> &rhs) = delete;
 
     /**
      * @brief Destructor
@@ -45,8 +58,8 @@ public:
      * @param rhs Existing texture.
      * @return this
      */
-    Texture &operator=(Texture &&rhs);
-    Texture &operator=(const Texture &rhs) = delete;
+    Texture<T> &operator=(Texture<T> &&rhs);
+    Texture<T> &operator=(const Texture<T> &rhs) = delete;
 
     /**
      * @brief Initializes the texture's GPU-side storage.
@@ -105,55 +118,68 @@ private:
     GLuint texture;
 };
 
-inline Texture::Texture()
+using Texture2D = Texture<TextureTarget::TEXTURE_2D>;
+using Texture2DMS = Texture<TextureTarget::TEXTURE_2D_MULTISAMPLE>;
+
+template<TextureTarget T>
+inline Texture<T>::Texture()
 {
-    glCreateTextures(GL_TEXTURE_2D, 1, &texture);
+    glCreateTextures(TEXTURE_TARGET<T>, 1, &texture);
 }
 
-inline Texture::Texture(Texture &&rhs)
+template<TextureTarget T>
+inline Texture<T>::Texture(Texture &&rhs)
 {
     texture = rhs.texture;
     rhs.texture = 0;
 }
 
-inline Texture::~Texture()
+template<TextureTarget T>
+inline Texture<T>::~Texture()
 {
     glDeleteTextures(1, &texture);
 }
 
-inline Texture &Texture::operator=(Texture &&rhs)
+template<TextureTarget T>
+inline Texture<T> &Texture<T>::operator=(Texture<T> &&rhs)
 {
     Texture copy(std::move(rhs));
     std::swap(copy.texture, texture);
     return *this;
 }
 
-inline void Texture::storage(int width, int height, GLenum format)
+template<TextureTarget T>
+inline void Texture<T>::storage(int width, int height, GLenum format)
 {
     glTextureStorage2D(texture, 1, format, width, height);
 }
 
-inline void Texture::subImage(int width, int height, GLenum format, GLenum type, const void *pixels)
+template<TextureTarget T>
+inline void Texture<T>::subImage(int width, int height, GLenum format, GLenum type, const void *pixels)
 {
     glTextureSubImage2D(texture, 0, 0, 0, width, height, format, type, pixels);
 }
 
-inline void Texture::setParameter(GLenum pname, int value)
+template<TextureTarget T>
+inline void Texture<T>::setParameter(GLenum pname, int value)
 {
     glTextureParameteri(texture, pname, value);
 }
 
-inline void Texture::setParameter(GLenum pname, float value)
+template<TextureTarget T>
+inline void Texture<T>::setParameter(GLenum pname, float value)
 {
     glTextureParameterf(texture, pname, value);
 }
 
-inline void Texture::generateMipmap()
+template<TextureTarget T>
+inline void Texture<T>::generateMipmap()
 {
     glGenerateTextureMipmap(texture);
 }
 
-inline constexpr GLuint Texture::get() const
+template<TextureTarget T>
+inline constexpr GLuint Texture<T>::get() const
 {
     return texture;
 }

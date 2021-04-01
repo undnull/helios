@@ -72,7 +72,7 @@ public:
      * @param scroll_factor Scrolling factor (pseudo-distance).
      * @param fit Fit to the screen height.
      */
-    void draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor, bool fit);
+    void draw(const gl::Texture2D &texture, const float2_t &texture_size, const float2_t &scroll_factor, bool fit);
 
 private:
     gl::VertexShader vert;

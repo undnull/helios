@@ -61,7 +61,7 @@ BlitRenderer::BlitRenderer(const fs::path &vs, const fs::path &fs)
     pipeline.stage(frag);
 }
 
-void BlitRenderer::draw(const gl::Texture &source)
+void BlitRenderer::draw(const gl::Texture2D &source)
 {
     glUseProgram(0);
     glBindProgramPipeline(pipeline.get());

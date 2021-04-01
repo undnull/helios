@@ -48,8 +48,8 @@ public:
      * 
      * @param rhs Existing shader.
      */
-    Shader(Shader &&rhs);
-    Shader(const Shader &rhs) = delete;
+    Shader(Shader<T> &&rhs);
+    Shader(const Shader<T> &rhs) = delete;
 
     /**
      * @brief Destructor
@@ -63,8 +63,8 @@ public:
      * @param rhs Existing shader.
      * @return this
      */
-    Shader &operator=(Shader &&rhs);
-    Shader &operator=(const Shader &rhs) = delete;
+    Shader<T> &operator=(Shader<T> &&rhs);
+    Shader<T> &operator=(const Shader<T> &rhs) = delete;
 
     /**
      * @brief Loads a SPIR-V binary, specializes and links the shader.
@@ -108,7 +108,7 @@ inline Shader<T>::Shader()
 }
 
 template<ShaderStage T>
-inline Shader<T>::Shader(Shader &&rhs)
+inline Shader<T>::Shader(Shader<T> &&rhs)
 {
     info_log = rhs.info_log;
     program = rhs.program;
@@ -125,7 +125,7 @@ inline Shader<T>::~Shader()
 }
 
 template<ShaderStage T>
-inline Shader<T> &Shader<T>::operator=(Shader &&rhs)
+inline Shader<T> &Shader<T>::operator=(Shader<T> &&rhs)
 {
     Shader copy(std::move(rhs));
     std::swap(copy.info_log, info_log);

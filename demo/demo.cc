@@ -27,22 +27,22 @@ constexpr const float Z_SPEED = 0.01f;  // A zoom factor
 struct background {
     float2_t scroll;
     float2_t size;
-    thorn::gl::Texture texture;
+    thorn::gl::Texture2D texture;
 };
 
 struct tileset {
     float tile;
     float2_t size;
-    thorn::gl::Texture texture;
+    thorn::gl::Texture2D texture;
 };
 
 struct tilemap {
     thorn::math::Transform t;
     float2_t size;
-    thorn::gl::Texture texture;
+    thorn::gl::Texture2D texture;
 };
 
-static bool loadTexture(const thorn::fs::path &path, bool repeat, bool filter, thorn::gl::Texture &texture, float2_t &size)
+static bool loadTexture(const thorn::fs::path &path, bool repeat, bool filter, thorn::gl::Texture2D &texture, float2_t &size)
 {
     thorn::Image img;
     if(img.loadFromFile(path)) {

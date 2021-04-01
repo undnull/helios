@@ -71,7 +71,7 @@ void TilemapRenderer::setView(math::View &view)
     ubo0.subData(0, &ubo0_i, sizeof(ubo0_i));
 }
 
-void TilemapRenderer::draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset)
+void TilemapRenderer::draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture2D &tilemap, const gl::Texture2D &tileset)
 {
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
     ubo0.subData(offsetof(ubo0_s, scale), &size_m, sizeof(size_m));

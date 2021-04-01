@@ -75,7 +75,7 @@ void BackgroundRenderer::setView(math::View &view)
     ubo0.subData(0, &ubo0_i, sizeof(ubo0_i));
 }
 
-void BackgroundRenderer::draw(const gl::Texture &texture, const float2_t &texture_size, const float2_t &scroll_factor, bool fit)
+void BackgroundRenderer::draw(const gl::Texture2D &texture, const float2_t &texture_size, const float2_t &scroll_factor, bool fit)
 {
     ubo1_s ubo1_i;
     ubo1_i.texture_size = texture_size;

@@ -60,7 +60,7 @@ public:
      * @param texture Sprite texture.
      * @param size Sprite/Texture size in pixels.
      */
-    void draw(std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size);
+    void draw(std::vector<math::Transform> &transforms, const gl::Texture2D &texture, const float2_t &size);
 
 private:
     gl::VertexShader vert;

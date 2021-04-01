@@ -73,7 +73,7 @@ public:
      * @param tilemap Tilemap texture (acts as a lookup table).
      * @param tileset Tileset texture.
      */
-    void draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture &tilemap, const gl::Texture &tileset);
+    void draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture2D &tilemap, const gl::Texture2D &tileset);
 
 private:
     gl::VertexShader vert;

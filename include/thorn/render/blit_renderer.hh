@@ -38,7 +38,7 @@ public:
      * 
      * @param source Texture.
      */
-    void draw(const gl::Texture &source);
+    void draw(const gl::Texture2D &source);
 
 private:
     gl::VertexShader vert;

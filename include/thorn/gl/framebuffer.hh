@@ -54,7 +54,8 @@ public:
      * @param texture Texture to attachs.
      * @param level Texture level.
      */
-    void attach(GLenum attachment, const Texture &texture, GLint level);
+    template<TextureTarget T>
+    void attach(GLenum attachment, const Texture<T> &texture, GLint level);
 
     /**
      * @brief Checks the buffer completion status.
@@ -97,7 +98,8 @@ inline Framebuffer &Framebuffer::operator=(Framebuffer &&rhs)
     return *this;
 }
 
-inline void Framebuffer::attach(GLenum attachment, const Texture &texture, GLint level)
+template<TextureTarget T>
+inline void Framebuffer::attach(GLenum attachment, const Texture<T> &texture, GLint level)
 {
     glNamedFramebufferTexture(framebuffer, attachment, texture.get(), level);
 }

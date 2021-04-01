@@ -71,7 +71,7 @@ void SpriteRenderer::setView(math::View &view)
     ubo.subData(0, &ubo_i, sizeof(ubo_i));
 }
 
-void SpriteRenderer::draw(std::vector<math::Transform> &transforms, const gl::Texture &texture, const float2_t &size)
+void SpriteRenderer::draw(std::vector<math::Transform> &transforms, const gl::Texture2D &texture, const float2_t &size)
 {
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
     ubo.subData(offsetof(ubo_s, scale), &size_m, sizeof(size_m));
