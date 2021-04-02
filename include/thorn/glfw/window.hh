@@ -8,6 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <thorn/image.hh>
 #include <GLFW/glfw3.h>
 #include <functional>
 #include <utility>
@@ -32,7 +33,7 @@ public:
      * @param title Window title.
      * @param fullscreen
      */
-    Window(int width, int height, const char *title, bool fullscreen = false);
+    Window(int width, int height, const std::string &title, bool fullscreen = false);
     Window(Window &&rhs) = delete;
     Window(const Window &rhs) = delete;
 
@@ -52,6 +53,15 @@ public:
      * @param title Window title.
      */
     void setTitle(const char *title);
+
+    /**
+     * @brief Sets the window icon.
+     * 
+     * @note The const correctness is broken because GLFWimage said so.
+     *
+     * @param image Icon image.
+     */
+    void setIcon(Image &image);
 
     /**
      * @brief Sets the window swap interval.
@@ -166,7 +176,7 @@ public:
 
 private:
     static void onClose(GLFWwindow *window);
-    static void onMousePosition(GLFWwindow *window, double x, double y);
+    static void onCursorPos(GLFWwindow *window, double x, double y);
     static void onScroll(GLFWwindow *window, double dx, double dy);
     static void onWindowSize(GLFWwindow *window, int width, int height);
     static void onKey(GLFWwindow *window, int key, int scancode, int action, int mods);
@@ -175,7 +185,7 @@ private:
 
 public:
     std::function<void()> on_close;
-    std::function<void(float, float)> on_mouse_position;
+    std::function<void(float, float)> on_cursor_pos;
     std::function<void(float, float)> on_scroll;
     std::function<void(int, int)> on_window_size;
     std::function<void(int, int, int)> on_key;
@@ -188,16 +198,16 @@ private:
     GLFWwindow *window;
 };
 
-inline Window::Window(int width, int height, const char *title, bool fullscreen)
+inline Window::Window(int width, int height, const std::string &title, bool fullscreen)
 {
     last_pressed_key = GLFW_KEY_UNKNOWN;
     last_released_key = GLFW_KEY_UNKNOWN;
     last_pressed_mb = GLFW_KEY_UNKNOWN;
     last_released_mb = GLFW_KEY_UNKNOWN;
-    window = glfwCreateWindow(width, height, title, fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+    window = glfwCreateWindow(width, height, title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
     glfwSetWindowUserPointer(window, this);
     glfwSetWindowCloseCallback(window, onClose);
-    glfwSetCursorPosCallback(window, onMousePosition);
+    glfwSetCursorPosCallback(window, onCursorPos);
     glfwSetScrollCallback(window, onScroll);
     glfwSetWindowSizeCallback(window, onWindowSize);
     glfwSetKeyCallback(window, onKey);
@@ -214,6 +224,14 @@ inline Window::~Window()
 inline void Window::setTitle(const char *title)
 {
     glfwSetWindowTitle(window, title);
+}
+
+inline void Window::setIcon(Image &image)
+{
+    GLFWimage icon;
+    icon.pixels = reinterpret_cast<unsigned char *>(image.getPixels());
+    image.getSize(icon.width, icon.height);
+    glfwSetWindowIcon(window, 1, &icon);
 }
 
 inline void Window::setSwapInterval(int interval)

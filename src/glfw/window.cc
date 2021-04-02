@@ -18,11 +18,11 @@ void Window::onClose(GLFWwindow *window)
         wrapper->on_close();
 }
 
-void Window::onMousePosition(GLFWwindow *window, double x, double y)
+void Window::onCursorPos(GLFWwindow *window, double x, double y)
 {
     Window *wrapper = reinterpret_cast<Window *>(glfwGetWindowUserPointer(window));
-    if(wrapper && wrapper->on_mouse_position)
-        wrapper->on_mouse_position(static_cast<float>(x), static_cast<float>(y));
+    if(wrapper && wrapper->on_cursor_pos)
+        wrapper->on_cursor_pos(static_cast<float>(x), static_cast<float>(y));
 }
 
 void Window::onScroll(GLFWwindow *window, double dx, double dy)

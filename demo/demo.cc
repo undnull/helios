@@ -90,6 +90,10 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    thorn::Image icon;
+    if(icon.loadFromFile("assets/textures/icon.png"))
+        window.setIcon(icon);
+
     std::cout << "Hello, Thorn!" << std::endl;
     std::cout << "Thorn " << thorn::VERSION_STR << std::endl;
 

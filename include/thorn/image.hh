@@ -92,6 +92,13 @@ public:
      */
     constexpr const void *getPixels() const;
 
+    /**
+     * @brief Gets the pointer to the pixel buffer.
+     * 
+     * @return Pixel buffer pointer.
+     */
+    constexpr void *getPixels();
+
 public:
     static const GLenum TEXTURE_FORMAT = GL_RGBA;
     static const GLenum TEXTURE_TYPE = GL_UNSIGNED_BYTE;
@@ -169,6 +176,11 @@ inline constexpr void Image::getSize(int &width, int &height) const
 }
 
 inline constexpr const void *Image::getPixels() const
+{
+    return pixels;
+}
+
+inline constexpr void *Image::getPixels()
 {
     return pixels;
 }
