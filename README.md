@@ -1,5 +1,5 @@
 # Thorn
-[![Doxygen](https://github.com/undnull/thorn/actions/workflows/docs.yml/badge.svg)](https://github.com/undnull/thorn/actions/workflows/doxygen.yml) [![Issues](https://img.shields.io/github/issues/undnull/thorn?style=flat)](https://github.com/undnull/thorn/issues) [![License](https://img.shields.io/github/license/undnull/thorn?style=flat)](https://github.com/undnull/thorn/blob/master/LICENSE)  
+[![Doxygen](https://github.com/undnull/thorn/actions/workflows/docs.yml/badge.svg)](https://github.com/undnull/thorn/actions/workflows/docs.yml) [![Issues](https://img.shields.io/github/issues/undnull/thorn?style=flat)](https://github.com/undnull/thorn/issues) [![License](https://img.shields.io/github/license/undnull/thorn?style=flat)](https://github.com/undnull/thorn/blob/master/LICENSE)  
 
 Thorn is a general-purpose set of libraries and abstractions to make the life of a 2D graphics programmer easier.  
 You may call it "SFML, but a bit closer to the hardware" game engine.  
