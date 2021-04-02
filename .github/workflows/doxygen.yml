@@ -8,7 +8,7 @@ on:
 
 jobs:
   doxygen:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -22,6 +22,7 @@ jobs:
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
+        cname: thorn.gprb.me
         github_token: ${{secrets.GITHUB_TOKEN}}
         publish_dir: "./doc/html"
         user_name: "github-actions[bot]"
