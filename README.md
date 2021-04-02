@@ -19,31 +19,31 @@ Well...
 **The project won't build on a headless system unless you have the required libraries**
 ### Standalone
 1. Clone the repo:
-   ```
+   ```bash
    git clone --recursive https://github.com/undnull/thorn.git
    ```
 2. Setup the CMake environment:
-   ```
+   ```bash
    cd thorn
    cmake -B build .
    ```
 3. Build it:
-   ```
+   ```bash
    cmake --build build
    ```
 
 ### Submodule
 1. Add the repo as a submodule:
-   ```
+   ```bash
    git submodule add https://github.com/undnull/thorn.git
    git submodule update --init --recursive
    ```
 2. Add the project as a subdirectory in your CMakeLists:
-   ```
+   ```cmake
    add_subdirectory(thorn)
    ```
 3. Add the project as a library to your executable:
-   ```
+   ```cmake
    target_link_libraries(my_game thorn)
    ```
 4. Build the project as usual!
