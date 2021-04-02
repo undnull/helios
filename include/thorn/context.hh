@@ -60,6 +60,10 @@ inline Context::~Context()
 }
 } // namespace thorn
 
+/**
+ * @brief Creates a new Thorn context.
+ * 
+ */
 #define THORN_INIT()            \
     thorn::Context x_thorn_ctx; \
     static_cast<void>(x_thorn_ctx)
