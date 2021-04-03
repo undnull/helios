@@ -59,7 +59,7 @@ done
 if [[ -z "$opt_manifest" ]]
 then
     opt_manifest="shaders/00_shaders.txt"
-    echo "opt_manifest not set, defaulting to $opt_manifest"
+    >&2 echo "opt_manifest not set, defaulting to $opt_manifest"
     if [[ ! -f "$PWD/$opt_manifest" ]]
     then
         >&2 echo "fatal: file $opt_manifest doesn't exist"
@@ -70,7 +70,7 @@ fi
 if [[ -z "$opt_spirvdir" ]]
 then
     opt_spirvdir="assets/shaders"
-    echo "opt_spirvdir not set, defaulting to $opt_spirvdir"
+    >&2 echo "opt_spirvdir not set, defaulting to $opt_spirvdir"
 fi
 
 opt_spirvdir="$PWD/$opt_spirvdir"
