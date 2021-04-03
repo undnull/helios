@@ -1,9 +1,9 @@
 name: docs
 
 on:
-  push:
-    tags:
-      - "*"
+  [push]
+    # tags:
+    #   - "*"
   workflow_dispatch:
 
 jobs:
@@ -20,9 +20,9 @@ jobs:
     #     enable-latex: false
     
     - name: Run Sphinx
-      uses: ammaraskar/sphinx-action@master
+      uses: sphinx-notes/pages@master
       with:
-        docs-folder: "./doc"
+        documentation_path: "./doc"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
