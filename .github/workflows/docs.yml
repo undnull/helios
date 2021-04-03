@@ -18,14 +18,12 @@ jobs:
       with:
         doxyfile-path: "./doc/Doxyfile"
         enable-latex: false
-    
-    - name: Run Sphinx
-      uses: sphinx-notes/pages@master
-      with:
-        documentation_path: "./doc"
 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
+        cname: thorn.gprb.me
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        publish_dir: "./doc/html"
+        user_name: "github-actions[bot]"
+        user_email: "github-actions[bot]@users.noreply.github.com"
