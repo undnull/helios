@@ -1,4 +1,4 @@
-name: Documentation
+name: docs
 
 on:
   push:
@@ -13,12 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Run Doxygen
-      uses: mattnotmitt/doxygen-action@v1
-      with:
-        doxyfile-path: "./doc/Doxyfile"
-        enable-latex: false
+    # - name: Run Doxygen
+    #   uses: mattnotmitt/doxygen-action@v1
+    #   with:
+    #     doxyfile-path: "./doc/Doxyfile"
+    #     enable-latex: false
     
+    - name: Run Sphinx
+      uses: ammaraskar/sphinx-action@master
+      with:
+        docs-folder: "./doc"
+
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
