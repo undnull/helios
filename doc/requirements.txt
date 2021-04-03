@@ -1,4 +1,3 @@
-sphinxcontrib-fulltoc
 myst-parser
 breathe
 exhale
