@@ -15,7 +15,7 @@ namespace thorn::gl
 {
 enum class TextureTarget {
     TEXTURE_2D,
-    TEXTURE_2D_MULTISAMPLE,
+    TEXTURE_2D_ARRAY,
 };
 
 template<TextureTarget T>
@@ -23,7 +23,7 @@ constexpr GLuint TEXTURE_TARGET = 0;
 template<>
 constexpr GLuint TEXTURE_TARGET<TextureTarget::TEXTURE_2D> = GL_TEXTURE_2D;
 template<>
-constexpr GLuint TEXTURE_TARGET<TextureTarget::TEXTURE_2D_MULTISAMPLE> = GL_TEXTURE_2D_MULTISAMPLE;
+constexpr GLuint TEXTURE_TARGET<TextureTarget::TEXTURE_2D_ARRAY> = GL_TEXTURE_2D_ARRAY;
 
 /**
  * @brief Chunk of GPU memory to store image data.
@@ -119,7 +119,7 @@ private:
 };
 
 using Texture2D = Texture<TextureTarget::TEXTURE_2D>;
-using Texture2DMS = Texture<TextureTarget::TEXTURE_2D_MULTISAMPLE>;
+using Texture2DArray = Texture<TextureTarget::TEXTURE_2D_ARRAY>;
 
 template<TextureTarget T>
 inline Texture<T>::Texture()

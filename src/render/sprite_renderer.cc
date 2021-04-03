@@ -7,8 +7,8 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <thorn/fs.hh>
 #include <thorn/render/sprite_renderer.hh>
+#include <thorn/util/file_io.hh>
 #include <algorithm>
 #include <iostream>
 
@@ -28,7 +28,7 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-SpriteRenderer::SpriteRenderer(const fs::path &vs, const fs::path &fs)
+SpriteRenderer::SpriteRenderer()
 {
     ubo.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo_s));
 
@@ -50,17 +50,56 @@ SpriteRenderer::SpriteRenderer(const fs::path &vs, const fs::path &fs)
 
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
+}
 
-    const std::vector<uint8_t> vert_spv = fs::readBinaryFile(vs);
-    if(!vert.link(vert_spv.data(), vert_spv.size()))
-        std::cerr << vert.getInfoLog() << std::endl;
+template<>
+bool SpriteRenderer::loadDefaultShader<gl::ShaderStage::VERTEX>()
+{
+    const std::vector<uint8_t> binary = util::file_io::read(DEFAULT_VERT);
+    if(binary.size() && vert.link(binary)) {
+        pipeline.stage(vert);
+        return true;
+    }
 
-    const std::vector<uint8_t> frag_spv = fs::readBinaryFile(fs);
-    if(!frag.link(frag_spv.data(), frag_spv.size()))
-        std::cerr << frag.getInfoLog() << std::endl;
+    std::cerr << vert.getInfoLog() << std::endl;
+    return false;
+}
 
-    pipeline.stage(vert);
-    pipeline.stage(frag);
+template<>
+bool SpriteRenderer::loadDefaultShader<gl::ShaderStage::FRAGMENT>()
+{
+    const std::vector<uint8_t> binary = util::file_io::read(DEFAULT_FRAG);
+    if(binary.size() && frag.link(binary)) {
+        pipeline.stage(frag);
+        return true;
+    }
+
+    std::cerr << frag.getInfoLog() << std::endl;
+    return false;
+}
+
+template<>
+bool SpriteRenderer::loadShader<gl::ShaderStage::VERTEX>(const std::vector<uint8_t> &binary)
+{
+    if(vert.link(binary)) {
+        pipeline.stage(vert);
+        return true;
+    }
+
+    std::cerr << vert.getInfoLog() << std::endl;
+    return false;
+}
+
+template<>
+bool SpriteRenderer::loadShader<gl::ShaderStage::FRAGMENT>(const std::vector<uint8_t> &binary)
+{
+    if(frag.link(binary)) {
+        pipeline.stage(frag);
+        return true;
+    }
+
+    std::cerr << frag.getInfoLog() << std::endl;
+    return false;
 }
 
 void SpriteRenderer::setView(math::View &view)

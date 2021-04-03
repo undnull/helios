@@ -15,6 +15,7 @@
 #include <thorn/image.hh>
 #include <thorn/render/background_renderer.hh>
 #include <thorn/render/tilemap_renderer.hh>
+#include <thorn/util/file_io.hh>
 #include <iostream>
 
 constexpr const int WIDTH = 1152;
@@ -42,10 +43,10 @@ struct tilemap {
     thorn::gl::Texture2D texture;
 };
 
-static bool loadTexture(const thorn::fs::path &path, bool repeat, bool filter, thorn::gl::Texture2D &texture, float2_t &size)
+static bool loadTexture(const char *path, bool repeat, bool filter, thorn::gl::Texture2D &texture, float2_t &size)
 {
     thorn::Image img;
-    if(img.loadFromFile(path)) {
+    if(img.load(thorn::util::file_io::read(path))) {
         int width, height;
         img.getSize(width, height);
 
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
     }
 
     thorn::Image icon;
-    if(icon.loadFromFile("assets/textures/icon.png"))
+    if(icon.load(thorn::util::file_io::read("assets/textures/icon.png")))
         window.setIcon(icon);
 
     std::cout << "Hello, Thorn!" << std::endl;
@@ -119,9 +120,13 @@ int main(int argc, char **argv)
     view.setSize(float2_t(WIDTH, HEIGHT) * 0.5f);
 
     thorn::render::BackgroundRenderer bg_renderer;
+    bg_renderer.loadDefaultShader<thorn::gl::ShaderStage::VERTEX>();
+    bg_renderer.loadDefaultShader<thorn::gl::ShaderStage::FRAGMENT>();
     bg_renderer.setView(view);
 
     thorn::render::TilemapRenderer map_renderer;
+    map_renderer.loadDefaultShader<thorn::gl::ShaderStage::VERTEX>();
+    map_renderer.loadDefaultShader<thorn::gl::ShaderStage::FRAGMENT>();
     map_renderer.setView(view);
 
     window.setSwapInterval(1);

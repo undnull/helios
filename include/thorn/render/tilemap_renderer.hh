@@ -8,12 +8,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <thorn/fs.hh>
 #include <thorn/gl/pipeline.hh>
 #include <thorn/gl/texture.hh>
 #include <thorn/gl/vertex_array.hh>
 #include <thorn/math/transform.hh>
 #include <thorn/math/view.hh>
+#include <vector>
 
 namespace thorn::render
 {
@@ -51,10 +51,27 @@ public:
     /**
      * @brief Constructor.
      * 
-     * @param vs Vertex shader file path.
-     * @param fs Fragment shader file path.
      */
-    TilemapRenderer(const fs::path &vs = DEFAULT_VERT, const fs::path &fs = DEFAULT_FRAG);
+    TilemapRenderer();
+
+    /**
+     * @brief Loads a default shader binary from file.
+     * 
+     * @tparam T Shader stage.
+     * @return true if succeeded, false otherwise.
+     */
+    template<gl::ShaderStage T>
+    bool loadDefaultShader();
+
+    /**
+     * @brief Loads a custom shader binary.
+     * 
+     * @tparam T Shader stage.
+     * @param binary SPIR-V binary.
+     * @return true if succeeded, false otherwise.
+     */
+    template<gl::ShaderStage T>
+    bool loadShader(const std::vector<uint8_t> &binary);
 
     /**
      * @brief Sets the view parameters.

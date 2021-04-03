@@ -7,8 +7,8 @@
  * License, v2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <thorn/fs.hh>
 #include <thorn/render/background_renderer.hh>
+#include <thorn/util/file_io.hh>
 #include <iostream>
 
 namespace thorn::render
@@ -27,7 +27,7 @@ static const GLuint indices[NUM_INDICES] = {
     0, 2, 3
 };
 
-BackgroundRenderer::BackgroundRenderer(bool stretch, const fs::path &vs, const fs::path &fs)
+BackgroundRenderer::BackgroundRenderer(bool stretch)
 {
     ubo0.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo0_s));
     ubo1.storage<gl::BufferUsage::DYNAMIC>(sizeof(ubo1_s));
@@ -50,17 +50,56 @@ BackgroundRenderer::BackgroundRenderer(bool stretch, const fs::path &vs, const f
 
     vao.setAttributeBinding(0, 0);
     vao.setAttributeBinding(1, 1);
+}
 
-    const std::vector<uint8_t> vert_spv = fs::readBinaryFile(vs);
-    if(!vert.link(vert_spv.data(), vert_spv.size()))
-        std::cerr << vert.getInfoLog() << std::endl;
+template<>
+bool BackgroundRenderer::loadDefaultShader<gl::ShaderStage::VERTEX>()
+{
+    const std::vector<uint8_t> binary = util::file_io::read(DEFAULT_VERT);
+    if(binary.size() && vert.link(binary)) {
+        pipeline.stage(vert);
+        return true;
+    }
 
-    const std::vector<uint8_t> frag_spv = fs::readBinaryFile(fs);
-    if(!frag.link(frag_spv.data(), frag_spv.size()))
-        std::cerr << frag.getInfoLog() << std::endl;
+    std::cerr << vert.getInfoLog() << std::endl;
+    return false;
+}
 
-    pipeline.stage(vert);
-    pipeline.stage(frag);
+template<>
+bool BackgroundRenderer::loadDefaultShader<gl::ShaderStage::FRAGMENT>()
+{
+    const std::vector<uint8_t> binary = util::file_io::read(DEFAULT_FRAG);
+    if(binary.size() && frag.link(binary)) {
+        pipeline.stage(frag);
+        return true;
+    }
+
+    std::cerr << frag.getInfoLog() << std::endl;
+    return false;
+}
+
+template<>
+bool BackgroundRenderer::loadShader<gl::ShaderStage::VERTEX>(const std::vector<uint8_t> &binary)
+{
+    if(vert.link(binary)) {
+        pipeline.stage(vert);
+        return true;
+    }
+
+    std::cerr << vert.getInfoLog() << std::endl;
+    return false;
+}
+
+template<>
+bool BackgroundRenderer::loadShader<gl::ShaderStage::FRAGMENT>(const std::vector<uint8_t> &binary)
+{
+    if(frag.link(binary)) {
+        pipeline.stage(frag);
+        return true;
+    }
+
+    std::cerr << frag.getInfoLog() << std::endl;
+    return false;
 }
 
 void BackgroundRenderer::setView(math::View &view)

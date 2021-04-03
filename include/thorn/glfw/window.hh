@@ -16,7 +16,7 @@
 namespace thorn::glfw
 {
 /**
- * @brief Window wrapper.
+ * @brief GLFWwindow wrapper.
  * 
  */
 class Window {

@@ -8,14 +8,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <thorn/fs.hh>
 #include <glad/gl.h>
 #include <stb_image.h>
+#include <stdint.h>
+#include <vector>
 
 namespace thorn
 {
 /**
- * @brief Image container.
+ * @brief RGBA image container.
  * 
  */
 class Image {
@@ -56,12 +57,12 @@ public:
     void clear();
 
     /**
-     * @brief Creates a pixel buffer from a file.
+     * @brief Creates a pixel buffer.
      * 
-     * @param path File path.
+     * @param binary Compresed image data.
      * @return true if succeeded, false otherwise.
      */
-    bool loadFromFile(const fs::path &path);
+    bool load(const std::vector<uint8_t> &binary);
 
     /**
      * @brief Gets the width of the Image.
@@ -104,7 +105,7 @@ public:
     static const GLenum TEXTURE_TYPE = GL_UNSIGNED_BYTE;
 
 private:
-    int width, height, comp;
+    int width, height;
     unsigned char *pixels;
 };
 
@@ -112,7 +113,6 @@ inline Image::Image()
 {
     width = -1;
     height = -1;
-    comp = -1;
     pixels = nullptr;
 }
 
@@ -120,11 +120,9 @@ inline Image::Image(Image &&rhs)
 {
     width = rhs.width;
     height = rhs.height;
-    comp = rhs.comp;
     pixels = rhs.pixels;
     rhs.width = -1;
     rhs.height = -1;
-    rhs.comp = -1;
     rhs.pixels = nullptr;
 }
 
@@ -138,7 +136,6 @@ inline Image &Image::operator=(Image &&rhs)
     Image copy(std::move(rhs));
     std::swap(copy.width, width);
     std::swap(copy.height, height);
-    std::swap(copy.comp, comp);
     std::swap(copy.pixels, pixels);
     return *this;
 }
@@ -148,14 +145,13 @@ inline void Image::clear()
     stbi_image_free(pixels);
     width = -1;
     height = -1;
-    comp = -1;
     pixels = nullptr;
 }
 
-inline bool Image::loadFromFile(const fs::path &path)
+inline bool Image::load(const std::vector<uint8_t> &binary)
 {
     stbi_image_free(pixels);
-    pixels = stbi_load(path.string().c_str(), &width, &height, &comp, STBI_rgb_alpha);
+    pixels = stbi_load_from_memory(binary.data(), static_cast<int>(binary.size()), &width, &height, nullptr, STBI_rgb_alpha);
     return !!pixels;
 }
 

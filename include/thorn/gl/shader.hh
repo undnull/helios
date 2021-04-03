@@ -9,7 +9,9 @@
  */
 #pragma once
 #include <glad/gl.h>
+#include <string>
 #include <utility>
+#include <vector>
 
 namespace thorn::gl
 {
@@ -70,17 +72,16 @@ public:
      * @brief Loads a SPIR-V binary, specializes and links the shader.
      * 
      * @param binary SPIR-V binary.
-     * @param size Binary size in bytes.
      * @return true if succeeded and false otherwise.
      */
-    bool link(const void *binary, size_t size);
+    bool link(const std::vector<uint8_t> &binary);
 
     /**
      * @brief Gets the shader info log.
      *
-     * @return Info log or nullptr if not present.
+     * @return Info log.
      */
-    constexpr const char *getInfoLog() const;
+    constexpr const std::string &getInfoLog() const;
 
     /**
      * @brief Gets an OpenGL handle of the shader.
@@ -90,9 +91,7 @@ public:
     constexpr GLuint get() const;
 
 private:
-    std::vector<GLuint> constant_index;
-    std::vector<GLuint> constant_value;
-    char *info_log;
+    std::string info_log;
     GLuint program;
 };
 
@@ -100,9 +99,8 @@ using VertexShader = Shader<ShaderStage::VERTEX>;
 using FragmentShader = Shader<ShaderStage::FRAGMENT>;
 
 template<ShaderStage T>
-inline Shader<T>::Shader()
+inline Shader<T>::Shader() : info_log()
 {
-    info_log = nullptr;
     program = glCreateProgram();
     glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
 }
@@ -119,8 +117,6 @@ inline Shader<T>::Shader(Shader<T> &&rhs)
 template<ShaderStage T>
 inline Shader<T>::~Shader()
 {
-    if(info_log)
-        delete[] info_log;
     glDeleteProgram(program);
 }
 
@@ -134,27 +130,23 @@ inline Shader<T> &Shader<T>::operator=(Shader<T> &&rhs)
 }
 
 template<ShaderStage T>
-inline bool Shader<T>::link(const void *binary, size_t size)
+inline bool Shader<T>::link(const std::vector<uint8_t> &binary)
 {
     GLint status;
 
-    if(info_log) {
-        delete[] info_log;
-        info_log = nullptr;
-    }
+    info_log.clear();
 
     GLuint shader = glCreateShader(SHADER_STAGE<T>);
-    glShaderBinary(1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary, static_cast<GLsizei>(size));
+    glShaderBinary(1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size()));
     glSpecializeShader(shader, "main", 0, nullptr, nullptr);
 
     glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
     if(status == GL_FALSE) {
         GLint length;
         glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
-
         if(length) {
-            info_log = new char[length];
-            glGetShaderInfoLog(shader, length, nullptr, info_log);
+            info_log.resize(static_cast<size_t>(length));
+            glGetShaderInfoLog(shader, length, nullptr, info_log.data());
         }
 
         glDeleteShader(shader);
@@ -168,12 +160,11 @@ inline bool Shader<T>::link(const void *binary, size_t size)
 
     glGetProgramiv(program, GL_LINK_STATUS, &status);
     if(status == GL_FALSE) {
-        int length;
+        GLint length;
         glGetProgramiv(program, GL_INFO_LOG_LENGTH, &length);
-
         if(length) {
-            info_log = new char[length];
-            glGetProgramInfoLog(program, length, nullptr, info_log);
+            info_log.resize(static_cast<size_t>(length));
+            glGetShaderInfoLog(shader, length, nullptr, info_log.data());
         }
 
         return false;
@@ -183,7 +174,7 @@ inline bool Shader<T>::link(const void *binary, size_t size)
 }
 
 template<ShaderStage T>
-inline constexpr const char *Shader<T>::getInfoLog() const
+inline constexpr const std::string &Shader<T>::getInfoLog() const
 {
     return info_log;
 }
