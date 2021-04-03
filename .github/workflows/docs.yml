@@ -1,24 +1,9 @@
 name: docs
 
 on:
-  [push]
-    # tags:
-    #   - "*"
-  workflow_dispatch:
-
-jobs:
-  doxygen:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    # - name: Run Doxygen
-    #   uses: mattnotmitt/doxygen-action@v1
-    #   with:
-    #     doxyfile-path: "./doc/Doxyfile"
-    #     enable-latex: false
-    
+  push:
+    tags:
+      - "*
     - name: Run Sphinx
       uses: sphinx-notes/pages@master
       with:
