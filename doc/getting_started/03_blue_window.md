@@ -1,4 +1,4 @@
-# Getting started: A blue window
+# A blue window
 This document will guide you through the process of opening a window and filling it with a dark-blue color.
 
 #### Includes
@@ -147,10 +147,3 @@ int main()
     return 0;
 }
 ```
-
-#### Getting started
-* [Root](../getting_started.md)
-* [Requirements](00_requirements.md)
-* [Cloning](01_cloning.md)
-* [Building](02_building.md)
-* **A blue Window**

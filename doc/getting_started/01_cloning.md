@@ -1,4 +1,4 @@
-# Getting started: Cloning
+# Cloning
 #### Git-based project
 For git-based projects you can obtain the code using Git submodules:
 ```bash
@@ -17,10 +17,3 @@ If the project happen to have a release or a tag present, it is highly recommend
 cd thorn
 git checkout <tag_name>
 ```
-
-#### Getting started
-* [Root](../getting_started.md)
-* [Requirements](00_requirements.md)
-* **Cloning**
-* [Building](02_building.md)
-* [A blue Window](03_blue_window.md)

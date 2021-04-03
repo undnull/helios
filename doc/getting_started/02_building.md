@@ -1,4 +1,4 @@
-# Getting started: Building
+# Building
 ## Standalone
 Some projects use libraries in their binary forms without building them.  
 This part shows how to build Thorn for those projects.
@@ -45,10 +45,3 @@ target_link_libraries(my_beloved_game thorn)
 #### Building
 Just build your project as usual.  
 **Note:** if you don't use CMake to build project directly, consider updaing the project files!
-
-#### Getting started
-* [Root](../getting_started.md)
-* [Requirements](00_requirements.md)
-* [Cloning](01_cloning.md)
-* **Building**
-* [A blue Window](03_blue_window.md)
