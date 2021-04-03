@@ -8,13 +8,6 @@
 # import os, sys
 # sys.path.insert(0, os.path.abspath("."))
 
-# ReadTheDocs
-import os
-if os.environ.get("READTHEDOCS", None) != "True":
-    import sphinx_rtd_theme
-    html_theme = "sphinx_rtd_theme"
-    html_theme_path = [ sphinx_rtd_theme.get_html_theme_path() ]
-
 # Project information
 project = "Thorn"
 copyright = "2021, Kirill GPRB"
@@ -61,3 +54,7 @@ html_sidebars = {
     ]
 }
 html_static_path = [ "static" ]
+
+import sphinx_rtd_theme
+html_theme = "sphinx_rtd_theme"
+html_theme_path = [ sphinx_rtd_theme.get_html_theme_path() ]
