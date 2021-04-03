@@ -13,6 +13,7 @@
 * _Optionally:_ [glslangValidator](https://github.com/KhronosGroup/glslang) and [SPIRV-Cross](https://github.com/KhronosGroup/SPIRV-Cross)
 
 #### Getting started
+* [Root](../getting_started.md)
 * **Requirements**
 * [Cloning](01_cloning.md)
 * [Building](02_building.md)

@@ -47,6 +47,7 @@ Just build your project as usual.
 **Note:** if you don't use CMake to build project directly, consider updaing the project files!
 
 #### Getting started
+* [Root](../getting_started.md)
 * [Requirements](00_requirements.md)
 * [Cloning](01_cloning.md)
 * **Building**
