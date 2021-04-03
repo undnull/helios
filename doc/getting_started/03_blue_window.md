@@ -97,7 +97,7 @@ window.handleEvents();
 ```
 
 #### Result
-![](doc/getting_started/03_blue_window.png)
+![](03_blue_window.png)
 
 #### Full code
 ```cpp
@@ -149,7 +149,7 @@ int main()
 ```
 
 #### Getting started
-* [Requirements](doc/getting_started/00_requirements.md)
-* [Cloning](doc/getting_started/01_cloning.md)
-* [Building](doc/getting_started/02_building.md)
+* [Requirements](00_requirements.md)
+* [Cloning](01_cloning.md)
+* [Building](02_building.md)
 * **A blue Window**

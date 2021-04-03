@@ -19,7 +19,7 @@ git checkout <tag_name>
 ```
 
 #### Getting started
-* [Requirements](doc/getting_started/00_requirements.md)
+* [Requirements](00_requirements.md)
 * **Cloning**
-* [Building](doc/getting_started/02_building.md)
-* [A blue Window](doc/getting_started/03_blue_window.md)
+* [Building](02_building.md)
+* [A blue Window](03_blue_window.md)
