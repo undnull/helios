@@ -16,7 +16,6 @@ version = "0.0.1"
 
 # General configuration
 extensions = [
-    "sphinx.ext.githubpages",
     "sphinx_rtd_theme",
     "myst_parser",
     "breathe",
