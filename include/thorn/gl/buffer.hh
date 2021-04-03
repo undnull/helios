@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <utility>
 
 namespace thorn::gl

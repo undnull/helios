@@ -9,7 +9,7 @@
  */
 #pragma once
 #include <thorn/fs.hh>
-#include <glad/glad.h>
+#include <glad/gl.h>
 #include <stb_image.h>
 
 namespace thorn

@@ -8,7 +8,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
-#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <glad/gl.h>
 #include <vector>
 
 namespace thorn::glad
@@ -26,7 +27,7 @@ namespace thorn::glad
  */
 static inline bool load()
 {
-    if(gladLoadGL()) {
+    if(gladLoadGL(glfwGetProcAddress)) {
         bool ext = true;
         ext = ext && GLAD_GL_ARB_shader_storage_buffer_object;
         ext = ext && GLAD_GL_ARB_separate_shader_objects;
