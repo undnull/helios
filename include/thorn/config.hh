@@ -13,10 +13,10 @@
 namespace thorn
 {
 static constexpr const int VERSION_MAJOR = 0;
-static constexpr const int VERSION_MINOR = 0;
-static constexpr const int VERSION_PATCH = 1;
-static constexpr const uint32_t GIT_REV = 0x93152384;
+static constexpr const int VERSION_MINOR = 1;
+static constexpr const int VERSION_PATCH = 0;
+static constexpr const uint32_t GIT_REV = 0x0a37e78f;
 
-static constexpr const char *VERSION_STR = "0.0.1";
-static constexpr const char *GIT_REV_STR = "93152384";
+static constexpr const char *VERSION_STR = "0.1.0";
+static constexpr const char *GIT_REV_STR = "0a37e78f";
 } // namespace thorn
