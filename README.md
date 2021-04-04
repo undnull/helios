@@ -1,5 +1,5 @@
 # Thorn
-[![Issues](https://img.shields.io/github/issues/undnull/thorn?style=flat)](https://github.com/undnull/thorn/issues) [![License](https://img.shields.io/github/license/undnull/thorn?style=flat)](https://github.com/undnull/thorn/blob/master/LICENSE)  
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/ffb2042fa37842b3be06243cf687832d)](https://www.codacy.com/gh/undnull/thorn/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=undnull/thorn&amp;utm_campaign=Badge_Grade) [![Issues](https://img.shields.io/github/issues/undnull/thorn?style=flat)](https://github.com/undnull/thorn/issues) [![License](https://img.shields.io/github/license/undnull/thorn?style=flat)](https://github.com/undnull/thorn/blob/master/LICENSE)  
 
 Thorn is a general-purpose wrapper library for 2D games and 2D game engines.  
 It features OOP wrappers for GLFW and OpenGL and also implements a bunch of renderers that draw common for 2D games stuff as fast as possible.  
