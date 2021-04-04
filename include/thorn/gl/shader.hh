@@ -100,9 +100,8 @@ using FragmentShader = Shader<ShaderStage::FRAGMENT>;
 
 template<ShaderStage T>
 inline Shader<T>::Shader()
-    : info_log()
+    : info_log(), program(glCreateProgram())
 {
-    program = glCreateProgram();
     glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
 }
 
