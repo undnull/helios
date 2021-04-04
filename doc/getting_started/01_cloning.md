@@ -17,3 +17,10 @@ If the project happen to have a release or a tag present, it is highly recommend
 cd thorn
 git checkout <tag_name>
 ```
+
+# Getting Started
+* [Root](../getting_started.md)
+* [Requirements](00_requirements.md)
+* **Cloning**
+* [Building](02_building.md)
+* [A blue window](03_blue_window.md)

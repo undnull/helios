@@ -147,3 +147,10 @@ int main()
     return 0;
 }
 ```
+
+# Getting Started
+* [Root](../getting_started.md)
+* [Requirements](00_requirements.md)
+* [Cloning](01_cloning.md)
+* [Building](02_building.md)
+* **A blue window**

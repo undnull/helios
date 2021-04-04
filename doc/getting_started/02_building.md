@@ -45,3 +45,10 @@ target_link_libraries(my_beloved_game thorn)
 #### Building
 Just build your project as usual.  
 **Note:** if you don't use CMake to build project directly, consider updaing the project files!
+
+# Getting Started
+* [Root](../getting_started.md)
+* [Requirements](00_requirements.md)
+* [Cloning](01_cloning.md)
+* **Building**
+* [A blue window](03_blue_window.md)

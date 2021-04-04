@@ -9,6 +9,7 @@ This is _not_ a game engine but a framework for such projects.
 * [Code of Conduct](CODE_OF_CONDUCT.md)
 * [Code style](doc/code_style.md)
 * [Getting started](doc/getting_started.md)
+* [Shader guide](doc/shader_guide.md)
 
 # Contributing
 Feel free to contribute through PRs and Issues.  
