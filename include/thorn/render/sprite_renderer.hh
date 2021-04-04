@@ -33,8 +33,8 @@ public:
         float4x4_t view;
     };
 
-    static constexpr const char *DEFAULT_VERT = "assets/shaders/sprite.vert.spv";
-    static constexpr const char *DEFAULT_FRAG = "assets/shaders/sprite.frag.spv";
+    const std::string DEFAULT_VERT = "assets/shaders/sprite.vert.spv";
+    const std::string DEFAULT_FRAG = "assets/shaders/sprite.frag.spv";
 
 public:
     /**

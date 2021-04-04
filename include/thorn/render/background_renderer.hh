@@ -45,8 +45,8 @@ public:
         GLuint fit;
     };
 
-    static constexpr const char *DEFAULT_VERT = "assets/shaders/background.vert.spv";
-    static constexpr const char *DEFAULT_FRAG = "assets/shaders/background.frag.spv";
+    const std::string DEFAULT_VERT = "assets/shaders/background.vert.spv";
+    const std::string DEFAULT_FRAG = "assets/shaders/background.frag.spv";
 
 public:
     /**

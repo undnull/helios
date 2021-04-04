@@ -21,8 +21,8 @@ namespace thorn::render
  */
 class BlitRenderer {
 public:
-    static constexpr const char *DEFAULT_VERT = "assets/shaders/blit.vert.spv";
-    static constexpr const char *DEFAULT_FRAG = "assets/shaders/blit.frag.spv";
+    const std::string DEFAULT_VERT = "assets/shaders/blit.vert.spv";
+    const std::string DEFAULT_FRAG = "assets/shaders/blit.frag.spv";
 
 public:
     /**

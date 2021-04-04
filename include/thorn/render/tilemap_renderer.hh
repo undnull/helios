@@ -44,8 +44,8 @@ public:
         float tile_size;
     };
 
-    static constexpr const char *DEFAULT_VERT = "assets/shaders/tilemap.vert.spv";
-    static constexpr const char *DEFAULT_FRAG = "assets/shaders/tilemap.frag.spv";
+    const std::string DEFAULT_VERT = "assets/shaders/tilemap.vert.spv";
+    const std::string DEFAULT_FRAG = "assets/shaders/tilemap.frag.spv";
 
 public:
     /**
