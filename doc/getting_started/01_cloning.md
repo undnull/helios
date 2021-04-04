@@ -17,7 +17,6 @@ cd thorn
 #### Checking out
 If the project happen to have a release or a tag present, it is highly recommended to checkout to it:
 ```bash
-cd thorn
 git checkout <tag_name>
 ```
 
