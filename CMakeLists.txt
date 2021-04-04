@@ -12,7 +12,19 @@ project(thorn VERSION 0.0.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(THORN_GIT_REV 0)
 add_library(thorn STATIC "")
+
+find_package(Git)
+if(GIT_FOUND)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} rev-parse --short=8 HEAD
+        WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
+        OUTPUT_VARIABLE THORN_GIT_REV
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message("-- Git revision: ${THORN_GIT_REV}")
+endif()
 
 # warning C4996: This function or variable may be unsafe.
 target_compile_definitions(thorn PUBLIC _CRT_SECURE_NO_WARNINGS=1)

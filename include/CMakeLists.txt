@@ -8,4 +8,4 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 target_include_directories(thorn PUBLIC "${CMAKE_CURRENT_LIST_DIR}")
-configure_file("${CMAKE_CURRENT_LIST_DIR}/thorn/config.hh.in" "${CMAKE_CURRENT_LIST_DIR}/thorn/config.hh" @ONLY)
+configure_file("${CMAKE_CURRENT_LIST_DIR}/thorn/config.hh.in" "${CMAKE_CURRENT_LIST_DIR}/thorn/config.hh")

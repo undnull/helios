@@ -17,6 +17,7 @@
 #include <thorn/render/tilemap_renderer.hh>
 #include <thorn/util/file_io.hh>
 #include <iostream>
+#include <stdio.h>
 
 constexpr const int WIDTH = 1152;
 constexpr const int HEIGHT = 648;
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
         window.setIcon(icon);
 
     std::cout << "Hello, Thorn!" << std::endl;
-    std::cout << "Thorn " << thorn::VERSION_STR << std::endl;
+    std::cout << "Thorn " << thorn::VERSION_STR << "-" << thorn::GIT_REV_STR << std::endl;
 
     // Setup the background
     background bg;

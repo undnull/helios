@@ -8,12 +8,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #pragma once
+#include <stdint.h>
 
 namespace thorn
 {
 static constexpr const int VERSION_MAJOR = @thorn_VERSION_MAJOR@;
 static constexpr const int VERSION_MINOR = @thorn_VERSION_MINOR@;
 static constexpr const int VERSION_PATCH = @thorn_VERSION_PATCH@;
+static constexpr const uint32_t GIT_REV = 0x@THORN_GIT_REV@;
 
 static constexpr const char *VERSION_STR = "@thorn_VERSION@";
+static constexpr const char *GIT_REV_STR = "@THORN_GIT_REV@";
 } // namespace thorn
