@@ -20,6 +20,18 @@ PATH=$PATH:"$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 source progressbar.sh || exit 1
 
+if ! command -v glslangValidator &> /dev/null
+then
+    >&2 echo "fatal: can't find glslangValidator"
+    exit 1
+fi
+
+if ! command -v spirv-cross &> /dev/null
+then
+    >&2 echo "fatal: can't find spirv-cross"
+    exit 1
+fi
+
 sys_builddir="$PWD/build/shaders"
 
 opt_manifest=""
@@ -59,7 +71,7 @@ done
 if [[ -z "$opt_manifest" ]]
 then
     opt_manifest="shaders/00_shaders.txt"
-    >&2 echo "opt_manifest not set, defaulting to $opt_manifest"
+    >&2 echo "opt_manifest is not set, defaulting to $opt_manifest"
     if [[ ! -f "$PWD/$opt_manifest" ]]
     then
         >&2 echo "fatal: file $opt_manifest doesn't exist"
@@ -70,11 +82,10 @@ fi
 if [[ -z "$opt_spirvdir" ]]
 then
     opt_spirvdir="assets/shaders"
-    >&2 echo "opt_spirvdir not set, defaulting to $opt_spirvdir"
+    >&2 echo "opt_spirvdir is not set, defaulting to $opt_spirvdir"
 fi
 
 opt_spirvdir="$PWD/$opt_spirvdir"
-sys_builddir="$sys_builddir/$(echo $opt_spirvdir | md5sum | awk '{print $1}')"
 
 mkdir -p "$sys_builddir"
 mkdir -p "$opt_spirvdir"
@@ -102,16 +113,18 @@ do
                 md5o=$(cat "$sys_builddir/$xspv.md5" 2> /dev/null)
 
                 >&2 progressbar "$pmessage" 1 6
+                rm -f "$opt_spirvdir/$xspv.spv"
 
-                if [[ "$md5c" == "$md5o" ]] && [[ $opt_rebuild == false ]]
+                if [[ "$md5c" == "$md5o" ]] && [[ $opt_rebuild == false ]] && [[ -f "$sys_builddir/$xspv.1.spv" ]]
                 then
                     >&2 progressbar "$pmessage" 6 6
+                    cp "$sys_builddir/$xspv.1.spv" "$opt_spirvdir/$xspv.spv"
                     continue
                 else
                     truncate -s 0 "$sys_builddir/$xspv.md5"
 
                     >&2 progressbar "$pmessage" 2 6
-                    eout=$(glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$sys_builddir/$xspv.spv" "$manifestdir/$srcfile")
+                    eout=$(glslangValidator --quiet -V --hlsl-dx9-compatible -e main -o "$sys_builddir/$xspv.0.spv" "$manifestdir/$srcfile")
                     if (( $? != 0 ))
                     then
                         >&2 printf "\n$eout\n"
@@ -119,7 +132,7 @@ do
                     fi
 
                     >&2 progressbar "$pmessage" 3 6
-                    eout=$(spirv-cross "$sys_builddir/$xspv.spv" > "$sys_builddir/$xspv.glsl")
+                    eout=$(spirv-cross "$sys_builddir/$xspv.0.spv" > "$sys_builddir/$xspv.glsl")
                     if (( $? != 0 ))
                     then
                         >&2 printf "\n$eout\n"
@@ -127,7 +140,7 @@ do
                     fi
 
                     >&2 progressbar "$pmessage" 4 6
-                    eout=$(glslangValidator --quiet -G -e main -o "$opt_spirvdir/$xspv.spv" "$sys_builddir/$xspv.glsl")
+                    eout=$(glslangValidator --quiet -G -e main -o "$sys_builddir/$xspv.1.spv" "$sys_builddir/$xspv.glsl")
                     if (( $? != 0 ))
                     then
                         >&2 printf "\n$eout\n"
@@ -138,6 +151,7 @@ do
                     echo "$md5c" > "$sys_builddir/$xspv.md5"
                     
                     >&2 progressbar "$pmessage" 6 6
+                    cp "$sys_builddir/$xspv.1.spv" "$opt_spirvdir/$xspv.spv"
                 fi
             fi
         done < "$PWD/$manifest"
