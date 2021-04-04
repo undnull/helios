@@ -81,8 +81,8 @@ inline Framebuffer::Framebuffer()
 }
 
 inline Framebuffer::Framebuffer(Framebuffer &&rhs)
+    : framebuffer(rhs.framebuffer)
 {
-    framebuffer = rhs.framebuffer;
     rhs.framebuffer = 0;
 }
 

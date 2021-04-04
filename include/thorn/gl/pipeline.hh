@@ -80,8 +80,8 @@ inline Pipeline::Pipeline()
 }
 
 inline Pipeline::Pipeline(Pipeline &&rhs)
+    : pipeline(rhs.pipeline)
 {
-    pipeline = rhs.pipeline;
     rhs.pipeline = 0;
 }
 

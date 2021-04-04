@@ -120,12 +120,8 @@ private:
 };
 
 inline Transform::Transform()
+    : origin(0.0f, 0.0f), position(0.0f, 0.0f), rotation(0.0f), scale_v(1.0f), needs_update(true)
 {
-    origin = float2_t(0.0f, 0.0f);
-    position = float2_t(0.0f, 0.0f);
-    rotation = 0.0f;
-    scale_v = 1.0f;
-    needs_update = true;
 }
 
 inline void Transform::setOrigin(const float2_t &origin)

@@ -136,12 +136,8 @@ private:
 };
 
 inline View::View()
+    : position(0.0f, 0.0f), rotation(0.0f), zoom_v(1.0f), projection_update(true), view_update(true)
 {
-    position = float2_t(0.0f, 0.0f);
-    rotation = 0.0f;
-    zoom_v = 1.0f;
-    projection_update = true;
-    view_update = true;
 }
 
 inline void View::setSize(const float2_t &size)

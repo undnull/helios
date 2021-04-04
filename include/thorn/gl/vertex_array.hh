@@ -112,8 +112,8 @@ inline VertexArray::VertexArray()
 }
 
 inline VertexArray::VertexArray(VertexArray &&rhs)
+    : vaobj(rhs.vaobj)
 {
-    vaobj = rhs.vaobj;
     rhs.vaobj = 0;
 }
 

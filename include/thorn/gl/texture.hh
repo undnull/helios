@@ -129,8 +129,8 @@ inline Texture<T>::Texture()
 
 template<TextureTarget T>
 inline Texture<T>::Texture(Texture &&rhs)
+    : texture(rhs)
 {
-    texture = rhs.texture;
     rhs.texture = 0;
 }
 

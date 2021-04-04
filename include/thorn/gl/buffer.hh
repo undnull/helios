@@ -102,8 +102,8 @@ inline Buffer::Buffer()
 }
 
 inline Buffer::Buffer(Buffer &&rhs)
+    : buffer(rhs.buffer)
 {
-    buffer = rhs.buffer;
     rhs.buffer = 0;
 }
 

@@ -99,7 +99,8 @@ using VertexShader = Shader<ShaderStage::VERTEX>;
 using FragmentShader = Shader<ShaderStage::FRAGMENT>;
 
 template<ShaderStage T>
-inline Shader<T>::Shader() : info_log()
+inline Shader<T>::Shader()
+    : info_log()
 {
     program = glCreateProgram();
     glProgramParameteri(program, GL_PROGRAM_SEPARABLE, GL_TRUE);
@@ -107,10 +108,9 @@ inline Shader<T>::Shader() : info_log()
 
 template<ShaderStage T>
 inline Shader<T>::Shader(Shader<T> &&rhs)
+    : info_log(rhs.info_log), program(rhs.program)
 {
-    info_log = rhs.info_log;
-    program = rhs.program;
-    rhs.info_log = nullptr;
+    rhs.info_log.clear();
     rhs.program = 0;
 }
 
