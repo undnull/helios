@@ -3,7 +3,8 @@ Since Thorn uses pre-compiled shaders, I wrote a build script that automates the
 
 #### Command line
 ```
-$ ./tools/buildshaders.sh -h                                                            usage: ./tools/buildshaders.sh [-m <path>] [-o <path>] [-r] [-h]
+$ ./tools/buildshaders.sh -h
+usage: ./tools/buildshaders.sh [-m <path>] [-o <path>] [-r] [-h]
 example: ./tools/buildshaders.sh -r -o assets/shaders
 options:
   -m <path>   : add the manifest file
