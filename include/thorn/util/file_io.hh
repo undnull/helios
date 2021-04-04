@@ -18,6 +18,8 @@ namespace thorn::util::file_io
 static inline const std::vector<uint8_t> read(const std::string &path)
 {
     std::ifstream ifs(path, std::ios::in | std::ios::binary);
+    if(!ifs.good())
+        return std::vector<uint8_t>();
     return std::vector<uint8_t>(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 }
 } // namespace thorn::util::file_io
