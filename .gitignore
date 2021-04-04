@@ -1,5 +1,2 @@
 build/
-thorn.log
-thorn.latest.log
-imgui.ini
-vidmode.json
+include/thorn/config.hh
