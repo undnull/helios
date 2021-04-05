@@ -105,9 +105,7 @@ do
 
                 >&2 progressbar "$pmessage" 0 6
 
-                xspv=$(basename "$srcfile" .hlsl)
-
-                spirvbase=$(basename "$opt_spirvdir")
+                xspv=$(basename $(basename "$srcfile" .glsl) .hlsl)
 
                 md5c=$(md5sum "$manifestdir/$srcfile" | awk '{print $1}')
                 md5o=$(cat "$sys_builddir/$xspv.md5" 2> /dev/null)
