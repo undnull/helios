@@ -72,7 +72,7 @@ public:
      * @brief Loads a SPIR-V binary, specializes and links the shader.
      * 
      * @param binary SPIR-V binary.
-     * @return true if succeeded and false otherwise.
+     * @return true if succeeded, false otherwise.
      */
     bool link(const std::vector<uint8_t> &binary);
 

@@ -10,6 +10,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(thorn VERSION 0.1.0)
 
+option(THORN_BUILD_EXAMPLES "Build examples" ON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(THORN_GIT_REV 0)
@@ -29,8 +31,7 @@ endif()
 # warning C4996: This function or variable may be unsafe.
 target_compile_definitions(thorn PUBLIC _CRT_SECURE_NO_WARNINGS=1)
 
+add_subdirectory(examples)
 add_subdirectory(external)
 add_subdirectory(include)
 add_subdirectory(src)
-
-add_subdirectory(demo)
