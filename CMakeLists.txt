@@ -8,7 +8,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 cmake_minimum_required(VERSION 3.10)
-project(thorn VERSION 0.1.0)
+project(thorn VERSION 0.1.1)
 
 option(THORN_BUILD_EXAMPLES "Build examples" ON)
 
