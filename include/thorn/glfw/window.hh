@@ -121,54 +121,10 @@ public:
     /**
      * @brief Godot-ish way of processing the keyboard input.
      * 
-     * The "just-pressed" keys are being reset when
-     * Window::handleEvents() is called.
-     *
-     * @param key GLFW key.
-     * @return true if the key was the latest pressed one.
-     */
-    bool isKeyJustPressed(int key) const;
-
-    /**
-     * @brief Godot-ish way of processing the keyboard input.
-     * 
-     * The "just-released" keys are being reset when
-     * Window::handleEvents() is called.
-     *
-     * @param key GLFW key.
-     * @return true if the key was the latest released one.
-     */
-    bool isKeyJustReleased(int key) const;
-
-    /**
-     * @brief Godot-ish way of processing the keyboard input.
-     * 
      * @param key GLFW key.
      * @return true if the key is pressed.
      */
     bool isKeyPressed(int key) const;
-
-    /**
-     * @brief Keyboard-ish way of processing the mouse input.
-     * 
-     * The "just-pressed" buttons are being reset when
-     * Window::handleEvents() is called.
-     *
-     * @param key GLFW mouse button.
-     * @return true if the button was the latest pressed one.
-     */
-    bool isMouseButtonJustPressed(int button) const;
-
-    /**
-     * @brief Keyboard-ish way of processing the mouse input.
-     * 
-     * The "just-released" buttons are being reset when
-     * Window::handleEvents() is called.
-     *
-     * @param key GLFW mouse button.
-     * @return true if the button was the latest released one.
-     */
-    bool isMouseButtonJustReleased(int button) const;
 
     /**
      * @brief Keyboard-ish way of processing the mouse input.
@@ -224,17 +180,11 @@ public:
     std::function<void(unsigned int)> on_char;
 
 private:
-    int last_pressed_key, last_released_key;
-    int last_pressed_mb, last_released_mb;
     GLFWwindow *window;
 };
 
 inline Window::Window(int width, int height, const std::string &title, bool fullscreen)
 {
-    last_pressed_key = GLFW_KEY_UNKNOWN;
-    last_released_key = GLFW_KEY_UNKNOWN;
-    last_pressed_mb = GLFW_KEY_UNKNOWN;
-    last_released_mb = GLFW_KEY_UNKNOWN;
     window = glfwCreateWindow(width, height, title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
     glfwSetWindowUserPointer(window, this);
     glfwSetWindowCloseCallback(window, onClose);
@@ -305,29 +255,9 @@ inline void Window::getSize(int &width, int &height) const
     glfwGetWindowSize(window, &width, &height);
 }
 
-inline bool Window::isKeyJustPressed(int key) const
-{
-    return key == last_pressed_key;
-}
-
-inline bool Window::isKeyJustReleased(int key) const
-{
-    return key == last_released_key;
-}
-
 inline bool Window::isKeyPressed(int key) const
 {
     return glfwGetKey(window, key) == GLFW_PRESS;
-}
-
-inline bool Window::isMouseButtonJustPressed(int button) const
-{
-    return button == last_pressed_mb;
-}
-
-inline bool Window::isMouseButtonJustReleased(int button) const
-{
-    return button == last_released_mb;
 }
 
 inline bool Window::isMouseButtonPressed(int button) const
@@ -347,10 +277,6 @@ inline void Window::swapBuffers()
 
 inline void Window::handleEvents()
 {
-    last_pressed_key = GLFW_KEY_UNKNOWN;
-    last_released_key = GLFW_KEY_UNKNOWN;
-    last_pressed_mb = GLFW_KEY_UNKNOWN;
-    last_released_mb = GLFW_KEY_UNKNOWN;
     if(glfwGetWindowAttrib(window, GLFW_FOCUSED))
         glfwPollEvents();
     else

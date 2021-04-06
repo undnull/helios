@@ -38,7 +38,7 @@ int main()
     // Main loop
     while(!window.shouldClose()) {
         // Exit if ESC is pressed
-        if(window.isKeyJustPressed(GLFW_KEY_ESCAPE))
+        if(window.isKeyPressed(GLFW_KEY_ESCAPE))
             window.setShouldClose(true);
 
         // Clear the screen

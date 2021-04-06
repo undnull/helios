@@ -173,11 +173,6 @@ int main(int argc, char **argv)
             if(window.isKeyPressed(GLFW_KEY_F2))
                 view.zoom(1.0f / (1.0f + Z_SPEED));
 
-            if(window.isKeyJustPressed(GLFW_KEY_ESCAPE))
-                std::cout << "Escape press!" << std::endl;
-            if(window.isKeyJustReleased(GLFW_KEY_ESCAPE))
-                std::cout << "Escape release!" << std::endl;
-
             // Update the view itself
             view.move(cv * frametime);
             view.rotate(rv * frametime);
