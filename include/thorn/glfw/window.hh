@@ -9,6 +9,7 @@
  */
 #pragma once
 #include <thorn/image.hh>
+#include <thorn/types.hh>
 #include <GLFW/glfw3.h>
 #include <functional>
 #include <string>
@@ -117,6 +118,13 @@ public:
      * @param height Height in pixels.
      */
     void getSize(int &width, int &height) const;
+
+    /**
+     * @brief Gets the cursor position.
+     * 
+     * @return Cursor position.
+     */
+    const float2_t getCursorPosition() const;
 
     /**
      * @brief Godot-ish way of processing the keyboard input.
@@ -253,6 +261,13 @@ inline int Window::getHeight() const
 inline void Window::getSize(int &width, int &height) const
 {
     glfwGetWindowSize(window, &width, &height);
+}
+
+inline const float2_t Window::getCursorPosition() const
+{
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    return float2_t(x, y);
 }
 
 inline bool Window::isKeyPressed(int key) const
