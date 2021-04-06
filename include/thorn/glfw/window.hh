@@ -91,6 +91,13 @@ public:
     void setShouldClose(bool close);
 
     /**
+     * @brief Sets the cursor mode
+     * 
+     * @param mode GLFW cursor mode.
+     */
+    void setCursorMode(int mode);
+
+    /**
      * @brief Gets the window close flag value.
      * 
      * @return true if the window needs to be closed.
@@ -237,6 +244,11 @@ inline void Window::setSwapInterval(int interval)
 inline void Window::setShouldClose(bool close)
 {
     glfwSetWindowShouldClose(window, close ? GLFW_TRUE : GLFW_FALSE);
+}
+
+inline void Window::setCursorMode(int mode)
+{
+    glfwSetInputMode(window, GLFW_CURSOR, mode);
 }
 
 inline bool Window::shouldClose() const
