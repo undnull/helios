@@ -49,6 +49,14 @@ public:
     Window &operator=(const Window &rhs) = delete;
 
     /**
+     * @brief Sets the window size.
+     * 
+     * @param width Width in pixels.
+     * @param height Height in pixels.
+     */
+    void setSize(int width, int height);
+
+    /**
      * @brief Sets the window title.
      * 
      * @param title Window title.
@@ -87,6 +95,28 @@ public:
      * @return true if the window needs to be closed.
      */
     bool shouldClose() const;
+
+    /**
+     * @brief Gets the window width.
+     * 
+     * @return Window width in pixels.
+     */
+    int getWidth() const;
+
+    /**
+     * @brief Gets the window height.
+     * 
+     * @return Window height in pixels.
+     */
+    int getHeight() const;
+
+    /**
+     * @brief Gets the window size.
+     * 
+     * @param width Width in pixels.
+     * @param height Height in pixels.
+     */
+    void getSize(int &width, int &height) const;
 
     /**
      * @brief Godot-ish way of processing the keyboard input.
@@ -222,6 +252,11 @@ inline Window::~Window()
     glfwDestroyWindow(window);
 }
 
+inline void Window::setSize(int width, int height)
+{
+    glfwSetWindowSize(window, width, height);
+}
+
 inline void Window::setTitle(const char *title)
 {
     glfwSetWindowTitle(window, title);
@@ -249,6 +284,25 @@ inline void Window::setShouldClose(bool close)
 inline bool Window::shouldClose() const
 {
     return glfwWindowShouldClose(window) == GLFW_TRUE;
+}
+
+inline int Window::getWidth() const
+{
+    int width;
+    glfwGetWindowSize(window, &width, nullptr);
+    return width;
+}
+
+inline int Window::getHeight() const
+{
+    int height;
+    glfwGetWindowSize(window, nullptr, &height);
+    return height;
+}
+
+inline void Window::getSize(int &width, int &height) const
+{
+    glfwGetWindowSize(window, &width, &height);
 }
 
 inline bool Window::isKeyJustPressed(int key) const
