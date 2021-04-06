@@ -11,7 +11,6 @@
 #include <thorn/gl/pipeline.hh>
 #include <thorn/gl/texture.hh>
 #include <thorn/gl/vertex_array.hh>
-#include <thorn/math/transform.hh>
 #include <thorn/math/view.hh>
 #include <vector>
 
@@ -72,11 +71,11 @@ public:
     /**
      * @brief Draws sprites.
      * 
-     * @param transforms Intances' transforms.
+     * @param instances Intance vector.
      * @param texture Sprite texture.
      * @param size Sprite/Texture size in pixels.
      */
-    void draw(std::vector<math::Transform> &transforms, const gl::Texture2D &texture, const float2_t &size);
+    void draw(const std::vector<float4x4_t> &instances, const gl::Texture2D &texture, const float2_t &size);
 
 private:
     gl::VertexShader vert;

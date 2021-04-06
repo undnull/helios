@@ -110,15 +110,10 @@ void SpriteRenderer::setView(math::View &view)
     ubo.subData(0, &ubo_i, sizeof(ubo_i));
 }
 
-void SpriteRenderer::draw(std::vector<math::Transform> &transforms, const gl::Texture2D &texture, const float2_t &size)
+void SpriteRenderer::draw(const std::vector<float4x4_t> &instances, const gl::Texture2D &texture, const float2_t &size)
 {
     const float4x4_t size_m = glm::scale(float4x4_t(1.0f), float3_t(size, 1.0f));
     ubo.subData(offsetof(ubo_s, scale), &size_m, sizeof(size_m));
-
-    instances.clear();
-    std::transform(transforms.begin(), transforms.end(), std::back_inserter(instances), [](math::Transform &t) {
-        return t.getMatrix();
-    });
 
     const size_t num_instances = instances.size();
     const size_t ssbo_size = sizeof(float4x4_t) * num_instances;

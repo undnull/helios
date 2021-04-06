@@ -11,7 +11,6 @@
 #include <thorn/gl/pipeline.hh>
 #include <thorn/gl/texture.hh>
 #include <thorn/gl/vertex_array.hh>
-#include <thorn/math/transform.hh>
 #include <thorn/math/view.hh>
 #include <vector>
 
@@ -90,7 +89,7 @@ public:
      * @param tilemap Tilemap texture (acts as a lookup table).
      * @param tileset Tileset texture.
      */
-    void draw(math::Transform &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture2D &tilemap, const gl::Texture2D &tileset);
+    void draw(const float4x4_t &transform, const float2_t &size, const float2_t &tileset_size, float tile_size, const gl::Texture2D &tilemap, const gl::Texture2D &tileset);
 
 private:
     gl::VertexShader vert;

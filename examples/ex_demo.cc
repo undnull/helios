@@ -13,6 +13,7 @@
 #include <thorn/glfw/clock.hh>
 #include <thorn/glfw/window.hh>
 #include <thorn/image.hh>
+#include <thorn/math/transform.hh>
 #include <thorn/render/background_renderer.hh>
 #include <thorn/render/tilemap_renderer.hh>
 #include <thorn/util/file_io.hh>
@@ -192,7 +193,7 @@ int main(int argc, char **argv)
         // Draw the tilemap layer
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        map_renderer.draw(tm.t, tm.size, ts.size, ts.tile, tm.texture, ts.texture);
+        map_renderer.draw(tm.t.getMatrix(), tm.size, ts.size, ts.tile, tm.texture, ts.texture);
 
         // Make sure we don't have any pipelines bound
         // so third-party overlay programs won't break
