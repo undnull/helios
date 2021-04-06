@@ -25,7 +25,7 @@ if(GIT_FOUND)
         OUTPUT_VARIABLE THORN_GIT_REV
         ERROR_QUIET
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    message("-- Git revision: ${THORN_GIT_REV}")
+    message("-- Thorn git revision: ${THORN_GIT_REV}")
 endif()
 
 # warning C4996: This function or variable may be unsafe.
