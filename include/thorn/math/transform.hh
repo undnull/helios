@@ -194,6 +194,7 @@ inline const float4x4_t &Transform::getMatrix()
         matrix = glm::rotate(matrix, glm::radians(rotation), float3_t(0.0f, 0.0f, 1.0f));
         matrix = glm::scale(matrix, float3_t(scale_v, scale_v, 1.0f));
         matrix = glm::translate(matrix, float3_t(-origin, 0.0f));
+        needs_update = false;
     }
 
     return matrix;
